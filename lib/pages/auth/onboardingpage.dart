@@ -67,15 +67,13 @@ class OB1 extends StatelessWidget {
           ),
           Text(
             "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style:
-                GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
             textScaleFactor: 1.0,
           ),
           SizedBox(height: 15),
           Text(
             "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style:
-                GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
+            style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
             textScaleFactor: 1.0,
           ),
           SizedBox(height: 45),
@@ -129,15 +127,13 @@ class OB2 extends StatelessWidget {
           ),
           Text(
             "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style:
-                GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
             textScaleFactor: 1.0,
           ),
           SizedBox(height: 15),
           Text(
             "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style:
-                GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
+            style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
             textScaleFactor: 1.0,
           ),
           SizedBox(height: 45),
@@ -148,22 +144,22 @@ class OB2 extends StatelessWidget {
                 width: 10,
                 height: 10,
               ),
-              Container(
-                width: 190,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade900,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LoginPage(),
-                        ),
-                      );
-                    },
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const LoginPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 190,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade900,
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Center(
                     child: Text(
                       "Continue",
                       style: GoogleFonts.dmSans(

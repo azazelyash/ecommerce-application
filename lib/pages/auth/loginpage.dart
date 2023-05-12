@@ -1,5 +1,7 @@
-import 'package:abhyukthafoods/auth/loginpage.dart';
-import 'package:abhyukthafoods/auth/signuppage.dart';
+import 'package:abhyukthafoods/pages/auth/loginpage.dart';
+import 'package:abhyukthafoods/pages/auth/signuppage.dart';
+import 'package:abhyukthafoods/comps/auth_text_field.dart';
+import 'package:abhyukthafoods/comps/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,10 +32,7 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login here",
-                          style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -43,47 +42,15 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          fillColor: Colors.transparent,
-                          filled: true,
-                          hintText: 'Username',
-                          hintStyle: TextStyle(color: Colors.white),
-                        ),
+                        style: const TextStyle(color: Colors.white),
+                        decoration: authTextFieldDecoration("Email"),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(13),
-                          ),
-                          fillColor: Colors.transparent,
-                          filled: true,
-                          hintText: 'Password',
-                          hintStyle: TextStyle(color: Colors.white),
-                        ),
+                        style: const TextStyle(color: Colors.white),
+                        decoration: authTextFieldDecoration("Password"),
                       ),
                     ),
 
@@ -95,18 +62,12 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             "Remember Me",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           Text(
                             "Forgot Password",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                         ],
@@ -126,11 +87,7 @@ class LoginPage extends StatelessWidget {
                         child: Center(
                           child: Text(
                             "Login in",
-                            style: GoogleFonts.dmSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                            style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                         ),
@@ -143,10 +100,7 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login with",
-                          style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -155,10 +109,7 @@ class LoginPage extends StatelessWidget {
                     //Google and facebox button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GoogleButton(onTapp: () {}),
-                        FacebookButton(onTapp: () {})
-                      ],
+                      children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
                     ),
 
                     //other way
@@ -169,15 +120,12 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             "Don't have an account ? ",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
+                              Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (_) => SignUpPage(),
                                 ),
