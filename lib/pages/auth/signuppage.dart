@@ -184,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         onTap: () {
                           if (!isFilled(emailController.text, passwordController.text, cfmPasswordController.text, nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -201,7 +201,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -218,7 +218,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!arePasswordsMatching(passwordController.text, cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(

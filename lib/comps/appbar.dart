@@ -42,3 +42,45 @@ class MyAppbar2 extends StatelessWidget {
     );
   }
 }
+
+
+class HomeAppBar extends StatefulWidget with PreferredSizeWidget {
+  HomeAppBar({
+    required this.title,
+    Key? key,
+  })  : preferredSize = const Size.fromHeight(kToolbarHeight),
+        super(key: key);
+  final String title;
+  @override
+  final Size preferredSize;
+
+  @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      elevation: 0.3,
+      backgroundColor: Colors.white,
+      title: const Text(
+        'Hello! Manikanta',
+        style: TextStyle(color: Colors.black),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_none),
+          color: Colors.black,
+        ),
+        const Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: CircleAvatar(
+              // backgroundImage: NetworkImage(''),
+              ),
+        )
+      ],
+    );
+  }
+}
