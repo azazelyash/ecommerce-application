@@ -28,49 +28,54 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: CarouselSlider(
-                  items: [
-                    OB1(onNextPressed: () {
-                      _controller.nextPage();
-                    }),
-                    OB2(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                Column(
+                  children: [
+                    Expanded(
+                      child: CarouselSlider(
+                        items: [
+                          OB1(onNextPressed: () {
+                            _controller.nextPage();
+                          }),
+                          OB2(),
+                        ],
+                        options: CarouselOptions(
+                          height: constraints.maxHeight,
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: false,
+                          reverse: false,
+                          autoPlay: false,
+                          scrollDirection: Axis.horizontal,
+                          onPageChanged: (index, _) {
+                            setState(() {
+                              _currentSlide = index;
+                            });
+                          },
+                        ),
+                        carouselController: _controller,
+                      ),
+                    ),
                   ],
-                  options: CarouselOptions(
-                    height: MediaQuery.of(context).size.height,
-                    viewportFraction: 1.0,
-                    enableInfiniteScroll: false,
-                    reverse: false,
-                    autoPlay: false,
-                    scrollDirection: Axis.horizontal,
-                    onPageChanged: (index, _) {
-                      setState(() {
-                        _currentSlide = index;
-                      });
-                    },
-                  ),
-                  carouselController: _controller,
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 40,
-            left: 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                2, // Replace '2' with the number of slides
-                (index) => buildDotIndicator(index),
-              ),
-            ),
-          ),
-        ],
-      )),
+                Positioned(
+                  bottom: constraints.maxHeight * 0.062,
+                  left: constraints.maxWidth * 0.05,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      2, // Replace '2' with the number of slides
+                      (index) => buildDotIndicator(index),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -97,38 +102,42 @@ class OB1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: 340,
-            height: 380,
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: Image.asset("assets/Login-signup/OB1.png"),
           ),
           Text(
             "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style:
-                GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontWeight: FontWeight.w700,
+            ),
             textScaleFactor: 1.0,
           ),
-          SizedBox(height: 15),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Text(
             "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style:
-                GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
+            style: GoogleFonts.dmSans(
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              fontWeight: FontWeight.w300,
+            ),
             textScaleFactor: 1.0,
           ),
-          SizedBox(height: 45),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.150),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(width: 10, height: 10),
+              Container(width: MediaQuery.of(context).size.width * 0.02),
               GestureDetector(
                 onTap: onNextPressed,
                 child: Container(
-                  width: 190,
-                  height: 55,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.07,
                   decoration: BoxDecoration(
                     color: Colors.green.shade900,
                     borderRadius: BorderRadius.circular(40),
@@ -137,7 +146,7 @@ class OB1 extends StatelessWidget {
                     child: Text(
                       "Next",
                       style: GoogleFonts.dmSans(
-                        fontSize: 15,
+                        fontSize: MediaQuery.of(context).size.width * 0.045,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
@@ -155,61 +164,65 @@ class OB1 extends StatelessWidget {
 }
 
 class OB2 extends StatelessWidget {
-  const OB2({super.key});
+  const OB2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 350,
-            height: 370,
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: Image.asset("assets/Login-signup/OB2.png"),
           ),
           Text(
             "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style:
-                GoogleFonts.dmSans(fontSize: 22, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontWeight: FontWeight.w700,
+            ),
             textScaleFactor: 1.0,
           ),
-          SizedBox(height: 15),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Text(
             "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style:
-                GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w300),
+            style: GoogleFonts.dmSans(
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              fontWeight: FontWeight.w300,
+            ),
             textScaleFactor: 1.0,
           ),
-          SizedBox(height: 45),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.150),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 10,
-                height: 10,
+                width: MediaQuery.of(context).size.width * 0.02,
+                height: MediaQuery.of(context).size.width * 0.02,
               ),
-              Container(
-                width: 190,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.green.shade900,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LoginPage(),
-                        ),
-                      );
-                    },
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => LoginPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade900,
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Center(
                     child: Text(
                       "Continue",
                       style: GoogleFonts.dmSans(
-                        fontSize: 15,
+                        fontSize: MediaQuery.of(context).size.width * 0.045,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
