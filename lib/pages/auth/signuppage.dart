@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
@@ -8,6 +9,8 @@ import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../home/homepage.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -53,13 +56,17 @@ class _SignUpPageState extends State<SignUpPage> {
     return password == confirmPassword;
   }
 
-  bool isFilled(String email, String password, String confirmPassword, String name) {
-    return email.isNotEmpty && password.isNotEmpty && confirmPassword.isNotEmpty && name.isNotEmpty;
+  bool isFilled(
+      String email, String password, String confirmPassword, String name) {
+    return email.isNotEmpty &&
+        password.isNotEmpty &&
+        confirmPassword.isNotEmpty &&
+        name.isNotEmpty;
   }
 
   /* ------------------------------ Sign Up User ------------------------------ */
 
-  Future signUp(CustomerModel model) async {
+  Future<void> signUp(CustomerModel model) async {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -70,33 +77,31 @@ class _SignUpPageState extends State<SignUpPage> {
       },
     );
 
-    await apiService.createCustomer(model).then(
-      (ret) {
-        Navigator.of(context).pop();
+    final success = await apiService.createCustomer(model);
 
-        if (ret) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.green,
-              content: Text("Sign Up Successful"),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.red,
-              content: Text("Email Already Exists"),
-            ),
-          );
-        }
+    Navigator.of(context).pop(); // Close the dialog
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const LoginPage(),
-          ),
-        );
-      },
-    );
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text("Sign Up Successful"),
+        ),
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => MainPage(), // Replace with your homepage widget
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Email Already Exists"),
+        ),
+      );
+    }
   }
 
   @override
@@ -122,7 +127,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sign Up here",
-                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -169,7 +177,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: Text(
                           "By signing up, you are agreeing to our Terms & Conditions, Privacy Policy.",
                           textAlign: TextAlign.center,
-                          style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -182,9 +191,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (!isFilled(emailController.text, passwordController.text, cfmPasswordController.text, nameController.text)) {
+                          if (!isFilled(
+                              emailController.text,
+                              passwordController.text,
+                              cfmPasswordController.text,
+                              nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -201,7 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -216,9 +229,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                             );
-                          } else if (!arePasswordsMatching(passwordController.text, cfmPasswordController.text)) {
+                          } else if (!arePasswordsMatching(
+                              passwordController.text,
+                              cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -276,7 +291,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sign up with",
-                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -285,7 +303,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     //Google and facebox button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
+                      children: [
+                        GoogleButton(onTapp: () {}),
+                        FacebookButton(onTapp: () {})
+                      ],
                     ),
 
                     //other way
@@ -296,7 +317,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           Text(
                             "Have an account ? ",
-                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(
