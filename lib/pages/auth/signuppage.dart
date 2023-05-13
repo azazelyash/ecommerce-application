@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../home/homepage.dart';
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -78,8 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
 
     final success = await apiService.createCustomer(model);
-
-    Navigator.of(context).pop(); // Close the dialog
+    if (mounted) Navigator.of(context).pop(); // Close the dialog
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,7 +88,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainPage(), // Replace with your homepage widget
+          builder: (_) => const MainPage(), // Replace with your homepage widget
         ),
       );
     } else {
@@ -197,7 +194,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               cfmPasswordController.text,
                               nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -214,7 +211,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -233,7 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               passwordController.text,
                               cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -327,7 +324,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             onTap: () {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (_) => LoginPage(),
+                                  builder: (_) => const LoginPage(),
                                 ),
                               );
                             },

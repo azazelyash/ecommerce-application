@@ -7,7 +7,7 @@ class MyAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }
 
@@ -30,7 +30,7 @@ class MyAppbar2 extends StatelessWidget {
               height: 30,
             ),
           ),
-          SizedBox(width: 18),
+          const SizedBox(width: 18),
           Text(
             title,
             style:
@@ -43,9 +43,8 @@ class MyAppbar2 extends StatelessWidget {
   }
 }
 
-
-class HomeAppBar extends StatefulWidget with PreferredSizeWidget {
-  HomeAppBar({
+class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const HomeAppBar({
     required this.title,
     Key? key,
   })  : preferredSize = const Size.fromHeight(kToolbarHeight),

@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
     ShimmerContainer shimmerContainer = ShimmerContainer();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: HomeAppBar(title: ''),
+      appBar: const HomeAppBar(title: ''),
       body: FutureBuilder(
         future: Future.delayed(const Duration(seconds: 2))
             .then((value) => a), //insert fetch here
@@ -60,8 +60,8 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       SizedBox(
                         width: 20,
                       ),
@@ -84,8 +84,8 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       SizedBox(
                         width: 20,
                       ),

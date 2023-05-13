@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
             ),
 
             // profile box
-            ProfileBox(),
+            const ProfileBox(),
 
             // categories
 
@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => FavouritePage(),
+                      builder: (_) => const FavouritePage(),
                     ),
                   );
                 }),
@@ -53,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => LanguagePage(),
+                      builder: (_) => const LanguagePage(),
                     ),
                   );
                 }),
@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => AboutUsPage(),
+                      builder: (_) => const AboutUsPage(),
                     ),
                   );
                 }),
@@ -149,7 +149,7 @@ class ProfileBox extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 5)
+        const SizedBox(height: 5)
       ],
     );
   }
@@ -172,7 +172,7 @@ class Titletile extends StatelessWidget {
       onTap: onTapp,
       child: Column(
         children: [
-          Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.fromLTRB(22, 18, 22, 18),
             child: Row(
@@ -184,7 +184,7 @@ class Titletile extends StatelessWidget {
                       imagepath,
                       height: 22,
                     ),
-                    SizedBox(width: 25),
+                    const SizedBox(width: 25),
                     Text(
                       title,
                       style: GoogleFonts.poppins(

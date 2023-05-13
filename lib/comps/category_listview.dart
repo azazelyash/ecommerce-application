@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key, required this.categories});
