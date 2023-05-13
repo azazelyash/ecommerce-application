@@ -1,11 +1,24 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'pages/auth/onboardingpage.dart';
 import 'comps/navbar.dart';
 
+Widget defaultPage = OnboardingPage();
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool _result = await SharedService.isLoggedIn();
+
+  if (_result) {
+    defaultPage = MainPage();
+  }
+
   runApp(const MyApp());
 }
 
@@ -14,9 +27,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnboardingPage(),
+      home: defaultPage,
     );
   }
 }

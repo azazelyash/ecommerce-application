@@ -1,13 +1,70 @@
+import 'package:abhyukthafoods/comps/navbar.dart';
+import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
 import 'package:abhyukthafoods/comps/text_styles.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  /* ----------------------- Check Username and Password ---------------------- */
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool isFieldEmpty(String field) {
+    return field.isEmpty;
+  }
+
+  /* ------------------------------- User Login ------------------------------- */
+
+  Future<void> loginUser() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
+
+    if (!mounted) return;
+
+    Navigator.of(context).pop();
+
+    if (model.statusCode == 200) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const MainPage(), // Replace with your homepage widget
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Invalid Username or Password"),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +99,7 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
+                        controller: emailController,
                         style: const TextStyle(color: Colors.white),
                         decoration: authTextFieldDecoration("Email"),
                       ),
@@ -49,6 +107,7 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
+                        controller: passwordController,
                         style: const TextStyle(color: Colors.white),
                         decoration: authTextFieldDecoration("Password"),
                       ),
@@ -74,21 +133,63 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
 
-                    //buttons
+                    /* ------------------------------ Login Button ------------------------------ */
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 390,
-                        height: 65,
-                        decoration: BoxDecoration(
-                          color: Colors.black87,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Login in",
-                            style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                            textScaleFactor: 1.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (isFieldEmpty(emailController.text) || isFieldEmpty(passwordController.text)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text("All fields are Mandatory"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (!isValidEmail(emailController.text)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text("Invalid Email"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            loginUser();
+                          }
+                        },
+                        child: Container(
+                          width: 390,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: Colors.black87,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Login in",
+                              style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              textScaleFactor: 1.0,
+                            ),
                           ),
                         ),
                       ),
