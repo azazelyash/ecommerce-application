@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../home/homepage.dart';
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -75,9 +73,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
     final success = await apiService.createCustomer(model);
 
+
     if (!mounted) return;
 
     Navigator.of(context).pop(); // Close the dialog
+
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +89,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
+
           builder: (_) => const LoginPage(), // Replace with your homepage widget
+
+
         ),
       );
     } else {
@@ -306,7 +309,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             onTap: () {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (_) => LoginPage(),
+                                  builder: (_) => const LoginPage(),
                                 ),
                               );
                             },

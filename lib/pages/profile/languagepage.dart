@@ -1,5 +1,4 @@
 import 'package:abhyukthafoods/comps/appbar.dart';
-import 'package:abhyukthafoods/comps/dialogboxes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +29,7 @@ class _LanguagePageState extends State<LanguagePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MyAppbar2(title: "Languages"),
+              const MyAppbar2(title: "Languages"),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -40,12 +39,12 @@ class _LanguagePageState extends State<LanguagePage> {
                       title: "Hindi",
                       value: "Hindi",
                     ),
-                    Divider(),
+                    const Divider(),
                     customRadioListTile(
                       title: "English",
                       value: "English",
                     ),
-                    Divider(),
+                    const Divider(),
                     customRadioListTile(
                       title: "Telugu",
                       value: "Telugu",

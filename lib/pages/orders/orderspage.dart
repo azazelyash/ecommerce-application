@@ -1,6 +1,4 @@
-import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -117,13 +115,13 @@ class OrderCard extends StatelessWidget {
                 ),
               )
               .toList(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Expanded(child: Text('02-03-2023 : 12: 44 PM')),
-                const Text('Rs 200.55')
+                Expanded(child: Text('02-03-2023 : 12: 44 PM')),
+                Text('Rs 200.55')
               ],
             ),
           ),

@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             // profile box
-            ProfileBox(),
+            const ProfileBox(),
 
             // categories
 
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => FavouritePage(),
+                      builder: (_) => const FavouritePage(),
                     ),
                   );
                 }),
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => LanguagePage(),
+                      builder: (_) => const LanguagePage(),
                     ),
                   );
                 }),
@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => AboutUsPage(),
+                      builder: (_) => const AboutUsPage(),
                     ),
                   );
                 }),
@@ -140,7 +140,7 @@ class ProfileBox extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 5)
+        const SizedBox(height: 5)
       ],
     );
   }
@@ -157,6 +157,7 @@ class Titletile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTapp,
+
       child: Container(
         color: Colors.transparent,
         child: Column(
@@ -172,6 +173,8 @@ class Titletile extends StatelessWidget {
                       SvgPicture.asset(
                         imagepath,
                         height: 22,
+
+
                       ),
                       SizedBox(width: 25),
                       Text(
