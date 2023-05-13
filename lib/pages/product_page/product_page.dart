@@ -123,7 +123,7 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Row(
+                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [Text('₹150.00 - ₹550.00'), CounterWidget()],
                       ),
@@ -170,7 +170,7 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Row(
+                     Row(
                         children: [
                           Expanded(
                             child: Text(

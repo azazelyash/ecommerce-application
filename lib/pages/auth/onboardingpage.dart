@@ -1,5 +1,14 @@
+import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'loginpage.dart';
+import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'loginpage.dart';
@@ -8,10 +17,10 @@ class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
   @override
-  OnboardingPageState createState() => OnboardingPageState();
+  _OnboardingPageState createState() => _OnboardingPageState();
 }
 
-class OnboardingPageState extends State<OnboardingPage> {
+class _OnboardingPageState extends State<OnboardingPage> {
   final CarouselController _controller = CarouselController();
   int _currentSlide = 0;
 
@@ -96,30 +105,34 @@ class OB1 extends StatelessWidget {
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: Image.asset("assets/Login-signup/OB1.png"),
+          Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Image.asset("assets/Login-signup/OB1.png"),
+              ),
+              Text(
+                "Discover a vast selection of culinary delights with our comprehensive catalogue.",
+                style: GoogleFonts.dmSans(
+                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                  fontWeight: FontWeight.w700,
+                ),
+                textScaleFactor: 1.0,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                "We've curated a selection of pickles that are made using regional recipes and techniques.",
+                style: GoogleFonts.dmSans(
+                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                  fontWeight: FontWeight.w300,
+                ),
+                textScaleFactor: 1.0,
+              ),
+            ],
           ),
-          Text(
-            "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style: GoogleFonts.dmSans(
-              fontSize: MediaQuery.of(context).size.width * 0.06,
-              fontWeight: FontWeight.w700,
-            ),
-            textScaleFactor: 1.0,
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-          Text(
-            "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style: GoogleFonts.dmSans(
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              fontWeight: FontWeight.w300,
-            ),
-            textScaleFactor: 1.0,
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.150),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -163,30 +176,34 @@ class OB2 extends StatelessWidget {
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: Image.asset("assets/Login-signup/OB2.png"),
+          Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Image.asset("assets/Login-signup/OB2.png"),
+              ),
+              Text(
+                "Discover a vast selection of culinary delights with our comprehensive catalogue.",
+                style: GoogleFonts.dmSans(
+                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                  fontWeight: FontWeight.w700,
+                ),
+                textScaleFactor: 1.0,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                "We've curated a selection of pickles that are made using regional recipes and techniques.",
+                style: GoogleFonts.dmSans(
+                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                  fontWeight: FontWeight.w300,
+                ),
+                textScaleFactor: 1.0,
+              ),
+            ],
           ),
-          Text(
-            "Discover a vast selection of culinary delights with our comprehensive catalogue.",
-            style: GoogleFonts.dmSans(
-              fontSize: MediaQuery.of(context).size.width * 0.06,
-              fontWeight: FontWeight.w700,
-            ),
-            textScaleFactor: 1.0,
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-          Text(
-            "We've curated a selection of pickles that are made using regional recipes and techniques.",
-            style: GoogleFonts.dmSans(
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              fontWeight: FontWeight.w300,
-            ),
-            textScaleFactor: 1.0,
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.150),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
