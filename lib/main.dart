@@ -1,8 +1,23 @@
+import 'dart:developer';
+import 'package:abhyukthafoods/pages/auth/signuppage.dart';
+import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'pages/auth/onboardingpage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+Widget defaultPage = OnboardingPage();
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool _result = await SharedService.isLoggedIn();
+
+  if (_result) {
+    defaultPage = MainPage();
+  }
+
   runApp(const MyApp());
 }
 
@@ -12,6 +27,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: defaultPage,
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
             secondary: Colors.black,
@@ -20,11 +37,9 @@ class MyApp extends StatelessWidget {
           const TextTheme(
               bodyLarge: TextStyle(fontSize: 20),
               titleMedium:
-                  TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                  TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
         ),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const OnboardingPage(),
     );
   }
 }

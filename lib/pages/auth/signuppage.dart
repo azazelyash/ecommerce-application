@@ -54,12 +54,8 @@ class _SignUpPageState extends State<SignUpPage> {
     return password == confirmPassword;
   }
 
-  bool isFilled(
-      String email, String password, String confirmPassword, String name) {
-    return email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirmPassword.isNotEmpty &&
-        name.isNotEmpty;
+  bool isFilled(String email, String password, String confirmPassword, String name) {
+    return email.isNotEmpty && password.isNotEmpty && confirmPassword.isNotEmpty && name.isNotEmpty;
   }
 
   /* ------------------------------ Sign Up User ------------------------------ */
@@ -76,7 +72,12 @@ class _SignUpPageState extends State<SignUpPage> {
     );
 
     final success = await apiService.createCustomer(model);
-    if (mounted) Navigator.of(context).pop(); // Close the dialog
+
+
+    if (!mounted) return;
+
+    Navigator.of(context).pop(); // Close the dialog
+
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -88,7 +89,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => const MainPage(), // Replace with your homepage widget
+
+          builder: (_) => const LoginPage(), // Replace with your homepage widget
+
+
         ),
       );
     } else {
@@ -124,10 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sign Up here",
-                          style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -174,8 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: Text(
                           "By signing up, you are agreeing to our Terms & Conditions, Privacy Policy.",
                           textAlign: TextAlign.center,
-                          style: kauthTextFieldStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -188,11 +188,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (!isFilled(
-                              emailController.text,
-                              passwordController.text,
-                              cfmPasswordController.text,
-                              nameController.text)) {
+                          if (!isFilled(emailController.text, passwordController.text, cfmPasswordController.text, nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Row(
@@ -226,9 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                             );
-                          } else if (!arePasswordsMatching(
-                              passwordController.text,
-                              cfmPasswordController.text)) {
+                          } else if (!arePasswordsMatching(passwordController.text, cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Row(
@@ -288,10 +282,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sign up with",
-                          style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -300,10 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     //Google and facebox button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GoogleButton(onTapp: () {}),
-                        FacebookButton(onTapp: () {})
-                      ],
+                      children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
                     ),
 
                     //other way
@@ -314,10 +302,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           Text(
                             "Have an account ? ",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(

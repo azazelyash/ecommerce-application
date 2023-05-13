@@ -33,8 +33,7 @@ class MyAppbar2 extends StatelessWidget {
           const SizedBox(width: 18),
           Text(
             title,
-            style:
-                GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
+            style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
             textScaleFactor: 1.0,
           ),
         ],
@@ -44,6 +43,7 @@ class MyAppbar2 extends StatelessWidget {
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+
   const HomeAppBar({
     required this.title,
     Key? key,
