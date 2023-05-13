@@ -29,7 +29,7 @@ class _LanguagePageState extends State<LanguagePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MyAppbar2(title: "Languages"),
+              const MyAppbar2(title: "Languages"),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -39,12 +39,12 @@ class _LanguagePageState extends State<LanguagePage> {
                       title: "Hindi",
                       value: "Hindi",
                     ),
-                    Divider(),
+                    const Divider(),
                     customRadioListTile(
                       title: "English",
                       value: "English",
                     ),
-                    Divider(),
+                    const Divider(),
                     customRadioListTile(
                       title: "Telugu",
                       value: "Telugu",

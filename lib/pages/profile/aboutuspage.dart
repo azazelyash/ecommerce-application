@@ -12,13 +12,13 @@ class AboutUsPage extends StatelessWidget {
           child: SingleChildScrollView(
         child: Column(
           children: [
-            MyAppbar2(title: "About Us"),
-            SizedBox(height: 20),
+            const MyAppbar2(title: "About Us"),
+            const SizedBox(height: 20),
             Image.asset(
               "assets/Icons/logo.png",
               height: 130,
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Padding(
               padding: const EdgeInsets.all(22.0),
               child: Center(
@@ -33,7 +33,7 @@ class AboutUsPage extends StatelessWidget {
                           fontWeight: FontWeight.w700),
                       textScaleFactor: 1.0,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: Text(
                         "Abhyukta Foods is a reliable and reputed site where you can order pickles online and also can get your desired items at your home only. You don’t need to go anywhere as it is available online.",
@@ -44,7 +44,7 @@ class AboutUsPage extends StatelessWidget {
                         textScaleFactor: 1.0,
                       ),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     Center(
                       child: Text(
                         "Privacy Policy         |         Terms & Conditions",

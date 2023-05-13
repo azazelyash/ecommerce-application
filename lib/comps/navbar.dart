@@ -16,10 +16,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _SelectedIndex = 0;
+  int selectedIndex = 0;
   void navigateBottomBar(int newIndex) {
     setState(() {
-      _SelectedIndex = newIndex;
+      selectedIndex = newIndex;
     });
   }
 
@@ -36,9 +36,9 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       bottomNavigationBar: NavBox(
         onTap: (index) => navigateBottomBar(index),
-        index: _SelectedIndex,
+        index: selectedIndex,
       ),
-      body: _pages[_SelectedIndex],
+      body: _pages[selectedIndex],
     );
   }
 }

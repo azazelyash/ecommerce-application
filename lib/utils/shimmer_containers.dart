@@ -109,7 +109,7 @@ class ShimmerContainer {
         highlightColor: Colors.white70,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
@@ -120,7 +120,7 @@ class ShimmerContainer {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -131,19 +131,19 @@ class ShimmerContainer {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                 height: 250,
-                margin: EdgeInsets.symmetric(horizontal: 50),
+                margin: const EdgeInsets.symmetric(horizontal: 50),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -154,7 +154,7 @@ class ShimmerContainer {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -165,7 +165,7 @@ class ShimmerContainer {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(

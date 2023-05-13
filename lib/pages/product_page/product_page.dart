@@ -123,14 +123,11 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text('₹150.00 - ₹550.00'),
-                          CounterWidget()
-                        ],
+                        children: [Text('₹150.00 - ₹550.00'), CounterWidget()],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Wrap(
@@ -173,8 +170,8 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Expanded(
                             child: Text(
                               'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
@@ -289,7 +286,7 @@ class _CounterWidgetState extends State<CounterWidget> {
           child: Center(
             child: Text(
               count.toString(),
-              style: TextStyle(color: Colors.white, fontSize: 15),
+              style: const TextStyle(color: Colors.white, fontSize: 15),
             ),
           ),
         ),
