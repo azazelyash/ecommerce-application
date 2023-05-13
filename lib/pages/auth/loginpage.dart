@@ -1,4 +1,3 @@
-import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
 import 'package:abhyukthafoods/comps/text_styles.dart';
@@ -32,7 +31,8 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login here",
-                          style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -62,12 +62,14 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             "Remember Me",
-                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: kauthTextFieldStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           Text(
                             "Forgot Password",
-                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: kauthTextFieldStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                         ],
@@ -86,8 +88,9 @@ class LoginPage extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Login in",
-                            style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            "Login",
+                            style: kauthTextFieldStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                         ),
@@ -100,7 +103,10 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login with",
-                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -109,7 +115,10 @@ class LoginPage extends StatelessWidget {
                     //Google and facebox button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
+                      children: [
+                        GoogleButton(onTapp: () {}),
+                        FacebookButton(onTapp: () {})
+                      ],
                     ),
 
                     //other way
@@ -120,7 +129,10 @@ class LoginPage extends StatelessWidget {
                         children: [
                           Text(
                             "Don't have an account ? ",
-                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(

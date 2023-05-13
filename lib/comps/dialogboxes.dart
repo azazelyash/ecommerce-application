@@ -18,9 +18,9 @@ class MyDialogBox extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: Colors.grey,
+              color: Color.fromARGB(255, 71, 70, 70),
               blurRadius: 1.0,
             ),
           ]),
