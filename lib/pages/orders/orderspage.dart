@@ -115,7 +115,7 @@ class OrderCard extends StatelessWidget {
                 ),
               )
               .toList(),
-          const Padding(
+           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
