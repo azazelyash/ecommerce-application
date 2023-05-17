@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
 import 'package:abhyukthafoods/comps/text_styles.dart';
@@ -73,29 +74,30 @@ class _SignUpPageState extends State<SignUpPage> {
 
     final success = await apiService.createCustomer(model);
 
-
     if (!mounted) return;
 
-    Navigator.of(context).pop(); // Close the dialog
-
-
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text("Sign Up Successful"),
-        ),
-      );
+      LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
+      if (!mounted) return;
 
-          builder: (_) => const LoginPage(), // Replace with your homepage widget
-
-
-        ),
-      );
+      Navigator.of(context).pop(); // Close the dialog
+      if (model.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const MainPage(), // Replace with your homepage widget
+          ),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(), // Replace with your homepage widget
+          ),
+        );
+      }
     } else {
+      Navigator.of(context).pop(); // Close the dialog
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
@@ -190,7 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         onTap: () {
                           if (!isFilled(emailController.text, passwordController.text, cfmPasswordController.text, nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -207,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -224,7 +226,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!arePasswordsMatching(passwordController.text, cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
