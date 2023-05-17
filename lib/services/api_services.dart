@@ -12,18 +12,20 @@ import 'package:http/http.dart' as http;
 class APIService {
   static var client = http.Client();
 
-  static Future<LoginResponseModel> loginCustomer(String username, String password) async {
+  static Future<LoginResponseModel> loginCustomer(
+      String username, String password) async {
     LoginResponseModel model = LoginResponseModel();
 
     try {
-      var response = await Dio().post(APIConfig().tokenUrl,
+      var response = await Dio().post(APIConfig.tokenUrl,
           data: {
             "username": username,
             "password": password,
           },
           options: Options(
             headers: {
-              HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+              HttpHeaders.contentTypeHeader:
+                  "application/x-www-form-urlencoded",
             },
           ));
 
@@ -79,16 +81,27 @@ class APIService {
     bool ret = false;
 
     try {
-      var response = await Dio().post(
-        APIConfig().url + APIConfig().customerURl,
-        data: model.toJson(),
-        options: Options(
-          headers: {
-            HttpHeaders.authorizationHeader: 'Basic $authToken',
-            HttpHeaders.contentTypeHeader: "application/json",
-          },
-        ),
+      final uri = Uri.https(
+        'mrsfood.in',
+        '/wp-json/wc/v3/products',
       );
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Basic ${authToken}',
+        },
+      );
+
+      // var response = await Dio().post(
+      //   APIConfig().url + APIConfig.customerURl,
+      //   data: model.toJson(),
+      //   options: Options(
+      //     headers: {
+      //       HttpHeaders.authorizationHeader: 'Basic $authToken',
+      //       HttpHeaders.contentTypeHeader: "application/json",
+      //     },
+      //   ),
+      // );
 
       if (response.statusCode == 201) {
         ret = true;

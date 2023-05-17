@@ -1,6 +1,7 @@
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/comps/category_listview.dart';
+import 'package:abhyukthafoods/network/fetch_categories.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,7 +61,7 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                   Row(
+                  Row(
                     children: [
                       SizedBox(
                         width: 20,
@@ -74,17 +75,19 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Categories(categories: [
-                    'Veg Pickles',
-                    'Veg Pickles',
-                    'Veg Pickles',
-                    'Veg Pickles',
-                    'Veg Pickles'
-                  ]),
+                  FutureBuilder(
+                      future: fetchCategories(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return shimmerContainer.categoryShimmer();
+                        } else {
+                          return Categories(categories: snapshot.data);
+                        }
+                      }),
                   const SizedBox(
                     height: 10,
                   ),
-                   Row(
+                  Row(
                     children: [
                       SizedBox(
                         width: 20,
