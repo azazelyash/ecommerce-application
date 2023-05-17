@@ -75,7 +75,7 @@ class APIService {
 
   Future<bool> createCustomer(CustomerModel model) async {
     var authToken = base64.encode(
-      utf8.encode("${APIConfig().key}:${APIConfig().secret}"),
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
     );
 
     bool ret = false;

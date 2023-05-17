@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import '../models/categories.dart';
 
 Future<List<ProductCategory>> fetchCategories() async {
-  var url = '${APIConfig().url}products/categories';
+  var url = '${APIConfig.url}products/categories';
 
   var authToken = base64.encode(
-    utf8.encode("${APIConfig().key}:${APIConfig().secret}"),
+    utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
   );
   final response = await Dio().get(url,
       options: Options(
@@ -19,15 +19,10 @@ Future<List<ProductCategory>> fetchCategories() async {
       ));
 
   var categoriesData = response.data;
-  // log(categoriesData.toString());
-
   List<ProductCategory> categories = [];
   categoriesData.forEach((category) {
     categories.add(ProductCategory.fromJson(category));
   });
 
-  // for (var x in categories) {
-  //   log(x.image['src'].toString());
-  // }
   return categories;
 }
