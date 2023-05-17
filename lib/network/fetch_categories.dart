@@ -1,28 +1,25 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:abhyukthafoods/api_config.dart';
-import 'package:dio/dio.dart';
+
+import 'package:abhyukthafoods/network/network_helper.dart';
+import 'package:abhyukthafoods/utils/api_key.dart';
+
 import '../models/categories.dart';
 
 Future<List<ProductCategory>> fetchCategories() async {
-  var url = '${APIConfig.url}products/categories';
+  var url =
+      '${storeUrl}products/categories?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
 
-  var authToken = base64.encode(
-    utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
-  );
-  final response = await Dio().get(url,
-      options: Options(
-        headers: {
-          HttpHeaders.authorizationHeader: 'Basic $authToken',
-          HttpHeaders.contentTypeHeader: "application/json",
-        },
-      ));
+  NetworkHelper networkHelper = NetworkHelper(url);
 
-  var categoriesData = response.data;
+  var categoriesData = await networkHelper.getData();
+  // log(categoriesData.toString());
+
   List<ProductCategory> categories = [];
   categoriesData.forEach((category) {
     categories.add(ProductCategory.fromJson(category));
   });
 
+  // for (var x in categories) {
+  //   log(x.image['src'].toString());
+  // }
   return categories;
 }

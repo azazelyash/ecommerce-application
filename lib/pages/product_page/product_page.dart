@@ -1,5 +1,4 @@
 import 'package:abhyukthafoods/comps/product_card.dart';
-import 'package:abhyukthafoods/models/products.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -124,7 +123,7 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
+                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [Text('₹150.00 - ₹550.00'), CounterWidget()],
                       ),
@@ -171,7 +170,7 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
+                     Row(
                         children: [
                           Expanded(
                             child: Text(
@@ -192,9 +191,8 @@ class _ProductPageState extends State<ProductPage> {
                         height: 20,
                       ),
                       const SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        // child: ProductCard()
-                      ),
+                          scrollDirection: Axis.horizontal,
+                          child: ProductCard()),
                     ]),
               ),
             )

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:abhyukthafoods/models/categories.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,8 +13,7 @@ class Categories extends StatelessWidget {
     return Color.fromRGBO(r, g, b, 1.0);
   }
 
-  Widget category(
-      BuildContext context, int index, List<ProductCategory> categories) {
+  Widget category(BuildContext context, int index, List categories) {
     return GestureDetector(
       onTap: () {},
       child: Column(
@@ -32,30 +30,23 @@ class Categories extends StatelessWidget {
             width: 70,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
-              child: categories[index].image != null
-                  ? Image(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(categories[index].image['src'])
+              child: const Image(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/Rectangle 33.png'),
 
-                      // NetworkImage(snapshot.data[index].image['src']),
-                      )
-                  : Placeholder(),
+                // NetworkImage(snapshot.data[index].image['src']),
+              ),
             ),
           ),
           const SizedBox(height: 6),
-          SizedBox(
-            width: 100,
-            child: Text(
-              // snapshot.data[index].name,
-              categories[index].name,
-              overflow: TextOverflow.ellipsis,
-
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500),
-            ),
+          Text(
+            // snapshot.data[index].name,
+            categories[index].toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 12,
+                fontWeight: FontWeight.w500),
           ),
         ],
       ),
