@@ -49,6 +49,7 @@ class Data {
   String? firstName;
   String? lastName;
   String? displayName;
+  String? avatarUrl;
 
   Data({
     this.token,
@@ -58,6 +59,7 @@ class Data {
     this.firstName,
     this.lastName,
     this.displayName,
+    this.avatarUrl,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class Data {
     firstName = json['firstName'];
     lastName = json['lastName'];
     displayName = json['displayName'];
+    avatarUrl = json['avatar_url'];
   }
 
   Map<String, dynamic> toJson() {

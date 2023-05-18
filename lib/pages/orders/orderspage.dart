@@ -8,13 +8,11 @@ class OrdersPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: Text(
           'Past Orders',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       body: Padding(
@@ -33,8 +31,7 @@ class OrdersPage extends StatelessWidget {
                     hintStyle: const TextStyle(
                       color: Colors.white,
                     ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     filled: true,
                     fillColor: Colors.black),
               ),
@@ -67,14 +64,10 @@ class OrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text('Order No. #13123412'))),
+                const Expanded(child: Padding(padding: EdgeInsets.all(10), child: Text('Order No. #13123412'))),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Delivered')),
+                  child: ElevatedButton(onPressed: () {}, child: const Text('Delivered')),
                 )
               ],
             ),
@@ -92,8 +85,7 @@ class OrderCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Image.asset('assets/Rectangle 33.png')),
-                      title: Text('Sunstar Fresh Melon Juice  x1',
-                          style: Theme.of(context).textTheme.titleSmall),
+                      title: Text('Sunstar Fresh Melon Juice  x1', style: Theme.of(context).textTheme.titleSmall),
                       trailing: const Text('Rs 200.55'),
                     ),
                     Padding(
@@ -103,9 +95,7 @@ class OrderCard extends StatelessWidget {
                             90,
                             (index) => Expanded(
                                   child: Container(
-                                    color: index % 2 == 0
-                                        ? Colors.transparent
-                                        : Colors.grey,
+                                    color: index % 2 == 0 ? Colors.transparent : Colors.grey,
                                     height: 1,
                                   ),
                                 )),
@@ -115,14 +105,11 @@ class OrderCard extends StatelessWidget {
                 ),
               )
               .toList(),
-           Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(child: Text('02-03-2023 : 12: 44 PM')),
-                Text('Rs 200.55')
-              ],
+              children: [Expanded(child: Text('02-03-2023 : 12: 44 PM')), Text('Rs 200.55')],
             ),
           ),
           const Divider(),
@@ -132,11 +119,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const Expanded(child: Text('Rate')),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                    onPressed: () {},
-                    child: const Text('Reorder')),
+                ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black), onPressed: () {}, child: const Text('Reorder')),
               ],
             ),
           ),

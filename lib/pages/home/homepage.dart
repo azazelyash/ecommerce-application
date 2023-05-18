@@ -3,6 +3,7 @@ import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/comps/category_listview.dart';
 import 'package:abhyukthafoods/network/fetch_categories.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,9 +20,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     int a = 2;
     ShimmerContainer shimmerContainer = ShimmerContainer();
+    // APIService().getCustomerDetails("21");
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: const HomeAppBar(title: ''),
+        appBar: const HomeAppBar(),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -105,13 +107,11 @@ class HomePage extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 4,
                           shrinkWrap: true,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio:
-                                MediaQuery.of(context).size.height / 1350,
+                            childAspectRatio: MediaQuery.of(context).size.height / 1350,
                           ),
                           itemBuilder: (BuildContext gridcontext, int index) {
                             return ProductCard(product: snapshot.data![index]);

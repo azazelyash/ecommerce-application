@@ -79,8 +79,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       margin: EdgeInsets.symmetric(horizontal: 2.0),
       decoration: BoxDecoration(
         shape: _currentSlide == index ? BoxShape.rectangle : BoxShape.circle,
-        borderRadius:
-            _currentSlide == index ? BorderRadius.circular(4.0) : null,
+        borderRadius: _currentSlide == index ? BorderRadius.circular(4.0) : null,
         color: _currentSlide == index ? Colors.green.shade900 : Colors.grey,
       ),
     );
@@ -206,7 +205,7 @@ class OB2 extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => LoginPage(),
                     ),
