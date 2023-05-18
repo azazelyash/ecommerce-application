@@ -74,7 +74,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
   Future<void> getCustomerDetails() async {
     loginModel = await SharedService.loginDetails();
-    customerModel = await APIService.getCustomerDetails(loginModel!.data!.id.toString());
+    customerModel = await APIService().getCustomerDetails(loginModel!.data!.id.toString());
     setState(() {
       isLoading = false;
     });

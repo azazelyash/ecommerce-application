@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/cart/cartpage.dart';
 import 'package:abhyukthafoods/pages/orders/orderspage.dart';
 import 'package:abhyukthafoods/pages/profile/profilepage.dart';
@@ -9,7 +12,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  MainPage({super.key, this.customerModel});
+
+  CustomerModel? customerModel;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -17,6 +22,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
+  CustomerModel? model = CustomerModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    model = widget.customerModel;
+  }
+
   void navigateBottomBar(int newIndex) {
     setState(() {
       selectedIndex = newIndex;
@@ -33,6 +47,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    log(model!.firstname.toString());
     return Scaffold(
       bottomNavigationBar: NavBox(
         onTap: (index) => navigateBottomBar(index),

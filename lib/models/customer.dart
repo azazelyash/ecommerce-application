@@ -6,10 +6,11 @@ class CustomerModel {
   String? avatarUrl;
 
   CustomerModel({
-    required this.email,
-    required this.firstname,
-    required this.lastname,
-    required this.password,
+    this.email,
+    this.firstname,
+    this.lastname,
+    this.password,
+    this.avatarUrl,
   });
 
   Map<String, dynamic> toJson() {
@@ -21,6 +22,7 @@ class CustomerModel {
       'last_name': lastname,
       'password': password,
       'username': email,
+      'avatar_url': avatarUrl,
     });
 
     return map;

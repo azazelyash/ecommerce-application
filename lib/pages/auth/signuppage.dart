@@ -7,6 +7,7 @@ import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
 import 'package:abhyukthafoods/comps/text_styles.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController cfmPasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   APIService apiService = APIService();
+  CustomerModel? customerModel = CustomerModel();
   bool signedIn = false;
   String firstName = '';
   String lastName = '';
@@ -79,13 +81,15 @@ class _SignUpPageState extends State<SignUpPage> {
     if (success) {
       LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
 
+      getCustomerData();
+
       if (!mounted) return;
 
       Navigator.of(context).pop(); // Close the dialog
       if (model.statusCode == 200) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => const MainPage(), // Replace with your homepage widget
+            builder: (_) => MainPage(customerModel: customerModel), // Replace with your homepage widget
           ),
         );
       } else {
@@ -105,6 +109,12 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
     }
+  }
+
+  Future<void> getCustomerData() async {
+    customerModel = await SharedService.customerDetails();
+    /* -------------------------- print customer model -------------------------- */
+    log("Customer Model: ${customerModel!.toJson()}");
   }
 
   @override

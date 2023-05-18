@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/navbar.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 
@@ -7,6 +10,7 @@ import 'package:abhyukthafoods/comps/auth_text_field.dart';
 import 'package:abhyukthafoods/comps/text_styles.dart';
 import 'package:abhyukthafoods/pages/home/homepage.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +25,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  CustomerModel? customerModel = CustomerModel();
 
   /* ----------------------- Check Username and Password ---------------------- */
 
@@ -48,14 +53,16 @@ class _LoginPageState extends State<LoginPage> {
 
     LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
 
-    if (!mounted) return;
+    getCustomerData();
+
+    // if (!mounted) return;
 
     Navigator.of(context).pop();
 
     if (model.statusCode == 200) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainPage(), // Replace with your homepage widget
+          builder: (_) => MainPage(customerModel: customerModel), // Replace with your homepage widget
         ),
       );
     } else {
@@ -66,6 +73,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
+  }
+
+  Future<void> getCustomerData() async {
+    customerModel = await SharedService.customerDetails();
+    /* -------------------------- print customer model -------------------------- */
+    log("Customer Model: ${customerModel!.toJson()}");
   }
 
   @override
