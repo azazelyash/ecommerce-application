@@ -1,3 +1,4 @@
+import 'package:abhyukthafoods/pages/splash_screen/splash_screen.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'comps/navbar.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: defaultPage,
+      home: const SplashScreen(),
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(secondary: Colors.black, seedColor: const Color.fromRGBO(20, 120, 70, 1)),
         textTheme: textTheme(
