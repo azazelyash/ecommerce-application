@@ -2,7 +2,7 @@
     package="com.skygoal.abhyukthafoods">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="abhyukthafoods"
+        android:label="Abhyuktha Foods"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

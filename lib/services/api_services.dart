@@ -28,10 +28,8 @@ class APIService {
           ));
 
       if (response.statusCode == 200) {
-        log("Login Success");
-        // log(response.data.toString());
+        log(response.data.toString());
         model = LoginResponseModel.fromJson(response.data);
-        log(model.data!.token.toString());
         if (model.statusCode == 200) {
           await SharedService.setLoginDetails(model);
         }
@@ -41,34 +39,22 @@ class APIService {
     }
 
     return model;
-    // Map<String, String> requestHeaders = {
-    //   'Content-type': 'application/x-www-form-urlencoded',
-    // };
+  }
 
-    // var response = await client.post(
-    //   Uri.parse("${APIConfig().loginUrl}/wp-json/jwt-auth/v1/token"),
-    //   headers: requestHeaders,
-    //   body: {
-    //     'username': username,
-    //     'password': password,
-    //   },
-    // );
+  static Future<CustomerModel?> getCustomerDetails(String id) async {
+    CustomerModel? model;
+    String url = "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
 
-    // if (response.statusCode == 200) {
-    //   log("Login Success");
-    //   var data = json.decode(response.body);
-    //   LoginResponseModel model = LoginResponseModel.fromJson(data);
+    try {
+      var response = await http.get(Uri.parse(url));
+      var data = jsonDecode(response.body);
+      model = CustomerModel.fromJson(data);
+      log(model.avatarUrl.toString());
+    } catch (e) {
+      log(e.toString());
+    }
 
-    // if (model.statusCode == 200) {
-    //   await SharedService.setLoginDetails(model);
-    // }
-
-    //   log(model.toString());
-
-    //   return model.statusCode == 200 ? true : false;
-    // }
-
-    // return false;
+    return model;
   }
 
   Future<bool> createCustomer(CustomerModel model) async {

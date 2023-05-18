@@ -1,8 +1,9 @@
 class CustomerModel {
-  String email;
-  String firstname;
-  String lastname;
-  String password;
+  String? email;
+  String? firstname;
+  String? lastname;
+  String? password;
+  String? avatarUrl;
 
   CustomerModel({
     required this.email,
@@ -23,5 +24,13 @@ class CustomerModel {
     });
 
     return map;
+  }
+
+  CustomerModel.fromJson(Map<String, dynamic> json) {
+    email = json['email'];
+    firstname = json['first_name'];
+    lastname = json['last_name'];
+    password = json['password'];
+    avatarUrl = json['avatar_url'];
   }
 }

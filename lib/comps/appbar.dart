@@ -1,3 +1,10 @@
+import 'dart:developer';
+
+import 'package:abhyukthafoods/api_config.dart';
+import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/login_model.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,9 +32,9 @@ class MyAppbar2 extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            child: SvgPicture.asset(
-              "assets/Icons/back.svg",
-              height: 30,
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
             ),
           ),
           const SizedBox(width: 18),
@@ -43,13 +50,9 @@ class MyAppbar2 extends StatelessWidget {
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-
-  const HomeAppBar({
-    required this.title,
-    Key? key,
-  })  : preferredSize = const Size.fromHeight(kToolbarHeight),
+  const HomeAppBar({Key? key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
-  final String title;
   @override
   final Size preferredSize;
 
@@ -58,14 +61,30 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
+  CustomerModel? customerModel;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       elevation: 0.3,
       backgroundColor: Colors.white,
-      title: const Text(
-        'Hello! Manikanta',
-        style: TextStyle(color: Colors.black),
+      title: FutureBuilder(
+        future: SharedService.loginDetails(),
+        builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
+          if (loginModel.hasData) {
+            return Text(
+              "Hello! ${loginModel.data!.data!.firstName.toString()}",
+              style: GoogleFonts.dmSans(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       actions: [
         IconButton(
@@ -73,12 +92,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
           icon: const Icon(Icons.notifications_none),
           color: Colors.black,
         ),
-        const Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: CircleAvatar(
-              // backgroundImage: NetworkImage(''),
-              ),
-        )
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: FutureBuilder(
+            future: SharedService.loginDetails(),
+            builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
+              return CircleAvatar();
+            },
+          ),
+        ),
       ],
     );
   }

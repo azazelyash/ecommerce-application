@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     HomePage(),
-     SearchPage(),
+    SearchPage(),
     const CartPage(),
     const OrdersPage(),
     const ProfilePage(),
@@ -59,7 +59,7 @@ class NavBox extends StatelessWidget {
       width: 280,
       height: 87,
       decoration: BoxDecoration(
-        color: Colors.grey[850],
+        color: Color(0xff1D1F24),
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(25),
           topLeft: Radius.circular(25),
@@ -125,15 +125,15 @@ class NavBox extends StatelessWidget {
                 width: 53,
                 height: 53,
                 decoration: BoxDecoration(
-                    color: index == 2
-                        ? Colors.green.shade300
-                        : Colors.green.shade300,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white)),
+                  color: const Color(0xff147846),
+                  // color: index == 2 ? Color(0xff147846) : Colors.green.shade300,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: Colors.white),
+                ),
                 child: Center(
                   child: SvgPicture.asset(
-                    "assets/Icons/cart.svg",
-                    height: 25,
+                    "assets/Icons/Vector-only cart-white.svg",
+                    height: 20,
                   ),
                 ),
               ),

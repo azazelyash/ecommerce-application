@@ -107,7 +107,7 @@ class ProfileBox extends StatelessWidget {
       children: [
         Center(
           child: Container(
-            width: 370,
+            width: MediaQuery.of(context).size.width * 0.9,
             height: 90,
             decoration: BoxDecoration(color: Colors.green.shade400, borderRadius: BorderRadius.circular(10)),
             child: Padding(
@@ -115,22 +115,30 @@ class ProfileBox extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Sai Kiran",
-                        style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
-                        textScaleFactor: 1.0,
-                      ),
-                      Text(
-                        "9894213456",
-                        style: GoogleFonts.dmSans(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-                        textScaleFactor: 1.0,
-                      ),
-                    ],
-                  ),
+                  FutureBuilder(
+                      future: SharedService.loginDetails(),
+                      builder: (context, AsyncSnapshot<LoginResponseModel> snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.data!.data!.firstName!,
+                                style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+                                textScaleFactor: 1.0,
+                              ),
+                              Text(
+                                snapshot.data!.data!.email!,
+                                style: GoogleFonts.dmSans(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                                textScaleFactor: 1.0,
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      }),
                   SvgPicture.asset(
                     "assets/profile/righwhite.svg",
                     height: 14,
@@ -157,7 +165,6 @@ class Titletile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTapp,
-
       child: Container(
         color: Colors.transparent,
         child: Column(
@@ -173,8 +180,6 @@ class Titletile extends StatelessWidget {
                       SvgPicture.asset(
                         imagepath,
                         height: 22,
-
-
                       ),
                       SizedBox(width: 25),
                       Text(
