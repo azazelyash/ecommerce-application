@@ -1,20 +1,17 @@
 import 'package:abhyukthafoods/pages/splash_screen/splash_screen.dart';
-import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
-import 'comps/navbar.dart';
-import 'pages/auth/onboardingpage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget defaultPage = const OnboardingPage();
+// Widget defaultPage = const OnboardingPage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  bool _result = await SharedService.isLoggedIn();
+  // bool _result = await SharedService.isLoggedIn();
 
-  if (_result) {
-    defaultPage = const MainPage();
-  }
+  // if (_result) {
+  //   defaultPage = const MainPage();
+  // }
 
   runApp(const MyApp());
 }
