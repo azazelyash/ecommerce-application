@@ -1,6 +1,7 @@
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/comps/category_listview.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_categories.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
