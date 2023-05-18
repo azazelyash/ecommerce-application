@@ -62,30 +62,58 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _HomeAppBarState extends State<HomeAppBar> {
   CustomerModel? customerModel;
+  LoginResponseModel? loginModel;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCustomerDetails();
+  }
+
+  Future<void> getCustomerDetails() async {
+    loginModel = await SharedService.loginDetails();
+    customerModel = await APIService.getCustomerDetails(loginModel!.data!.id.toString());
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const LinearProgressIndicator();
+    }
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0.3,
       backgroundColor: Colors.white,
-      title: FutureBuilder(
-        future: SharedService.loginDetails(),
-        builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
-          if (loginModel.hasData) {
-            return Text(
-              "Hello! ${loginModel.data!.data!.firstName.toString()}",
-              style: GoogleFonts.dmSans(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      title: Text(
+        "Hello! ${customerModel?.firstname.toString()}",
+        style: GoogleFonts.dmSans(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
       ),
+      // title: FutureBuilder(
+      //   future: SharedService.loginDetails(),
+      //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
+      //     if (loginModel.hasData) {
+      //       return Text(
+      //         "Hello! ${loginModel.data!.data!.firstName.toString()}",
+      //         style: GoogleFonts.dmSans(
+      //           fontSize: 20,
+      //           fontWeight: FontWeight.w700,
+      //           color: Colors.black,
+      //         ),
+      //       );
+      //     } else {
+      //       return const Center(child: CircularProgressIndicator());
+      //     }
+      //   },
+      // ),
       actions: [
         IconButton(
           onPressed: () {},
@@ -93,14 +121,32 @@ class _HomeAppBarState extends State<HomeAppBar> {
           color: Colors.black,
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: FutureBuilder(
-            future: SharedService.loginDetails(),
-            builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
-              return CircleAvatar();
-            },
-          ),
-        ),
+            padding: const EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
+            )
+            // child: FutureBuilder(
+            //   future: SharedService.loginDetails(),
+            //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
+            //     if (loginModel.hasData) {
+            //       return FutureBuilder(
+            //         future: APIService.getCustomerDetails(loginModel.data!.data!.id.toString()),
+            //         builder: (context, AsyncSnapshot<CustomerModel?> snapshot) {
+            //           if (loginModel.hasData) {
+            //             return CircleAvatar(
+            //               backgroundImage: NetworkImage(snapshot.data!.avatarUrl.toString()),
+            //             );
+            //           } else {
+            //             return const Center(child: CircularProgressIndicator());
+            //           }
+            //         },
+            //       );
+            //     } else {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
+            ),
       ],
     );
   }
