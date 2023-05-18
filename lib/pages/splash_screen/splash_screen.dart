@@ -1,7 +1,9 @@
 import 'package:abhyukthafoods/comps/navbar.dart';
-import 'package:abhyukthafoods/pages/home/homepage.dart';
-import 'package:animations/animations.dart';
+import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
+
+Widget defaultPage = const OnboardingPage();
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,10 +17,20 @@ class _SplashScreenState extends State<SplashScreen> {
   double topLevel = 0.0;
   bool selected = false;
 
+  @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     super.initState();
     updateUI();
   }
+
+  /* ---------------------- Function To Create Animation ---------------------- */
+
+  // This Function is used to create animation for the splash screen,
+  // it will wait for 500 milliseconds and then it will change the opacity of the logo and the image to 1.0
+  // and then it will wait for another 500 milliseconds and then it will check if the user is logged in or not,
+  // if the user is logged in then it will redirect the user to the home page
+  // else it will redirect the user to the onboarding page.
 
   Future updateUI() async {
     await Future.delayed(const Duration(milliseconds: 500));
@@ -26,12 +38,17 @@ class _SplashScreenState extends State<SplashScreen> {
       opacityLevel = 1.0;
       selected = true;
     });
-    await Future.delayed(const Duration(milliseconds: 500));
+    bool result = await SharedService.isLoggedIn();
+
+    if (result) {
+      defaultPage = const MainPage();
+    }
+    await Future.delayed(const Duration(milliseconds: 1000));
 
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const MainPage(),
+        builder: (context) => defaultPage,
       ),
     );
   }
@@ -84,8 +101,8 @@ class _SplashScreenState extends State<SplashScreen> {
             bottom: opacityLevel == 1.0 ? 0 : -120,
             left: opacityLevel == 1.0 ? 0 : -120,
             curve: Curves.bounceInOut,
-            duration: Duration(milliseconds: 500),
-            child: Image(
+            duration: const Duration(milliseconds: 500),
+            child: const Image(
               image: AssetImage("assets/splash_screen/Splash_Image.png"),
             ),
           ),
