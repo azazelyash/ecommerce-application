@@ -14,6 +14,7 @@ class APIService {
 
   static Future<LoginResponseModel> loginCustomer(String username, String password) async {
     LoginResponseModel model = LoginResponseModel();
+    CustomerModel customerModel = CustomerModel();
 
     try {
       var response = await Dio().post(APIConfig.tokenUrl,
@@ -30,8 +31,11 @@ class APIService {
       if (response.statusCode == 200) {
         log(response.data.toString());
         model = LoginResponseModel.fromJson(response.data);
+        customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
+        log("Avatar Url at API SERVICE : ${customerModel.avatarUrl}");
         if (model.statusCode == 200) {
           await SharedService.setLoginDetails(model);
+          await SharedService.setCustomerDetails(customerModel);
         }
       }
     } on DioError catch (e) {
@@ -41,15 +45,14 @@ class APIService {
     return model;
   }
 
-  static Future<CustomerModel?> getCustomerDetails(String id) async {
-    CustomerModel? model;
+  Future<CustomerModel> getCustomerDetails(String id) async {
+    CustomerModel model = CustomerModel();
     String url = "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
 
     try {
       var response = await http.get(Uri.parse(url));
       var data = jsonDecode(response.body);
       model = CustomerModel.fromJson(data);
-      log(model.avatarUrl.toString());
     } catch (e) {
       log(e.toString());
     }

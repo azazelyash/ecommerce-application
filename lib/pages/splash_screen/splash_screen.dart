@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/navbar.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget defaultPage = const OnboardingPage();
 
@@ -16,12 +21,20 @@ class _SplashScreenState extends State<SplashScreen> {
   double opacityLevel = 0.0;
   double topLevel = 0.0;
   bool selected = false;
+  CustomerModel? customerModel;
 
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
     super.initState();
+    getCustomerData();
     updateUI();
+  }
+
+  Future<void> getCustomerData() async {
+    customerModel = await SharedService.customerDetails();
+    /* -------------------------- print customer model -------------------------- */
+    log("Customer Model: ${customerModel!.toJson()}");
   }
 
   /* ---------------------- Function To Create Animation ---------------------- */
@@ -33,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   // else it will redirect the user to the onboarding page.
 
   Future updateUI() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 700));
     setState(() {
       opacityLevel = 1.0;
       selected = true;
@@ -41,11 +54,16 @@ class _SplashScreenState extends State<SplashScreen> {
     bool result = await SharedService.isLoggedIn();
 
     if (result) {
-      defaultPage = const MainPage();
+      defaultPage = MainPage(
+        customerModel: customerModel,
+      );
     }
     await Future.delayed(const Duration(milliseconds: 1000));
 
-    if (!mounted) return;
+    nextPage();
+  }
+
+  void nextPage() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => defaultPage,
@@ -65,37 +83,47 @@ class _SplashScreenState extends State<SplashScreen> {
             width: MediaQuery.of(context).size.width,
             fit: BoxFit.cover,
           ),
-          AnimatedOpacity(
-            curve: Curves.easeIn,
-            opacity: opacityLevel,
-            duration: const Duration(milliseconds: 500),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Image(
-                    image: AssetImage(
-                      'assets/splash_screen/Abhyuktha Logo.png',
-                    ),
-                    fit: BoxFit.cover,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedOpacity(
+                curve: Curves.easeIn,
+                opacity: opacityLevel,
+                duration: const Duration(milliseconds: 500),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Image(
+                        image: AssetImage(
+                          'assets/splash_screen/Abhyuktha Logo.png',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "India's largest Pickles store",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                        child: Text(
+                          "Abhyukta Foods is a reliable and reputed site where you can order pickles online and also can get your desired items at your home only. You don’t need to go anywhere as it is available online.",
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 12),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "India's largest Pickles store",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 12),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                    child: Text(
-                      "Abhyukta Foods is a reliable and reputed site where you can order pickles online and also can get your desired items at your home only. You don’t need to go anywhere as it is available online.",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.2,
+                child: const LinearProgressIndicator(),
+              ),
+            ],
           ),
           AnimatedPositioned(
             bottom: opacityLevel == 1.0 ? 0 : -120,
