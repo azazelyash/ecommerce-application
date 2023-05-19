@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CartPage extends StatelessWidget {
@@ -20,8 +19,7 @@ class CartPage extends StatelessWidget {
               padding: const EdgeInsets.all(22.0),
               child: Text(
                 "Cart",
-                style: GoogleFonts.dmSans(
-                    fontSize: 25, fontWeight: FontWeight.w700),
+                style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
               ),
             ),
 
@@ -277,9 +275,7 @@ class ApplyCouponBox extends StatelessWidget {
         child: Container(
           width: 390,
           height: 70,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
@@ -390,9 +386,7 @@ class TotalBox extends StatelessWidget {
         child: Container(
           width: 390,
           height: 70,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: Row(

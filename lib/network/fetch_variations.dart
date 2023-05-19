@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:abhyukthafoods/api_config.dart';
@@ -26,6 +27,7 @@ Future<List<Variation>> fetchVariations(String productId) async {
   List<Variation> variations = [];
   response.data.forEach((data) {
     variations.add(Variation.fromJson(data));
+    // log(data.toString());
   });
 
   // for (var x in variations) {
