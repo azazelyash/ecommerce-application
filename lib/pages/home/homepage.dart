@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Row(
+               Row(
                 children: [
                   SizedBox(
                     width: 20,
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Row(
+               Row(
                 children: [
                   SizedBox(
                     width: 20,
