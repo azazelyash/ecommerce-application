@@ -16,7 +16,7 @@ class ProductCard extends StatelessWidget {
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductPage(),
+              builder: (context) => ProductPage(product: product),
             )),
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
