@@ -10,13 +10,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  HomePage({super.key, required this.customerModel});
+
+  CustomerModel? customerModel;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final controller = PageController(viewportFraction: 1, keepPage: true);
+  CustomerModel? model = CustomerModel();
+
   final List pages = [
     SvgPicture.asset('assets/Banners/banner 3.svg'),
     SvgPicture.asset('assets/Banners/banner 4.svg'),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    model = widget.customerModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     int a = 2;
@@ -24,7 +42,7 @@ class HomePage extends StatelessWidget {
     // APIService().getCustomerDetails("21");
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: const HomeAppBar(),
+        appBar: HomeAppBar(customerModel: model),
         body: SingleChildScrollView(
           child: Column(
             children: [

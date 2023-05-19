@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   // else it will redirect the user to the onboarding page.
 
   Future updateUI() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 700));
     setState(() {
       opacityLevel = 1.0;
       selected = true;
