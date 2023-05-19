@@ -45,6 +45,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   shimmer: ^2.0.0
   animations: ^2.0.7
+  connectivity_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - assets/splash_screen/
     - assets/Login-signup/
     - assets/Icons/bgg.jpg
+    - assets/Errors/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
