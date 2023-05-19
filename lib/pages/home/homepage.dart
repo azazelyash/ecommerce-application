@@ -123,22 +123,28 @@ class homePageBody extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          FutureBuilder(
-              future: fetchCategories(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return shimmerContainer.categoryShimmer();
-                } else {
-                  return Categories(categories: snapshot.data);
-                }
-              }),
-          const SizedBox(
-            height: 10,
-          ),
-          const Row(
-            children: [
-              SizedBox(
-                width: 20,
+              FutureBuilder(
+                  future: fetchCategories(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return shimmerContainer.categoryShimmer();
+                    } else {
+                      return Categories(categories: snapshot.data);
+                    }
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+               Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    'Recently viewed',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
               ),
               Text(
                 'Recently viewed',
