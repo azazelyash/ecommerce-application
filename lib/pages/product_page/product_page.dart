@@ -1,35 +1,71 @@
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/models/products.dart';
+import 'package:abhyukthafoods/network/fetch_products.dart';
+import 'package:abhyukthafoods/network/fetch_variations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductPage extends StatefulWidget {
-  ProductPage({super.key});
-
+  const ProductPage({required this.product, super.key});
+  final Product product;
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
   final PageController pageController = PageController();
+  Future<List>? variationData;
 
-  final pages = [
-    Image.asset(fit: BoxFit.contain, 'assets/Rectangle 33.png'),
-    Image.asset(fit: BoxFit.contain, 'assets/Rectangle 33.png'),
-  ];
-
-  final List<bool> isSelected = [true, false, false];
+  int varIndex = 0;
+  late List<bool> isSelected = [];
 
   void selectButton(int index) {
-    return setState(() {
+    setState(() {
+      varIndex = index;
       isSelected.fillRange(0, isSelected.length, false);
       isSelected[index] = true;
     });
   }
 
+  String resolvePrice(dynamic product) {
+    if (product.price != '') {
+      return '₹' + product.price;
+    } else if (product.regularPrice != '') {
+      return '₹' + product.regularPrice;
+    } else if (product.salePrice != '') {
+      return '₹' + product.salePrice;
+    } else {
+      return 'No Price set';
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.product.variations!.isEmpty) {
+      variationData = Future.value([0]);
+    } else {
+      variationData = fetchVariations(widget.product.id.toString());
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (widget.product.variations!.isEmpty) return;
+    isSelected = [...widget.product.variations!.map((e) => false)];
+    isSelected[0] = true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.product.images!.length);
+    var pages = [
+      ...widget.product.images!.map((e) => Image(image: NetworkImage(e['src'])))
+    ];
     var theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.primaryColor,
@@ -40,6 +76,7 @@ class _ProductPageState extends State<ProductPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+//---------------------------------- Back Button -----------------------------
                   GestureDetector(
                     child: Container(
                         margin: const EdgeInsets.all(10),
@@ -56,20 +93,37 @@ class _ProductPageState extends State<ProductPage> {
                       Navigator.pop(context);
                     },
                   ),
+
+//---------------------------------- Image Widget -----------------------------
+
                   Center(
                     child: Column(
                       children: [
                         SizedBox(
                           height: 200,
-                          child: PageView.builder(
-                            controller: pageController,
-                            itemCount: 2,
-                            itemBuilder: (context, index) => Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: pages[index],
-                            ),
-                          ),
+                          child: FutureBuilder(
+                              future: variationData,
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const CircularProgressIndicator();
+                                } else {
+                                  if (widget.product.variations!.isNotEmpty) {
+                                    pages = [
+                                      Image(
+                                          image: NetworkImage(snapshot
+                                              .data![varIndex].imageUrl))
+                                    ];
+                                  }
+                                  return PageView.builder(
+                                    controller: pageController,
+                                    itemCount: pages.length,
+                                    itemBuilder: (context, index) => Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: pages[index]),
+                                  );
+                                }
+                              }),
                         ),
                         const SizedBox(
                           height: 10,
@@ -99,14 +153,16 @@ class _ProductPageState extends State<ProductPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+//
+//---------------------------------- Title widget -----------------------------
+
                       Row(
                         children: [
                           Expanded(
                               child: Text(
-                            'Chicken Pickle',
+                            widget.product.name,
                             style: theme.textTheme.titleMedium,
                           )),
-                          const Spacer(),
                           GestureDetector(
                             child: Container(
                               decoration: BoxDecoration(
@@ -124,22 +180,48 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Text('₹150.00 - ₹550.00'), CounterWidget()],
+
+//---------------------------------- Price and Counter -----------------------------
+
+                      FutureBuilder(
+                        future: variationData,
+                        builder: (context, snapshot) => !snapshot.hasData
+                            ? const CircularProgressIndicator()
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(widget.product.variations!.isEmpty
+                                      ? resolvePrice(widget.product)
+                                      : resolvePrice(snapshot.data![varIndex])),
+                                  const CounterWidget()
+                                ],
+                              ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Wrap(
-                        children: List<Widget>.generate(
-                            isSelected.length,
-                            (index) => VariationButton(
-                                  isSelected: isSelected[index],
-                                  selectButtonCallback: () =>
-                                      selectButton(index),
-                                )),
-                      ),
+
+//---------------------------------- Variation selector  -----------------------------
+
+                      FutureBuilder(
+                          future: variationData,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const CircularProgressIndicator();
+                            }
+                            return Wrap(
+                              children: List<Widget>.generate(
+                                  isSelected.length,
+                                  (index) => VariationButton(
+                                        label: snapshot.data![index].name,
+                                        isSelected: isSelected[index],
+                                        selectButtonCallback: () =>
+                                            selectButton(index),
+                                      )),
+                            );
+                          }),
+// ------------------------------------------------------------------------------------
                       const SizedBox(
                         height: 20,
                       ),
@@ -174,9 +256,9 @@ class _ProductPageState extends State<ProductPage> {
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
-                            ),
+                            child: Text(widget.product.shortDescription == ''
+                                ? 'No description'
+                                : widget.product.shortDescription!),
                           ),
                         ],
                       ),
@@ -191,9 +273,26 @@ class _ProductPageState extends State<ProductPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        // child: ProductCard()
+                      FutureBuilder(
+                        future: fetchProducts(),
+                        builder: (context, snapshot) => !snapshot.hasData
+                            ? const CircularProgressIndicator()
+                            : SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    ...snapshot.data!.map(
+                                      (e) => Container(
+                                        padding: const EdgeInsets.all(10),
+                                        height: 300,
+                                        width: 200,
+                                        child: ProductCard(
+                                          product: e,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )),
                       ),
                     ]),
               ),
@@ -208,8 +307,10 @@ class _ProductPageState extends State<ProductPage> {
 class VariationButton extends StatefulWidget {
   const VariationButton(
       {super.key,
+      required this.label,
       required this.selectButtonCallback,
       required this.isSelected});
+  final String label;
   final Function selectButtonCallback;
   final bool isSelected;
   @override
@@ -229,7 +330,7 @@ class _VariationButtonState extends State<VariationButton> {
             backgroundColor: widget.isSelected ? null : Colors.white,
             minimumSize: const Size(80, 100)),
         child: Text(
-          '100Gm',
+          widget.label,
           style:
               TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
         ),

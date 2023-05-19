@@ -1,20 +1,30 @@
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/network/network_helper.dart';
 import 'package:abhyukthafoods/utils/api_key.dart';
+import 'package:dio/dio.dart';
 
 import '../models/variations.dart';
 
 Future<List<Variation>> fetchVariations(String productId) async {
-  var url =
-      '${storeUrl}products/$productId/variations?consumer_key=$consumerKey&consumer_secret=$consumerSecret';
+  var url = '${APIConfig.url}products/$productId/variations';
 
-  NetworkHelper networkHelper = NetworkHelper(url);
-
-  var variationData = await networkHelper.getData();
+  var authToken = base64.encode(
+    utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+  );
+  final response = await Dio().get(url,
+      options: Options(
+        headers: {
+          HttpHeaders.authorizationHeader: 'Basic $authToken',
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+      ));
   // log(productsData.toString());
 
   List<Variation> variations = [];
-  variationData.forEach((data) {
+  response.data.forEach((data) {
     variations.add(Variation.fromJson(data));
   });
 
