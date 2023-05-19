@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CartPage extends StatelessWidget {
@@ -25,11 +26,17 @@ class CartPage extends StatelessWidget {
             ),
 
             // card
-            CartCard(),
+            CartCard(
+              caption: '1 unit',
+              name: 'Sugar ',
+              image: '',
+            ),
 
             // apply coupon
             ApplyCouponBox(),
-
+            EnterCouponBox(
+              submit: () {},
+            ),
             //total price
             TotalBox(),
           ],
@@ -40,7 +47,16 @@ class CartPage extends StatelessWidget {
 }
 
 class CartCard extends StatefulWidget {
-  const CartCard({Key? key}) : super(key: key);
+  CartCard({
+    Key? key,
+    required this.name,
+    required this.caption,
+    required this.image,
+  }) : super(key: key);
+
+  final String name;
+  final String caption;
+  final String image;
 
   @override
   _CartCardState createState() => _CartCardState();
@@ -66,7 +82,7 @@ class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(10.0),
       child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Stack(
@@ -91,7 +107,7 @@ class _CartCardState extends State<CartCard> {
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: SvgPicture.asset(''),
+                        child: SvgPicture.asset(widget.image),
                       ),
 
                       Padding(
@@ -100,7 +116,7 @@ class _CartCardState extends State<CartCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Sunstar Fresh Melon Juice",
+                              widget.name,
                               style: GoogleFonts.dmSans(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -110,7 +126,7 @@ class _CartCardState extends State<CartCard> {
                             Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: Text(
-                                "1 UNIT",
+                                widget.caption,
                                 style: GoogleFonts.dmSans(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -285,6 +301,74 @@ class ApplyCouponBox extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                   textScaleFactor: 1.0,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// enter coupon
+
+class EnterCouponBox extends StatelessWidget {
+  const EnterCouponBox({Key? key, required this.submit});
+
+  final VoidCallback submit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Container(
+          width: 390,
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Enter coupon code",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 14,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTap: submit,
+                  child: Container(
+                    width: 90,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "SUBMIT",
+                        style: GoogleFonts.dmSans(
+                          color: Colors.grey.shade100,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textScaleFactor: 1.0,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
