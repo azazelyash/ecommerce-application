@@ -50,9 +50,12 @@ class MyAppbar2 extends StatelessWidget {
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const HomeAppBar({Key? key})
+  HomeAppBar({Key? key, required this.customerModel})
       : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
+
+  CustomerModel? customerModel;
+
   @override
   final Size preferredSize;
 
@@ -63,28 +66,28 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   CustomerModel? customerModel;
   LoginResponseModel? loginModel;
-  bool isLoading = true;
+  // bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCustomerDetails();
+    customerModel = widget.customerModel;
   }
 
-  Future<void> getCustomerDetails() async {
-    loginModel = await SharedService.loginDetails();
-    customerModel = await APIService().getCustomerDetails(loginModel!.data!.id.toString());
-    setState(() {
-      isLoading = false;
-    });
-  }
+  // Future<void> getCustomerDetails() async {
+  //   loginModel = await SharedService.loginDetails();
+  //   customerModel = await APIService().getCustomerDetails(loginModel!.data!.id.toString());
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const LinearProgressIndicator();
-    }
+    // if (isLoading) {
+    //   return const LinearProgressIndicator();
+    // }
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0.3,
@@ -123,6 +126,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
         Padding(
             padding: const EdgeInsets.only(right: 10),
             child: CircleAvatar(
+              backgroundColor: Colors.grey[300],
               backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
             )
             // child: FutureBuilder(

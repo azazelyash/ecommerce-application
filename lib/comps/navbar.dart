@@ -37,17 +37,16 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  final List<Widget> _pages = [
-    HomePage(),
-    SearchPage(),
-    const CartPage(),
-    const OrdersPage(),
-    const ProfilePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     log(model!.firstname.toString());
+    final List<Widget> _pages = [
+      HomePage(customerModel: model),
+      SearchPage(),
+      const CartPage(),
+      const OrdersPage(),
+      ProfilePage(customerModel: model),
+    ];
     return Scaffold(
       bottomNavigationBar: NavBox(
         onTap: (index) => navigateBottomBar(index),

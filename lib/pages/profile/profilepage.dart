@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
@@ -12,13 +13,24 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../comps/dialogboxes.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key, required this.customerModel});
+
+  CustomerModel? customerModel = CustomerModel();
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  CustomerModel? customerModel = CustomerModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    customerModel = widget.customerModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             // profile box
-            const ProfileBox(),
+            ProfileBox(
+              customerModel: customerModel,
+            ),
 
             // categories
 
@@ -98,8 +112,24 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class ProfileBox extends StatelessWidget {
-  const ProfileBox({super.key});
+class ProfileBox extends StatefulWidget {
+  ProfileBox({super.key, required this.customerModel});
+
+  CustomerModel? customerModel;
+
+  @override
+  State<ProfileBox> createState() => _ProfileBoxState();
+}
+
+class _ProfileBoxState extends State<ProfileBox> {
+  CustomerModel? model = CustomerModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    model = widget.customerModel;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,37 +138,48 @@ class ProfileBox extends StatelessWidget {
         Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            height: 90,
-            decoration: BoxDecoration(color: Colors.green.shade400, borderRadius: BorderRadius.circular(10)),
+            // height: 74,
+
+            /* ------------------------------ Profile Color ----------------------------- */
+
+            decoration: BoxDecoration(color: const Color(0xff147846), borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: const EdgeInsets.all(22.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FutureBuilder(
-                      future: SharedService.loginDetails(),
-                      builder: (context, AsyncSnapshot<LoginResponseModel> snapshot) {
-                        if (snapshot.hasData) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                snapshot.data!.data!.firstName!,
-                                style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
-                                textScaleFactor: 1.0,
-                              ),
-                              Text(
-                                snapshot.data!.data!.email!,
-                                style: GoogleFonts.dmSans(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-                                textScaleFactor: 1.0,
-                              ),
-                            ],
-                          );
-                        } else {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                      }),
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          model!.avatarUrl!,
+                          height: 52,
+                          width: 52,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${model!.firstname} ${model!.lastname}",
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+                            textScaleFactor: 1.0,
+                          ),
+                          Text(
+                            model!.email!,
+                            style: GoogleFonts.dmSans(color: Colors.white.withOpacity(0.7), fontSize: 14, fontWeight: FontWeight.w500),
+                            textScaleFactor: 1.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   SvgPicture.asset(
                     "assets/profile/righwhite.svg",
                     height: 14,
