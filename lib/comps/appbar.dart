@@ -40,7 +40,8 @@ class MyAppbar2 extends StatelessWidget {
           const SizedBox(width: 18),
           Text(
             title,
-            style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
+            style:
+                GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
             textScaleFactor: 1.0,
           ),
         ],
@@ -127,7 +128,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
             padding: const EdgeInsets.only(right: 10),
             child: CircleAvatar(
               backgroundColor: Colors.grey[300],
-              backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
+              backgroundImage:
+                  NetworkImage(customerModel!.avatarUrl.toString()),
             )
             // child: FutureBuilder(
             //   future: SharedService.loginDetails(),

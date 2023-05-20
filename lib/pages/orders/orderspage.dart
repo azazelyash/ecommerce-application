@@ -1,8 +1,11 @@
+import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/order.dart';
+import 'package:abhyukthafoods/network/fetch_orders.dart';
 import 'package:flutter/material.dart';
 
 class OrdersPage extends StatelessWidget {
-  const OrdersPage({super.key});
-
+  const OrdersPage({super.key, this.customerModel});
+  final CustomerModel? customerModel;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,44 +15,68 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: Text(
           'Past Orders',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    hintText: 'Search',
-                    hintStyle: const TextStyle(
-                      color: Colors.white,
-                    ),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    filled: true,
-                    fillColor: Colors.black),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              OrderCard()
-            ],
+        child: CustomScrollView(slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                TextField(
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: 'Search',
+                      hintStyle: const TextStyle(
+                        color: Colors.white,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      filled: true,
+                      fillColor: Colors.black),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
-        ),
+          SliverFillRemaining(
+            child: FutureBuilder(
+              future: fetchOrders(customerModel!.id.toString()),
+              builder: (context, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : !snapshot.hasData
+                          ? const Center(
+                              child: Text('No data'),
+                            )
+                          : ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) =>
+                                  OrderCard(order: snapshot.data![index]),
+                            ),
+            ),
+          )
+        ]),
       ),
     );
   }
 }
 
 class OrderCard extends StatelessWidget {
-  OrderCard({super.key});
-  final List<String> productList = ['a', 'b', 'c'];
+  const OrderCard({super.key, required this.order});
+  final Order order;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -64,29 +91,36 @@ class OrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Expanded(child: Padding(padding: EdgeInsets.all(10), child: Text('Order No. #13123412'))),
+                Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text('Order No. ${order.id}'))),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(onPressed: () {}, child: const Text('Delivered')),
+                  child: ElevatedButton(
+                      onPressed: () {}, child: Text(order.status)),
                 )
               ],
             ),
           ),
-          ...productList
+          ...order.itemList
               .map(
                 (e) => Column(
                   children: [
                     ListTile(
                       leading: Container(
-                          padding: const EdgeInsets.all(10),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Image.asset('assets/Rectangle 33.png')),
-                      title: Text('Sunstar Fresh Melon Juice  x1', style: Theme.of(context).textTheme.titleSmall),
-                      trailing: const Text('Rs 200.55'),
+                        padding: const EdgeInsets.all(10),
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        // child: Image.asset('assets/Rectangle 33.png'),
+                      ),
+                      title: Text('${e.name}  x${e.quantity}',
+                          style: Theme.of(context).textTheme.titleSmall),
+                      trailing: Text('Rs ${e.total}'),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10),
@@ -95,7 +129,9 @@ class OrderCard extends StatelessWidget {
                             90,
                             (index) => Expanded(
                                   child: Container(
-                                    color: index % 2 == 0 ? Colors.transparent : Colors.grey,
+                                    color: index % 2 == 0
+                                        ? Colors.transparent
+                                        : Colors.grey,
                                     height: 1,
                                   ),
                                 )),
@@ -106,10 +142,13 @@ class OrderCard extends StatelessWidget {
               )
               .toList(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [Expanded(child: Text('02-03-2023 : 12: 44 PM')), Text('Rs 200.55')],
+              children: [
+                Expanded(child: Text('${order.dateCreated}')),
+                Text('${order.total}')
+              ],
             ),
           ),
           const Divider(),
@@ -119,7 +158,11 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const Expanded(child: Text('Rate')),
-                ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black), onPressed: () {}, child: const Text('Reorder')),
+                ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                    onPressed: () {},
+                    child: const Text('Reorder')),
               ],
             ),
           ),

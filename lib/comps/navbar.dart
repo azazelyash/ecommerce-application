@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
       HomePage(customerModel: model),
       SearchPage(),
       const CartPage(),
-      const OrdersPage(),
+      OrdersPage(customerModel: model),
       ProfilePage(customerModel: model),
     ];
     return Scaffold(

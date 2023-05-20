@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 10,
               ),
-               Row(
+              Row(
                 children: [
                   SizedBox(
                     width: 20,
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 10,
               ),
-               Row(
+              Row(
                 children: [
                   SizedBox(
                     width: 20,
@@ -126,11 +126,13 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 4,
                           shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: MediaQuery.of(context).size.height / 1350,
+                            childAspectRatio:
+                                MediaQuery.of(context).size.height / 1350,
                           ),
                           itemBuilder: (BuildContext gridcontext, int index) {
                             return ProductCard(product: snapshot.data![index]);
