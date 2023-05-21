@@ -4,7 +4,7 @@ class CustomerModel {
   String? lastname;
   String? password;
   String? avatarUrl;
-
+  int? id;
   CustomerModel({
     this.email,
     this.firstname,
@@ -29,6 +29,7 @@ class CustomerModel {
   }
 
   CustomerModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     email = json['email'];
     firstname = json['first_name'];
     lastname = json['last_name'];
