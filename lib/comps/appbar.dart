@@ -78,19 +78,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
     customerModel = widget.customerModel;
   }
 
-  // Future<void> getCustomerDetails() async {
-  //   loginModel = await SharedService.loginDetails();
-  //   customerModel = await APIService().getCustomerDetails(loginModel!.data!.id.toString());
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // if (isLoading) {
-    //   return const LinearProgressIndicator();
-    // }
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0.3,
@@ -103,23 +92,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
           color: Colors.black,
         ),
       ),
-      // title: FutureBuilder(
-      //   future: SharedService.loginDetails(),
-      //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
-      //     if (loginModel.hasData) {
-      //       return Text(
-      //         "Hello! ${loginModel.data!.data!.firstName.toString()}",
-      //         style: GoogleFonts.dmSans(
-      //           fontSize: 20,
-      //           fontWeight: FontWeight.w700,
-      //           color: Colors.black,
-      //         ),
-      //       );
-      //     } else {
-      //       return const Center(child: CircularProgressIndicator());
-      //     }
-      //   },
-      // ),
       actions: [
         IconButton(
           onPressed: () {},
@@ -127,12 +99,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
           color: Colors.black,
         ),
         Padding(
+
             padding: const EdgeInsets.only(right: 10),
             child: CircleAvatar(
               backgroundColor: Colors.grey[300],
               backgroundImage:
                   NetworkImage(customerModel!.avatarUrl.toString()),
-            )
+            ),
             // child: FutureBuilder(
             //   future: SharedService.loginDetails(),
             //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
@@ -156,6 +129,47 @@ class _HomeAppBarState extends State<HomeAppBar> {
             // ),
             ),
       ],
+    );
+  }
+}
+
+class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
+  AddressAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
+
+  String title;
+
+  @override
+  final Size preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      elevation: 0.3,
+      backgroundColor: Colors.white,
+      title: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 18,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(width: 18),
+          Text(
+            title,
+            style: GoogleFonts.dmSans(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
