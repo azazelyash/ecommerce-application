@@ -17,16 +17,18 @@ class APIService {
     CustomerModel customerModel = CustomerModel();
 
     try {
-      var response = await Dio().post(APIConfig.tokenUrl,
-          data: {
-            "username": username,
-            "password": password,
+      var response = await Dio().post(
+        APIConfig.tokenUrl,
+        data: {
+          "username": username,
+          "password": password,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
           },
-          options: Options(
-            headers: {
-              HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
-            },
-          ));
+        ),
+      );
 
       if (response.statusCode == 200) {
         log(response.data.toString());
@@ -53,6 +55,7 @@ class APIService {
       var response = await http.get(Uri.parse(url));
       var data = jsonDecode(response.body);
       model = CustomerModel.fromJson(data);
+      log(model.billing!.address1.toString());
     } catch (e) {
       log(e.toString());
     }
@@ -87,5 +90,22 @@ class APIService {
     }
 
     return ret;
+  }
+
+  Future<void> updateCustomerAddress(CustomerModel model) async {
+    var url = '${APIConfig.url}customers/${model.id}';
+
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+    final response = await Dio().put(
+      url,
+      options: Options(
+        headers: {
+          HttpHeaders.authorizationHeader: 'Basic $authToken',
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+      ),
+    );
   }
 }
