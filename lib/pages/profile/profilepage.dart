@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
+import 'package:abhyukthafoods/pages/profile/address_page.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
 import 'package:abhyukthafoods/pages/profile/languagepage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
@@ -44,8 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.all(22.0),
               child: Text(
                 "Profile",
-                style: GoogleFonts.dmSans(
-                    fontSize: 25, fontWeight: FontWeight.w700),
+                style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
               ),
             ),
 
@@ -69,7 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
             Titletile(
                 imagepath: "assets/profile/fluent_location-16-regular.svg",
                 title: "Addresses",
-                onTapp: () {}),
+                onTapp: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AddressPage(),
+                    ),
+                  );
+                }),
             Titletile(
                 imagepath: "assets/profile/uil_language.svg",
                 title: "Choose Language",
@@ -80,10 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   );
                 }),
-            Titletile(
-                imagepath: "assets/profile/solar_settings-outline.svg",
-                title: "Settings",
-                onTapp: () {}),
+            Titletile(imagepath: "assets/profile/solar_settings-outline.svg", title: "Settings", onTapp: () {}),
             Titletile(
                 imagepath: "assets/profile/mdi_about-circle-outline.svg",
                 title: "About us",
@@ -94,14 +97,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   );
                 }),
-            Titletile(
-                imagepath: "assets/profile/tabler_help.svg",
-                title: "Help desk",
-                onTapp: () {}),
-            Titletile(
-                imagepath: "assets/profile/send feedback.svg",
-                title: "Send Feedback",
-                onTapp: () {}),
+            Titletile(imagepath: "assets/profile/tabler_help.svg", title: "Help desk", onTapp: () {}),
+            Titletile(imagepath: "assets/profile/send feedback.svg", title: "Send Feedback", onTapp: () {}),
             Titletile(
                 imagepath: "assets/profile/material-symbols_logout-rounded.svg",
                 title: "Logout",
@@ -155,12 +152,9 @@ class _ProfileBoxState extends State<ProfileBox> {
 
             /* ------------------------------ Profile Color ----------------------------- */
 
-            decoration: BoxDecoration(
-                color: const Color(0xff147846),
-                borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: const Color(0xff147846), borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -184,18 +178,12 @@ class _ProfileBoxState extends State<ProfileBox> {
                         children: [
                           Text(
                             "${model!.firstname} ${model!.lastname}",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           Text(
                             model!.email!,
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white.withOpacity(0.7),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
+                            style: GoogleFonts.dmSans(color: Colors.white.withOpacity(0.7), fontSize: 14, fontWeight: FontWeight.w500),
                             textScaleFactor: 1.0,
                           ),
                         ],
@@ -222,11 +210,7 @@ class Titletile extends StatelessWidget {
   final String title;
   final VoidCallback onTapp;
 
-  const Titletile(
-      {super.key,
-      required this.imagepath,
-      required this.title,
-      required this.onTapp});
+  const Titletile({super.key, required this.imagepath, required this.title, required this.onTapp});
 
   @override
   Widget build(BuildContext context) {
