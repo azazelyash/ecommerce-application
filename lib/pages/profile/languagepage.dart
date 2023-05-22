@@ -29,7 +29,7 @@ class _LanguagePageState extends State<LanguagePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MyAppbar2(title: "Languages"),
+              const StandardAppBar(title: "Languages"),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(

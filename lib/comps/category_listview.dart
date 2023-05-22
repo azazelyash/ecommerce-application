@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:abhyukthafoods/models/categories.dart';
+import 'package:abhyukthafoods/pages/category_page/category_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,13 @@ class Categories extends StatelessWidget {
   Widget category(
       BuildContext context, int index, List<ProductCategory> categories) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CategoryView(category: categories[index]),
+            ));
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

@@ -8,11 +8,12 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: StandardAppBar(title: "About Us"),
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
           children: [
-            const MyAppbar2(title: "About Us"),
             const SizedBox(height: 20),
             Image.asset(
               "assets/Icons/logo.png",

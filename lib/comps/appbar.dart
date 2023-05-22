@@ -18,44 +18,47 @@ class MyAppbar extends StatelessWidget {
   }
 }
 
-class MyAppbar2 extends StatelessWidget {
-  const MyAppbar2({super.key, required this.title});
+class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const StandardAppBar({Key? key, required this.title})
+      : preferredSize = const Size.fromHeight(kToolbarHeight),
+        super(key: key);
   final String title;
+  @override
+  final Size preferredSize;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(22.0),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(width: 18),
-          Text(
-            title,
-            style:
-                GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
-            textScaleFactor: 1.0,
-          ),
-        ],
-      ),
-    );
+    return AppBar(
+        elevation: 0,
+        leading: GestureDetector(
+          child: Container(
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: const BorderRadius.all(Radius.circular(100))),
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              )),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          title,
+          textScaleFactor: 1.3,
+          style: const TextStyle(color: Colors.black),
+        ));
   }
 }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  HomeAppBar({Key? key, required this.customerModel})
+  const HomeAppBar({Key? key, required this.customerModel})
       : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
 
-  CustomerModel? customerModel;
+  final CustomerModel? customerModel;
 
   @override
   final Size preferredSize;
@@ -71,7 +74,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     customerModel = widget.customerModel;
   }
