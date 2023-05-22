@@ -10,6 +10,25 @@ class ProductCard extends StatelessWidget {
   });
   final Product product;
   final isLiked = false;
+
+  String resolvePrice(Product product) {
+    String price = '';
+
+    if (product.price != '') {
+      price += '₹${product.price}';
+    } else if (product.regularPrice != '') {
+      price += '₹${product.regularPrice}';
+    } else if (product.salePrice != '') {
+      price += '₹${product.salePrice}';
+    } else {
+      return 'No Price set';
+    }
+    if (product.variations!.isNotEmpty) {
+      return 'Starting at $price';
+    }
+    return price;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -69,8 +88,8 @@ class ProductCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                '400.00 - 1300.00', // snapshot.data[index].name,
+              Text(
+                resolvePrice(product),
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

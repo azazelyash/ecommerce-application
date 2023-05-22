@@ -6,11 +6,11 @@ class FavouritePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
-          children: [MyAppbar2(title: "Favourites")],
+          children: [StandardAppBar(title: "Favourites")],
         ),
       )),
     );
