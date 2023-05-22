@@ -76,6 +76,16 @@ class _ProductPageState extends State<ProductPage> {
     log(varIndex.toString());
     var pages = [...widget.product.images!.map((e) => Image(image: NetworkImage(e['src'])))];
     var theme = Theme.of(context);
+
+    CartDetails cartItem = CartDetails(
+      id: widget.product.id,
+      name: widget.product.name,
+      description: widget.product.description,
+      image: widget.product.images!.isEmpty ? null : widget.product.images![0]['src'],
+      price: widget.product.price,
+      quantity: 1,
+    );
+
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: SafeArea(
@@ -215,12 +225,14 @@ class _ProductPageState extends State<ProductPage> {
                       // check if the product has variations then add the variation id to the cart
                       if (widget.product.variations!.isNotEmpty) {
                         log("Adding variation to cart");
-                        Cart().addItemToCart(variationList![varIndex].id, 1);
+                        cartItem.id = variationList![varIndex].id;
+                        cartItem.price = variationList![varIndex].price;
+                        Cart().addItemToCart(cartItem);
                         Cart().printCart();
                         return;
                       }
                       log("Adding product to cart");
-                      Cart().addItemToCart(widget.product.id, 1);
+                      Cart().addItemToCart(cartItem);
                       Cart().printCart();
                     },
                     style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.black),
