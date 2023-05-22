@@ -1,39 +1,101 @@
 import 'dart:developer';
 
-Map<int, int> CartItems = {};
+List<CartDetails> cartItems = [];
+
+class CartDetails {
+  int id;
+  String name;
+  String? image;
+  String? description;
+  String? price;
+  int quantity;
+
+  CartDetails({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.quantity,
+  });
+}
 
 class Cart {
-  void addItemToCart(int id, int quantity) {
+  void addItemToCart(CartDetails item) {
     // check if the cart already has the item then increase the quantity
-    if (CartItems.containsKey(id)) {
-      CartItems[id] = CartItems[id]! + quantity;
+    if (cartItems.contains(item)) {
+      cartItems[cartItems.indexOf(item)].quantity += 1;
       return;
     }
-    CartItems[id] = quantity;
+    cartItems.add(item);
   }
 
-  void decreaseItemQuantity(int id) {
+  void decreaseItemQuantity(CartDetails item) {
     // check if the cart already has only 1 item then decrease the quantity
-    if (CartItems[id] == 1) {
-      CartItems.remove(id);
+    if (cartItems[cartItems.indexOf(item)].quantity == 1) {
+      cartItems.remove(item);
       return;
     }
-    CartItems[id] = CartItems[id]! - 1;
+    cartItems[cartItems.indexOf(item)].quantity -= 1;
   }
 
-  void increaseItemQuantity(int id) {
-    CartItems[id] = CartItems[id]! + 1;
+  void increaseItemQuantity(CartDetails item) {
+    cartItems[cartItems.indexOf(item)].quantity += 1;
   }
 
-  void removeItemFromCart(int id) {
-    CartItems.remove(id);
+  void removeItemFromCart(CartDetails item) {
+    cartItems.remove(item);
   }
 
   void clearCart() {
-    CartItems.clear();
+    cartItems.clear();
   }
 
   void printCart() {
-    log(CartItems.toString());
+    log(cartItems.length.toString());
+    for (var item in cartItems) {
+      log('------------------');
+      log(item.id.toString());
+      log(item.name);
+      log(item.description.toString());
+      log(item.image.toString());
+      log(item.price.toString());
+      log(item.quantity.toString());
+      log('------------------');
+    }
   }
+
+  // void addItemToCart(int id) {
+  //   // check if the cart already has the item then increase the quantity
+  //   if (cartItems.containsKey(id)) {
+  //     cartItems[id] = cartItems[id]! + 1;
+  //     return;
+  //   }
+  //   cartItems[id] = 1;
+  // }
+
+  // void decreaseItemQuantity(int id) {
+  //   // check if the cart already has only 1 item then decrease the quantity
+  //   if (cartItems[id] == 1) {
+  //     cartItems.remove(id);
+  //     return;
+  //   }
+  //   cartItems[id] = cartItems[id]! - 1;
+  // }
+
+  // void increaseItemQuantity(int id) {
+  //   cartItems[id] = cartItems[id]! + 1;
+  // }
+
+  // void removeItemFromCart(int id) {
+  //   cartItems.remove(id);
+  // }
+
+  // void clearCart() {
+  //   cartItems.clear();
+  // }
+
+  // void printCart() {
+  //   log(cartItems.toString());
+  // }
 }

@@ -39,7 +39,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(model!.firstname.toString());
     final List<Widget> _pages = [
       HomePage(customerModel: model),
       SearchPage(),
