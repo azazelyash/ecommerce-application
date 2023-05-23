@@ -52,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
-
     getCustomerData();
 
     // if (!mounted) return;
