@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
@@ -44,12 +45,27 @@ class SharedService {
     return prefs.getString("customer_details") != null ? CustomerModel.fromJson(jsonDecode(prefs.getString("customer_details")!)) : CustomerModel();
   }
 
+  /* ------------------------ Will Save Address of User ----------------------- */
+
+  static Future<void> setAddressDetails(Billing? billing) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("address_details", billing != null ? jsonEncode(billing.toJson()) : "");
+  }
+
+  /* ----------------------- Will Fetch Address of User ----------------------- */
+
+  static Future<Billing> addressDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("address_details") != null ? Billing.fromJson(jsonDecode(prefs.getString("address_details")!)) : Billing();
+  }
+
   /* ---------------------------- Will Log Out User --------------------------- */
 
   static Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("login_details");
     prefs.remove("customer_details");
+    prefs.remove("address_details");
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

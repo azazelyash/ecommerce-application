@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/models/customer.dart';
-import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
 import 'package:abhyukthafoods/pages/profile/address_page.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
@@ -30,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // TODO: implement initState
     super.initState();
     customerModel = widget.customerModel;
+    log(customerModel!.toJson().toString());
   }
 
   @override
@@ -72,7 +72,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTapp: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const AddressPage(),
+                      builder: (_) => AddressPage(
+                        id: customerModel!.id.toString(),
+                      ),
                     ),
                   );
                 }),

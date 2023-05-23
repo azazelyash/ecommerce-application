@@ -1,24 +1,31 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/models/address.dart';
+import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditAddressPage extends StatelessWidget {
-  const EditAddressPage({super.key});
+  EditAddressPage({super.key, required this.id});
+
+  String id;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AddressAppBar(title: "Edit Shipping Address"),
-      body: const EditAddressPageBody(),
+      body: EditAddressPageBody(id: id),
     );
   }
 }
 
 class EditAddressPageBody extends StatefulWidget {
-  const EditAddressPageBody({super.key});
-
+  EditAddressPageBody({super.key, required this.id});
+  String id;
   @override
   State<EditAddressPageBody> createState() => _EditAddressPageBodyState();
 }
@@ -34,30 +41,33 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController countryController = TextEditingController();
 
+  Billing billing = Billing();
+
   @override
   Widget build(BuildContext context) {
+    String id = widget.id;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: FutureBuilder(
-        future: SharedService.customerDetails(),
+        future: SharedService.addressDetails(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            firstNameController.text = snapshot.data!.firstname.toString();
-            lastNameController.text = snapshot.data!.lastname.toString();
+            firstNameController.text = snapshot.data!.firstName.toString();
+            lastNameController.text = snapshot.data!.lastName.toString();
             emailController.text = snapshot.data!.email.toString();
-            // phoneController.text = snapshot.data!.billing['phone'].toString();
-            // addressController.text = snapshot.data!.billing['address_1'].toString();
-            // cityController.text = snapshot.data!.billing['city'].toString();
-            // stateController.text = snapshot.data!.billing['state'].toString();
-            // pincodeController.text = snapshot.data!.billing['postcode'].toString();
-            // countryController.text = snapshot.data!.billing['country'].toString();
+            phoneController.text = snapshot.data!.phone.toString();
+            addressController.text = snapshot.data!.address1.toString();
+            cityController.text = snapshot.data!.city.toString();
+            stateController.text = snapshot.data!.state.toString();
+            pincodeController.text = snapshot.data!.postcode.toString();
+            countryController.text = snapshot.data!.country.toString();
 
             return ListView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               children: [
                 addressPageFields("First Name", firstNameController, TextInputType.name),
@@ -75,7 +85,50 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: FloatingActionButton.extended(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      );
+
+                      billing.firstName = firstNameController.text;
+                      billing.lastName = lastNameController.text;
+                      billing.email = emailController.text;
+                      billing.phone = phoneController.text;
+                      billing.address1 = addressController.text;
+                      billing.city = cityController.text;
+                      billing.state = stateController.text;
+                      billing.postcode = pincodeController.text;
+                      billing.country = countryController.text;
+
+                      log("Billing Address at EDIT ADDRESS PAGE : ${billing.toJson().toString()}");
+
+                      APIService.updateAddress(billing, id);
+
+                      Navigator.pop(context);
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Address Updated"),
+                            content: const Text("Your address has been updated successfully"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("OK"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Colors.black,
                     label: Center(

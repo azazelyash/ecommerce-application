@@ -33,9 +33,7 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: GestureDetector(
           child: Container(
               margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.all(Radius.circular(100))),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(100))),
               child: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
@@ -99,35 +97,33 @@ class _HomeAppBarState extends State<HomeAppBar> {
           color: Colors.black,
         ),
         Padding(
-
-            padding: const EdgeInsets.only(right: 10),
-            child: CircleAvatar(
-              backgroundColor: Colors.grey[300],
-              backgroundImage:
-                  NetworkImage(customerModel!.avatarUrl.toString()),
-            ),
-            // child: FutureBuilder(
-            //   future: SharedService.loginDetails(),
-            //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
-            //     if (loginModel.hasData) {
-            //       return FutureBuilder(
-            //         future: APIService.getCustomerDetails(loginModel.data!.data!.id.toString()),
-            //         builder: (context, AsyncSnapshot<CustomerModel?> snapshot) {
-            //           if (loginModel.hasData) {
-            //             return CircleAvatar(
-            //               backgroundImage: NetworkImage(snapshot.data!.avatarUrl.toString()),
-            //             );
-            //           } else {
-            //             return const Center(child: CircularProgressIndicator());
-            //           }
-            //         },
-            //       );
-            //     } else {
-            //       return const Center(child: CircularProgressIndicator());
-            //     }
-            //   },
-            // ),
-            ),
+          padding: const EdgeInsets.only(right: 10),
+          child: CircleAvatar(
+            backgroundColor: Colors.grey[300],
+            backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
+          ),
+          // child: FutureBuilder(
+          //   future: SharedService.loginDetails(),
+          //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
+          //     if (loginModel.hasData) {
+          //       return FutureBuilder(
+          //         future: APIService.getCustomerDetails(loginModel.data!.data!.id.toString()),
+          //         builder: (context, AsyncSnapshot<CustomerModel?> snapshot) {
+          //           if (loginModel.hasData) {
+          //             return CircleAvatar(
+          //               backgroundImage: NetworkImage(snapshot.data!.avatarUrl.toString()),
+          //             );
+          //           } else {
+          //             return const Center(child: CircularProgressIndicator());
+          //           }
+          //         },
+          //       );
+          //     } else {
+          //       return const Center(child: CircularProgressIndicator());
+          //     }
+          //   },
+          // ),
+        ),
       ],
     );
   }
@@ -151,7 +147,7 @@ class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             },
             child: const Icon(
               Icons.arrow_back_ios,
