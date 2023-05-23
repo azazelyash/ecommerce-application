@@ -78,6 +78,7 @@ flutter:
     - assets/splash_screen/
     - assets/Login-signup/
     - assets/Icons/bgg.jpg
+    - assets/success and failed/ 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
