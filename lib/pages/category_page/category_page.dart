@@ -1,6 +1,7 @@
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/models/categories.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
@@ -11,8 +12,9 @@ import 'package:shimmer/shimmer.dart';
 import '../product_page/product_page.dart';
 
 class CategoryView extends StatefulWidget {
-  const CategoryView({super.key, required this.category});
+  const CategoryView({super.key, required this.category, required this.customerModel});
   final ProductCategory category;
+  final CustomerModel customerModel;
 
   @override
   State<CategoryView> createState() => _CategoryViewState();
@@ -21,8 +23,7 @@ class CategoryView extends StatefulWidget {
 class _CategoryViewState extends State<CategoryView> {
   static const _pageSize = 6;
 
-  final PagingController<int, Product> _pagingController =
-      PagingController(firstPageKey: 1);
+  final PagingController<int, Product> _pagingController = PagingController(firstPageKey: 1);
 
   @override
   void initState() {
@@ -40,8 +41,7 @@ class _CategoryViewState extends State<CategoryView> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await fetchPaginatedCategory(
-          pageKey, widget.category.id.toString(), _pageSize);
+      final newItems = await fetchPaginatedCategory(pageKey, widget.category.id.toString(), _pageSize);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -72,34 +72,33 @@ class _CategoryViewState extends State<CategoryView> {
           ),
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Product>(
-              firstPageProgressIndicatorBuilder: (context) =>
-                  SingleChildScrollView(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            ShimmerContainer().offerProductShimmer(),
-                            const SizedBox(height: 16),
-                            ShimmerContainer().offerProductShimmer(),
-                            const SizedBox(height: 16),
-                            ShimmerContainer().offerProductShimmer(),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ShimmerContainer().offerProductShimmer(),
-                            const SizedBox(height: 16),
-                            ShimmerContainer().offerProductShimmer(),
-                            const SizedBox(height: 16),
-                            ShimmerContainer().offerProductShimmer(),
-                          ],
-                        ),
-                      ],
-                    ),
+            firstPageProgressIndicatorBuilder: (context) => SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    children: [
+                      ShimmerContainer().offerProductShimmer(),
+                      const SizedBox(height: 16),
+                      ShimmerContainer().offerProductShimmer(),
+                      const SizedBox(height: 16),
+                      ShimmerContainer().offerProductShimmer(),
+                    ],
                   ),
-              itemBuilder: (context, item, index) =>
-                  ProductCard(product: item)),
+                  Column(
+                    children: [
+                      ShimmerContainer().offerProductShimmer(),
+                      const SizedBox(height: 16),
+                      ShimmerContainer().offerProductShimmer(),
+                      const SizedBox(height: 16),
+                      ShimmerContainer().offerProductShimmer(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            itemBuilder: (context, item, index) => ProductCard(product: item, customerModel: widget.customerModel),
+          ),
         ),
       ),
     );

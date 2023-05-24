@@ -12,9 +12,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({super.key, this.customerModel});
+  MainPage({super.key, required this.customerModel});
 
-  CustomerModel? customerModel;
+  final CustomerModel customerModel;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     final List<Widget> _pages = [
       HomePage(customerModel: model),
       SearchPage(),
-      const CartPage(),
+      CartPage(customerModel: model!),
       OrdersPage(customerModel: model),
       ProfilePage(customerModel: model),
     ];

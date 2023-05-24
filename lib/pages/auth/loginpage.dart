@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     if (model.statusCode == 200) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainPage(customerModel: customerModel), // Replace with your homepage widget
+          builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
         ),
       );
     } else {

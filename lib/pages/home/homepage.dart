@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                     if (!snapshot.hasData) {
                       return shimmerContainer.categoryShimmer();
                     } else {
-                      return Categories(categories: snapshot.data);
+                      return Categories(categories: snapshot.data, customerModel: model!);
                     }
                   }),
               const SizedBox(
@@ -126,16 +126,14 @@ class _HomePageState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 4,
                           shrinkWrap: true,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio:
-                                MediaQuery.of(context).size.height / 1350,
+                            childAspectRatio: MediaQuery.of(context).size.height / 1350,
                           ),
                           itemBuilder: (BuildContext gridcontext, int index) {
-                            return ProductCard(product: snapshot.data![index]);
+                            return ProductCard(product: snapshot.data![index], customerModel: model!);
                           },
                         ),
                       );
