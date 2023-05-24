@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (result) {
       defaultPage = MainPage(
-        customerModel: customerModel,
+        customerModel: customerModel!,
       );
     }
     await Future.delayed(const Duration(milliseconds: 1000));

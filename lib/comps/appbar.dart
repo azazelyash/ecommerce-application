@@ -169,3 +169,44 @@ class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
+class PaymentAppBar extends StatelessWidget implements PreferredSizeWidget {
+  PaymentAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
+
+  String title;
+
+  @override
+  final Size preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      elevation: 0.3,
+      backgroundColor: Colors.white,
+      title: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context, true);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 18,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(width: 18),
+          Text(
+            title,
+            style: GoogleFonts.dmSans(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

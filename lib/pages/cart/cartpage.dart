@@ -1,14 +1,17 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/models/cart.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
+import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  const CartPage({super.key, required this.customerModel});
+  final CustomerModel customerModel;
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -88,7 +91,7 @@ class _CartPageState extends State<CartPage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: FloatingActionButton.extended(
-                    onPressed: () {
+                    onPressed: () async {
                       if (cartItems.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -97,6 +100,20 @@ class _CartPageState extends State<CartPage> {
                             content: Text("Your cart is empty"),
                           ),
                         );
+                        return;
+                      }
+                      bool ref = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConfirmOrderPage(
+                            customerModel: widget.customerModel,
+                            products: cartItems,
+                          ),
+                        ),
+                      );
+
+                      if (ref) {
+                        setState(() {});
                       }
                     },
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

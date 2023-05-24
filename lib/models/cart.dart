@@ -22,9 +22,11 @@ class CartDetails {
 
 class Cart {
   void addItemToCart(CartDetails item) {
-    // check if the cart already has the item then increase the quantity
-    if (cartItems.contains(item)) {
-      cartItems[cartItems.indexOf(item)].quantity += 1;
+    // check if the cart already has the item id then increase the quantity
+
+    if (cartItems.any((cartObject) => cartObject.id == item.id)) {
+      int itemIndex = cartItems.indexWhere((element) => element.id == item.id);
+      cartItems[itemIndex].quantity += 1;
       return;
     }
     cartItems.add(item);
