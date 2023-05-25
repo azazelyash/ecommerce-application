@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'buttons.dart';
 
 class LostInternet extends StatelessWidget {
-  const LostInternet({Key? key}) : super(key: key);
+  const LostInternet({Key? key, required this.callback}) : super(key: key);
+  final Function callback;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,7 @@ class LostInternet extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: RectButton(
                     title: "Retry",
-                    onTapp: () {
-                      // Add your retry logic here
-                    },
+                    onTapp: () => callback,
                   ),
                 ),
                 SizedBox(height: 30),
