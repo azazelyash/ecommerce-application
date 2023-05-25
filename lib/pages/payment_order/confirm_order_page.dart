@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
 import 'package:abhyukthafoods/pages/profile/edit_address_page.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
@@ -545,7 +546,12 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       ),
       backgroundColor: kPrimaryColor,
       elevation: 0,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PaymentPage()),
+        );
+      },
       label: const Text("Proceed to Pay"),
     );
   }
