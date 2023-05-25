@@ -41,106 +41,108 @@ class _HomePageState extends State<HomePage> {
     ShimmerContainer shimmerContainer = ShimmerContainer();
     // APIService().getCustomerDetails("21");
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: HomeAppBar(customerModel: model),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 200,
-                child: PageView.builder(
-                  controller: controller,
-                  itemCount: 2,
-                  itemBuilder: (context, index) => Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: pages[index],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SmoothPageIndicator(
+      backgroundColor: Colors.white,
+      appBar: HomeAppBar(customerModel: model),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 200,
+              child: PageView.builder(
                 controller: controller,
-                count: pages.length,
-                effect: const ExpandingDotsEffect(
-                  dotHeight: 10,
-                  dotWidth: 10,
+                itemCount: 2,
+                itemBuilder: (context, index) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: pages[index],
                 ),
               ),
-              const SizedBox(
-                height: 10,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SmoothPageIndicator(
+              controller: controller,
+              count: pages.length,
+              effect: const ExpandingDotsEffect(
+                dotHeight: 10,
+                dotWidth: 10,
               ),
-               Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'Categories',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FutureBuilder(
-                  future: fetchCategories(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return shimmerContainer.categoryShimmer();
-                    } else {
-                      return Categories(categories: snapshot.data, customerModel: model!);
-                    }
-                  }),
-              const SizedBox(
-                height: 10,
-              ),
-               Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'Recently viewed',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FutureBuilder(
-                  future: fetchProducts(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return shimmerContainer.categoryShimmer();
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 4,
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: MediaQuery.of(context).size.height / 1350,
-                          ),
-                          itemBuilder: (BuildContext gridcontext, int index) {
-                            return ProductCard(product: snapshot.data![index], customerModel: model!);
-                          },
-                        ),
-                      );
-                    }
-                  }),
-            ],
-          ),
-        ));
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Categories',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            FutureBuilder(
+                future: fetchCategories(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return shimmerContainer.categoryShimmer();
+                  } else {
+                    return Categories(categories: snapshot.data, customerModel: model!);
+                  }
+                }),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Recently viewed',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            FutureBuilder(
+              future: fetchProducts(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return shimmerContainer.categoryShimmer();
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
+                      ),
+                      itemBuilder: (BuildContext gridcontext, int index) {
+                        return ProductCard(product: snapshot.data![index], customerModel: model!);
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
