@@ -71,6 +71,7 @@ class OrdersPage extends StatelessWidget {
 class OrderCard extends StatelessWidget {
   const OrderCard({super.key, required this.order});
   final Order order;
+  static final buttonRadius = BorderRadius.all(Radius.circular(10));
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -88,7 +89,18 @@ class OrderCard extends StatelessWidget {
                 Expanded(child: Padding(padding: const EdgeInsets.all(10), child: Text('Order No. ${order.id}'))),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(onPressed: () {}, child: Text(order.status)),
+
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: buttonRadius,
+                        color: Theme.of(context).colorScheme.primary),
+                    child: Text(
+                      order.status[0].toUpperCase() + order.status.substring(1),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+
                 )
               ],
             ),
@@ -142,7 +154,15 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const Expanded(child: Text('Rate')),
-                ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black), onPressed: () {}, child: const Text('Reorder')),
+
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape:
+                            RoundedRectangleBorder(borderRadius: buttonRadius),
+                        backgroundColor: Colors.black),
+                    onPressed: () {},
+                    child: const Text('Reorder')),
+
               ],
             ),
           ),

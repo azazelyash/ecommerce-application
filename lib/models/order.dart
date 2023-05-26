@@ -22,8 +22,7 @@ class Order {
         dateCreated: json['date_created'],
         dateCompleted: json['date_completed'],
         itemList: [
-          ...(json['line_items'] as List<Map<String, dynamic>>)
-              .map((e) => OrderItem.fromJson(e))
+          ...(json['line_items'] as List).map((e) => OrderItem.fromJson(e))
         ]);
   }
 }
