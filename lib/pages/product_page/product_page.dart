@@ -9,10 +9,12 @@ import 'package:abhyukthafoods/network/fetch_variations.dart';
 import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({required this.product, super.key, required this.customerModel});
+  const ProductPage(
+      {required this.product, super.key, required this.customerModel});
   final Product product;
   final CustomerModel customerModel;
   @override
@@ -76,20 +78,27 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     // print(widget.product.images!.length);
     log(varIndex.toString());
-    var pages = [...widget.product.images!.map((e) => Image(image: NetworkImage(e['src'])))];
+    var pages = [
+      ...widget.product.images!.map((e) => Image(
+            image: NetworkImage(e['src']),
+            fit: BoxFit.fill,
+          ))
+    ];
     var theme = Theme.of(context);
 
     CartDetails cartItem = CartDetails(
       id: widget.product.id,
       name: widget.product.name,
       description: widget.product.description,
-      image: widget.product.images!.isEmpty ? null : widget.product.images![0]['src'],
+      image: widget.product.images!.isEmpty
+          ? null
+          : widget.product.images![0]['src'],
       price: widget.product.price,
       quantity: 1,
     );
 
     return Scaffold(
-      backgroundColor: theme.primaryColor,
+      // backgroundColor: theme.primaryColor,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -97,22 +106,6 @@ class _ProductPageState extends State<ProductPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-//---------------------------------- Back Button -----------------------------
-                  GestureDetector(
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: theme.colorScheme.secondary, borderRadius: const BorderRadius.all(Radius.circular(100))),
-                      padding: const EdgeInsets.all(10),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-
 //---------------------------------- Image Widget -----------------------------
 
                   Center(
@@ -122,28 +115,63 @@ class _ProductPageState extends State<ProductPage> {
                           future: variationData,
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return SizedBox(height: 200, child: const CircularProgressIndicator());
+                              return SizedBox(
+                                  height: 200,
+                                  child: const CircularProgressIndicator());
                             } else {
                               if (widget.product.variations!.isNotEmpty) {
-                                pages = [Image(image: NetworkImage(snapshot.data![varIndex].imageUrl))];
+                                pages = [
+                                  Image(
+                                    image: NetworkImage(
+                                        snapshot.data![varIndex].imageUrl),
+                                    fit: BoxFit.cover,
+                                  )
+                                ];
                               }
                               return Column(
                                 children: [
-                                  SizedBox(
-                                    height: 200,
-                                    child: PageView.builder(
-                                      controller: pageController,
-                                      itemCount: pages.length,
-                                      itemBuilder: (context, index) => Container(padding: const EdgeInsets.symmetric(horizontal: 10), child: pages[index]),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SmoothPageIndicator(controller: pageController, count: 1),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
+                                  Stack(
+                                    children: [
+                                      SizedBox(
+                                        height: 340,
+                                        child: PageView.builder(
+                                          controller: pageController,
+                                          itemCount: pages.length,
+                                          itemBuilder: (context, index) =>
+                                              pages[index],
+                                        ),
+                                      ),
+                                      //---------------------------------- Back Button -----------------------------
+                                      GestureDetector(
+                                        child: Container(
+                                          margin: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  theme.colorScheme.secondary,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(100))),
+                                          padding: const EdgeInsets.all(10),
+                                          child: const Icon(
+                                            Icons.arrow_back,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+
+                                      Positioned(
+                                        right: 5,
+                                        left: 200,
+                                        bottom: 10,
+                                        child: SmoothPageIndicator(
+                                            controller: pageController,
+                                            count: 1),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               );
                             }
@@ -160,7 +188,11 @@ class _ProductPageState extends State<ProductPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 width: double.infinity,
-                decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                decoration: const BoxDecoration(
+                    color: const Color.fromRGBO(20, 120, 70, 1),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,13 +205,21 @@ class _ProductPageState extends State<ProductPage> {
                         Expanded(
                             child: Text(
                           widget.product.name,
-                          style: theme.textTheme.titleMedium,
+                          style: GoogleFonts.dmSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         )),
                         GestureDetector(
                           child: Container(
-                            decoration: BoxDecoration(color: theme.colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(5))),
+                            decoration: BoxDecoration(
+                                color: theme.colorScheme.primary,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5))),
                             padding: const EdgeInsets.all(10),
-                            child: SvgPicture.asset(color: Colors.white, 'assets/Icons/love.svg'),
+                            child: SvgPicture.asset(
+                                color: Colors.white, 'assets/Icons/love.svg'),
                           ),
                           onTap: () {},
                         ),
@@ -197,7 +237,19 @@ class _ProductPageState extends State<ProductPage> {
                           ? const CircularProgressIndicator()
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text(widget.product.variations!.isEmpty ? resolvePrice(widget.product) : resolvePrice(snapshot.data![varIndex])), const CounterWidget()],
+                              children: [
+                                Text(
+                                  widget.product.variations!.isEmpty
+                                      ? resolvePrice(widget.product)
+                                      : resolvePrice(snapshot.data![varIndex]),
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const CounterWidget()
+                              ],
                             ),
                     ),
                     const SizedBox(
@@ -246,7 +298,9 @@ class _ProductPageState extends State<ProductPage> {
                         Cart().addItemToCart(cartItem);
                         Cart().printCart();
                       },
-                      style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.black),
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          backgroundColor: Colors.black),
                       child: const Text('Add to Cart'),
                     ),
                     const SizedBox(
@@ -274,7 +328,8 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Product Description',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -282,7 +337,9 @@ class _ProductPageState extends State<ProductPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(widget.product.shortDescription == '' ? 'No description' : widget.product.shortDescription!),
+                          child: Text(widget.product.shortDescription == ''
+                              ? 'No description'
+                              : widget.product.shortDescription!),
                         ),
                       ],
                     ),
@@ -291,7 +348,8 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Suggested Products',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -331,7 +389,11 @@ class _ProductPageState extends State<ProductPage> {
 }
 
 class VariationButton extends StatefulWidget {
-  const VariationButton({super.key, required this.label, required this.selectButtonCallback, required this.isSelected});
+  const VariationButton(
+      {super.key,
+      required this.label,
+      required this.selectButtonCallback,
+      required this.isSelected});
   final String label;
   final Function selectButtonCallback;
   final bool isSelected;
@@ -348,10 +410,13 @@ class _VariationButtonState extends State<VariationButton> {
         onPressed: () {
           widget.selectButtonCallback();
         },
-        style: ElevatedButton.styleFrom(backgroundColor: widget.isSelected ? null : Colors.white, minimumSize: const Size(80, 100)),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: widget.isSelected ? null : Colors.white,
+            minimumSize: const Size(80, 50)),
         child: Text(
           widget.label,
-          style: TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
+          style:
+              TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
         ),
       ),
     );
@@ -386,7 +451,7 @@ class _CounterWidgetState extends State<CounterWidget> {
               ),
               color: Colors.black,
             ),
-            height: 30,
+            height: 40,
             width: 50,
             child: const Center(
               child: Text(
@@ -403,7 +468,7 @@ class _CounterWidgetState extends State<CounterWidget> {
             ),
             color: Colors.black,
           ),
-          height: 30,
+          height: 40,
           width: 50,
           child: Center(
             child: Text(
@@ -425,7 +490,7 @@ class _CounterWidgetState extends State<CounterWidget> {
               ),
               color: Colors.black,
             ),
-            height: 30,
+            height: 40,
             width: 50,
             child: const Center(
               child: Text(
