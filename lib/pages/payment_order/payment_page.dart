@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/models/cart.dart';
+import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
+import 'package:abhyukthafoods/pages/payment_order/order_success.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/razor_pay_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
@@ -12,9 +15,11 @@ import 'package:flutter_svg/svg.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({super.key, required this.orderModel});
+  PaymentPage({super.key, required this.orderModel, required this.customerModel, required this.products});
 
   OrderModel orderModel;
+  CustomerModel customerModel;
+  List<CartDetails> products;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -146,6 +151,22 @@ class _PaymentPageState extends State<PaymentPage> {
             }
 
             bool ret = await APIService.createOrder(widget.orderModel);
+
+            if (ret) {
+              log("Order Created Successfully");
+              if (!mounted) return;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderSuccessPage(
+                    customerModel: widget.customerModel,
+                    products: widget.products,
+                  ),
+                ),
+              );
+            } else {
+              log("Order Creation Failed");
+            }
           },
           label: const Text("Confirm Order"),
         ),
