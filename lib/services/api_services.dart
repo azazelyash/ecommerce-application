@@ -6,6 +6,7 @@ import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
+import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -147,5 +148,37 @@ class APIService {
     }
 
     return billing;
+  }
+
+  static Future<bool> createOrder(OrderModel model) async {
+    bool isOrderCreated = false;
+
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().post(
+        APIConfig.url + APIConfig.orderURL,
+        data: model.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        isOrderCreated = true;
+      }
+    } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        log(e.response!.data.toString());
+      }
+      log(e.message.toString());
+      log(e.response.toString());
+    }
+    return isOrderCreated;
   }
 }

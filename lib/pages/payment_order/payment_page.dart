@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/models/order_model.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:abhyukthafoods/services/razor_pay_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +12,9 @@ import 'package:flutter_svg/svg.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  PaymentPage({super.key, required this.orderModel});
+
+  OrderModel orderModel;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -18,6 +25,14 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    log("Order ID: ${widget.orderModel.orderId}");
+    log("Order CustomerId: ${widget.orderModel.customerId}");
+    log("Order PaymentMethod: ${widget.orderModel.paymentMethod}");
+    log("--------------------");
+    for (var item in widget.orderModel.lineItems!) {
+      log("Order Item: ${item.productId}");
+      log("Order Item: ${item.quantity}");
+    }
     return Scaffold(
       appBar: PaymentAppBar(title: "Payment Options"),
       backgroundColor: Colors.white,
@@ -112,7 +127,26 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           backgroundColor: kPrimaryColor,
           elevation: 0,
-          onPressed: () {},
+          onPressed: () async {
+            // RazorPayService razorPayService = RazorPayService();
+            // razorPayService.initPaymentGateway();
+            // razorPayService.getPayment(context);
+
+            for (var item in widget.orderModel.lineItems!) {
+              log("Item: ${item.productId}");
+              log("Item: ${item.quantity}");
+            }
+
+            if (_paymentMethod == PaymentMethod.COD) {
+              widget.orderModel.paymentMethod = "cod";
+              widget.orderModel.paymentMethodTitle = "Cash on Delivery";
+            } else {
+              widget.orderModel.paymentMethod = "razorpay";
+              widget.orderModel.paymentMethodTitle = "RazorPay";
+            }
+
+            bool ret = await APIService.createOrder(widget.orderModel);
+          },
           label: const Text("Confirm Order"),
         ),
       ),

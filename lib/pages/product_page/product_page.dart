@@ -308,6 +308,10 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        if (widget.product.variations!.isNotEmpty) {
+                          cartItem.id = variationList![varIndex].id;
+                          cartItem.price = variationList![varIndex].price;
+                        }
                         Navigator.push(
                           context,
                           MaterialPageRoute(
