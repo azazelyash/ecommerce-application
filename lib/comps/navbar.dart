@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:abhyukthafoods/comps/internetlostpage.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/cart/cartpage.dart';
 import 'package:abhyukthafoods/pages/orders/orderspage.dart';
@@ -8,7 +10,7 @@ import 'package:abhyukthafoods/pages/search/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -23,7 +25,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
   CustomerModel? model = CustomerModel();
-
+  bool isConnected = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -46,13 +48,28 @@ class _MainPageState extends State<MainPage> {
       OrdersPage(customerModel: model),
       ProfilePage(customerModel: model),
     ];
+
     return Scaffold(
-      bottomNavigationBar: NavBox(
-        onTap: (index) => navigateBottomBar(index),
-        index: selectedIndex,
-      ),
-      body: _pages[selectedIndex],
-    );
+        bottomNavigationBar: NavBox(
+          onTap: (index) => navigateBottomBar(index),
+          index: selectedIndex,
+        ),
+        body: StreamBuilder(
+          stream: InternetConnectionChecker().onStatusChange,
+          builder: (context, snapshot) {
+            switch (snapshot.data) {
+              case InternetConnectionStatus.disconnected:
+                return LostInternet(callback: () {
+                  setState(() {
+             
+                  });
+                });
+              case null:
+              case InternetConnectionStatus.connected:
+                return _pages[selectedIndex];
+            }
+          },
+        ));
   }
 }
 

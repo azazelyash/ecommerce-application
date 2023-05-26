@@ -1,8 +1,12 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/order.dart';
+import 'package:abhyukthafoods/models/order_model.dart';
+import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
 import 'package:abhyukthafoods/pages/profile/edit_address_page.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
@@ -20,6 +24,10 @@ class ConfirmOrderPage extends StatefulWidget {
 }
 
 class ConfirmOrderPageState extends State<ConfirmOrderPage> {
+  OrderModel orderModel = OrderModel();
+  Billing billing = Billing();
+  List<LineItems> lineItems = [];
+
   int totalAmt = 0;
   int couponAmount = 0;
   int payableAmount = 0;
@@ -36,6 +44,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       log("Empty");
       Navigator.pop(context, true);
     }
+    createLineItems();
   }
 
   void totalAmount() {
@@ -86,6 +95,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ],
       ),
     );
+    createLineItems();
   }
 
   void decreaseQuantity(int index) {
@@ -98,11 +108,22 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     });
   }
 
+  void createLineItems() {
+    log("Num. of Products : ${widget.products.length}");
+    for (int i = 0; i < widget.products.length; i++) {
+      lineItems.add(
+        LineItems(
+          productId: widget.products[i].id,
+          quantity: widget.products[i].quantity,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    log(widget.customerModel.id.toString());
-    log(widget.products.length.toString());
-    log(widget.products[0].image.toString());
+    log("Customer Id: ${widget.customerModel.id}");
+    log("No. of Products: ${widget.products.length}");
     totalAmount();
     totalAmountAfterCoupon();
     return Scaffold(
@@ -378,6 +399,16 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                       ),
                     );
                   }
+
+                  /* ---------------- Storing Address Details in Billing Model ---------------- */
+
+                  billing.address1 = snapshot.data!.address1;
+                  billing.city = snapshot.data!.city;
+                  billing.country = snapshot.data!.country;
+                  billing.firstName = snapshot.data!.firstName;
+                  billing.lastName = snapshot.data!.lastName;
+                  billing.postcode = snapshot.data!.postcode;
+                  billing.state = snapshot.data!.state;
                   String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
                   String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
                   return Column(
@@ -545,7 +576,27 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       ),
       backgroundColor: kPrimaryColor,
       elevation: 0,
-      onPressed: () {},
+      onPressed: () {
+        /* -------------------------- Creating Order Model -------------------------- */
+
+        orderModel.customerId = widget.customerModel.id;
+        orderModel.paymentMethod = "";
+        orderModel.paymentMethodTitle = "";
+        orderModel.setPaid = false;
+        orderModel.transactionId = "";
+        orderModel.billing = billing;
+        orderModel.lineItems = lineItems;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentPage(
+              orderModel: orderModel,
+              customerModel: widget.customerModel,
+              products: widget.products,
+            ),
+          ),
+        );
+      },
       label: const Text("Proceed to Pay"),
     );
   }

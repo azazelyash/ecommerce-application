@@ -6,6 +6,8 @@ import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
+import 'package:abhyukthafoods/models/order.dart';
+import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -147,5 +149,74 @@ class APIService {
     }
 
     return billing;
+  }
+
+  static Future<bool> createOrder(OrderModel model) async {
+    bool isOrderCreated = false;
+
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      log("<------------------Order Initialized------------------->");
+      var response = await Dio().post(
+        APIConfig.url + APIConfig.orderURL,
+        data: model.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      log("<--------------------Order Created--------------------->");
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 201) {
+        isOrderCreated = true;
+      }
+    } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        log(e.response!.data.toString());
+      }
+      log(e.message.toString());
+      log(e.response.toString());
+    }
+    return isOrderCreated;
+  }
+
+  static Future<List<OrderModel>> getOrders(String id) async {
+    List<OrderModel> data = [];
+
+    try {
+      String url = "${APIConfig.url}${APIConfig.orderURL}?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
+
+      log("URL at getOrders() : $url");
+
+      var response = await Dio().get(
+        url,
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+        queryParameters: {
+          "customer": id,
+        },
+      );
+
+      // log(response.data.toString());
+
+      if (response.statusCode == 200) {
+        // data = {response.data}.map((e) => OrderModel.fromJson(e)).toList();
+        data = (response.data as List).map((e) => OrderModel.fromJson(e)).toList();
+      }
+    } on DioError catch (e) {
+      log(e.response.toString());
+    }
+
+    return data;
   }
 }

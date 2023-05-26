@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
+import 'package:abhyukthafoods/pages/auth/forgotpassword.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
 
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
@@ -51,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
+    LoginResponseModel model = await APIService.loginCustomer(
+        emailController.text, passwordController.text);
     getCustomerData();
 
     // if (!mounted) return;
@@ -61,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
     if (model.statusCode == 200) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
+          builder: (_) => MainPage(
+              customerModel:
+                  customerModel!), // Replace with your homepage widget
         ),
       );
     } else {
@@ -103,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login here",
-                          style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -135,13 +140,24 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Text(
                             "Remember Me",
-                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: kauthTextFieldStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
-                          Text(
-                            "Forgot Password",
-                            style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                            textScaleFactor: 1.0,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => ForgotPasswordPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "Forgot Password",
+                              style: kauthTextFieldStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w600),
+                              textScaleFactor: 1.0,
+                            ),
                           ),
                         ],
                       ),
@@ -153,7 +169,8 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (isFieldEmpty(emailController.text) || isFieldEmpty(passwordController.text)) {
+                          if (isFieldEmpty(emailController.text) ||
+                              isFieldEmpty(passwordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Row(
@@ -201,7 +218,8 @@ class _LoginPageState extends State<LoginPage> {
                           child: Center(
                             child: Text(
                               "Login in",
-                              style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: kauthTextFieldStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                               textScaleFactor: 1.0,
                             ),
                           ),
@@ -210,37 +228,40 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     //login with
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Login with",
-                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                          textScaleFactor: 1.0,
-                        ),
-                      ),
-                    ),
+                    // Center(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: Text(
+                    //       "Login with",
+                    //       style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                    //       textScaleFactor: 1.0,
+                    //     ),
+                    //   ),
+                    // ),
 
-                    //Google and facebox button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
-                    ),
+                    // //Google and facebox button
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [GoogleButton(onTapp: () {}), FacebookButton(onTapp: () {})],
+                    // ),
 
                     //other way
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(18.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Don't have an account ? ",
-                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => SignUpPage(),
                                 ),

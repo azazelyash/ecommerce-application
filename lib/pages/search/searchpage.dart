@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:abhyukthafoods/pages/product_page/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/products.dart';
 class APIConfig {
   String url = "https://www.mrsfood.in/wp-json/wc/v3/";
   String loginUrl = "https://www.mrsfood.in";
@@ -14,33 +14,55 @@ class APIConfig {
   String customerURl = "customers";
 }
 
+class Product {
+  final String name;
+
+  Product({required this.name});
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      name: json['name'],
+    );
+  }
+}
+
+class API {
+  static Future<List<Product>> searchProducts(String query) async {
+    final APIConfig apiConfig = APIConfig();
+    final response = await http.get(
+      Uri.parse("${apiConfig.url}products?search=$query"),
+      headers: {
+        'Authorization': 'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
+      return products;
+    } else {
+      throw Exception('Failed to search products');
+    }
+  }
+}
+
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final APIConfig apiConfig = APIConfig();
   final TextEditingController searchController = TextEditingController();
   List<Product> products = [];
 
   Future<void> searchProducts(String query) async {
-    final response = await http.get(
-      Uri.parse("${apiConfig.url}products?search=$query"),
-      headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonList = json.decode(response.body);
+    try {
+      List<Product> searchedProducts = await API.searchProducts(query);
       setState(() {
-        products = jsonList.map((e) => Product.fromJson(e)).toList();
+        products = searchedProducts;
       });
-    } else {
-      // Handle the error
-      print('Error: ${response.statusCode}');
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -64,15 +86,24 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (context, index) {
                   final product = products[index];
                   return ListTile(
-                    title: Text(
-                      product.name,
-                      style: GoogleFonts.dmSans(
-                        color: Colors.black,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      title: Text(
+                        product.name,
+                        style: GoogleFonts.dmSans(
+                          color: Colors.black,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  );
+                      onTap: () {}
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ProductPage(
+                      //       product: products,
+                      //     ),
+                      //   ),
+                      // );},
+                      );
                 },
               ),
             ],
@@ -97,58 +128,17 @@ class SearchTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: 360,
-          height: 58,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(13, 10, 15, 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SvgPicture.asset(
-                  "assets/Icons/search-normal-.svg",
-                  height: 30,
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    autofocus: true,
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    style: GoogleFonts.figtree(
-                      color: Colors.grey.shade900,
-                      fontSize: 21,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.1,
-                    ),
-                    decoration: InputDecoration.collapsed(
-                      hintText: "Search for Products...",
-                      hintStyle: GoogleFonts.dmSans(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                    onChanged: onSearch,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    "assets/Icons/mic_24px.svg",
-                    height: 25,
-                  ),
-                ),
-              ],
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: 'Search products...',
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
+          onSubmitted: onSearch,
         ),
       ),
     );
