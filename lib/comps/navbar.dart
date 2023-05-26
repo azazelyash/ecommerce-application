@@ -61,7 +61,7 @@ class _MainPageState extends State<MainPage> {
               case InternetConnectionStatus.disconnected:
                 return LostInternet(callback: () {
                   setState(() {
-                    log('aaaaa');
+             
                   });
                 });
               case null:
