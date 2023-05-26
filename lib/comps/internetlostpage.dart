@@ -38,7 +38,7 @@ class LostInternet extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: RectButton(
                     title: "Retry",
-                    onTapp: () => callback,
+                    onTapp: () => callback(),
                   ),
                 ),
                 SizedBox(height: 30),

@@ -58,12 +58,13 @@ class _MainPageState extends State<MainPage> {
           stream: InternetConnectionChecker().onStatusChange,
           builder: (context, snapshot) {
             switch (snapshot.data) {
-              case null:
               case InternetConnectionStatus.disconnected:
                 return LostInternet(callback: () {
-                  setState(() {});
+                  setState(() {
+             
+                  });
                 });
-
+              case null:
               case InternetConnectionStatus.connected:
                 return _pages[selectedIndex];
             }
