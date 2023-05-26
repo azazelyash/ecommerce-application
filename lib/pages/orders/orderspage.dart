@@ -15,10 +15,7 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: Text(
           'Past Orders',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       body: Padding(
@@ -38,8 +35,7 @@ class OrdersPage extends StatelessWidget {
                       hintStyle: const TextStyle(
                         color: Colors.white,
                       ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       filled: true,
                       fillColor: Colors.black),
                 ),
@@ -52,20 +48,18 @@ class OrdersPage extends StatelessWidget {
           SliverFillRemaining(
             child: FutureBuilder(
               future: fetchOrders(customerModel!.id.toString()),
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
+              builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : !snapshot.hasData
                       ? const Center(
-                          child: CircularProgressIndicator(),
+                          child: Text('No data'),
                         )
-                      : !snapshot.hasData
-                          ? const Center(
-                              child: Text('No data'),
-                            )
-                          : ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) =>
-                                  OrderCard(order: snapshot.data![index]),
-                            ),
+                      : ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => OrderCard(order: snapshot.data![index]),
+                        ),
             ),
           )
         ]),
@@ -91,14 +85,10 @@ class OrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text('Order No. ${order.id}'))),
+                Expanded(child: Padding(padding: const EdgeInsets.all(10), child: Text('Order No. ${order.id}'))),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ElevatedButton(
-                      onPressed: () {}, child: Text(order.status)),
+                  child: ElevatedButton(onPressed: () {}, child: Text(order.status)),
                 )
               ],
             ),
@@ -118,8 +108,7 @@ class OrderCard extends StatelessWidget {
                         ),
                         // child: Image.asset('assets/Rectangle 33.png'),
                       ),
-                      title: Text('${e.name}  x${e.quantity}',
-                          style: Theme.of(context).textTheme.titleSmall),
+                      title: Text('${e.name}  x${e.quantity}', style: Theme.of(context).textTheme.titleSmall),
                       trailing: Text('Rs ${e.total}'),
                     ),
                     Padding(
@@ -129,9 +118,7 @@ class OrderCard extends StatelessWidget {
                             90,
                             (index) => Expanded(
                                   child: Container(
-                                    color: index % 2 == 0
-                                        ? Colors.transparent
-                                        : Colors.grey,
+                                    color: index % 2 == 0 ? Colors.transparent : Colors.grey,
                                     height: 1,
                                   ),
                                 )),
@@ -145,10 +132,7 @@ class OrderCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(child: Text('${order.dateCreated}')),
-                Text('${order.total}')
-              ],
+              children: [Expanded(child: Text('${order.dateCreated}')), Text('${order.total}')],
             ),
           ),
           const Divider(),
@@ -158,11 +142,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const Expanded(child: Text('Rate')),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                    onPressed: () {},
-                    child: const Text('Reorder')),
+                ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.black), onPressed: () {}, child: const Text('Reorder')),
               ],
             ),
           ),

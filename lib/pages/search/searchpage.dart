@@ -1,10 +1,9 @@
 import 'dart:convert';
+import 'package:abhyukthafoods/pages/product_page/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
-import '../product_page/product_page.dart';
 
 class APIConfig {
   String url = "https://www.mrsfood.in/wp-json/wc/v3/";
@@ -33,15 +32,13 @@ class API {
     final response = await http.get(
       Uri.parse("${apiConfig.url}products?search=$query"),
       headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
+        'Authorization': 'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
       },
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
-      final List<Product> products =
-          jsonList.map((e) => Product.fromJson(e)).toList();
+      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
       return products;
     } else {
       throw Exception('Failed to search products');
@@ -89,26 +86,24 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (context, index) {
                   final product = products[index];
                   return ListTile(
-                    title: Text(
-                      product.name,
-                      style: GoogleFonts.dmSans(
-                        color: Colors.black,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                            product: product,
-                            customerModel: null, //
-                          ),
+                      title: Text(
+                        product.name,
+                        style: GoogleFonts.dmSans(
+                          color: Colors.black,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
                         ),
+                      ),
+                      onTap: () {}
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ProductPage(
+                      //       product: products,
+                      //     ),
+                      //   ),
+                      // );},
                       );
-                    },
-                  );
                 },
               ),
             ],

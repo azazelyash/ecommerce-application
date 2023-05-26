@@ -34,7 +34,7 @@ class RazorPayService {
 
   getPayment(BuildContext context) {
     var options = {
-      'key': 'RAZOR_KEY',
+      'key': 'rzp_live_9hEjbyS7CoAypM',
       'amount': 100,
       'description': 'Test Payment',
       'prefill': {

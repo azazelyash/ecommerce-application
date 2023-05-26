@@ -95,6 +95,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ],
       ),
     );
+    createLineItems();
   }
 
   void decreaseQuantity(int index) {
@@ -121,9 +122,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.customerModel.id.toString());
-    log(widget.products.length.toString());
-    log(widget.products[0].image.toString());
+    log("Customer Id: ${widget.customerModel.id}");
+    log("No. of Products: ${widget.products.length}");
     totalAmount();
     totalAmountAfterCoupon();
     return Scaffold(
@@ -591,6 +591,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
           MaterialPageRoute(
             builder: (context) => PaymentPage(
               orderModel: orderModel,
+              customerModel: widget.customerModel,
+              products: widget.products,
             ),
           ),
         );
