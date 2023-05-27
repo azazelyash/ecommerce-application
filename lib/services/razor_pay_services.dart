@@ -7,7 +7,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 class RazorPayService {
   final Razorpay _razorpay = Razorpay();
 
-  initPaymentGateway() {
+  initPaymentGateway(Function paymentSuccess) {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, externalWallet);
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, paymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, paymentError);
@@ -15,18 +15,6 @@ class RazorPayService {
 
   void externalWallet(ExternalWalletResponse response) {
     log(response.walletName.toString());
-  }
-
-  void paymentSuccess(PaymentSuccessResponse response, BuildContext context) {
-    log("Success: ${response.paymentId}");
-    OrderModel orderModel = OrderModel();
-    orderModel.paymentMethod = "razorpay";
-    orderModel.paymentMethodTitle = "RazorPay";
-    orderModel.setPaid = true;
-    orderModel.transactionId = response.paymentId.toString();
-
-    log("Order ID: ${orderModel.orderId}");
-    log("Order TrasactionId: ${orderModel.transactionId}");
   }
 
   void paymentError(PaymentFailureResponse response) {

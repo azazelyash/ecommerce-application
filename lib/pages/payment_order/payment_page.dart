@@ -12,11 +12,17 @@ import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products});
+  PaymentPage(
+      {super.key,
+      required this.billing,
+      required this.orderModel,
+      required this.customerModel,
+      required this.products});
 
   OrderModel orderModel;
   CustomerModel customerModel;
@@ -58,13 +64,22 @@ class _PaymentPageState extends State<PaymentPage> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        paymentCard(imagePath: "assets/payment_options/money.svg", title: "Cash on Delivery", radioValue: PaymentMethod.COD),
-        paymentCard(imagePath: "assets/payment_options/razorpay.svg", title: "RazorPay", radioValue: PaymentMethod.RazorPay),
+        paymentCard(
+            imagePath: "assets/payment_options/money.svg",
+            title: "Cash on Delivery",
+            radioValue: PaymentMethod.COD),
+        paymentCard(
+            imagePath: "assets/payment_options/razorpay.svg",
+            title: "RazorPay",
+            radioValue: PaymentMethod.RazorPay),
       ],
     );
   }
 
-  Widget paymentCard({required String imagePath, required String title, required PaymentMethod radioValue}) {
+  Widget paymentCard(
+      {required String imagePath,
+      required String title,
+      required PaymentMethod radioValue}) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -103,7 +118,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -121,6 +137,33 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
     );
+  }
+
+  void paymentSuccess(PaymentSuccessResponse response) async {
+    log("Success: ${response.paymentId}");
+    OrderModel orderModel = OrderModel();
+    orderModel.paymentMethod = "razorpay";
+    orderModel.paymentMethodTitle = "RazorPay";
+    orderModel.setPaid = true;
+    orderModel.transactionId = response.paymentId.toString();
+
+    log("Order ID: ${orderModel.orderId}");
+    log("Order TrasactionId: ${orderModel.transactionId}");
+    var ret = await APIService.createOrder(widget.orderModel);
+    if (ret) {
+      log("Order Created Successfully");
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => OrderSuccessPage(
+            customerModel: widget.customerModel,
+            products: widget.products,
+          ),
+        ),
+      );
+    } else {
+      log("Order Creation Failed");
+    }
   }
 
   Widget paymentButton() {
@@ -159,8 +202,9 @@ class _PaymentPageState extends State<PaymentPage> {
               widget.orderModel.paymentMethod = "razorpay";
               widget.orderModel.paymentMethodTitle = "RazorPay";
               RazorPayService razorPayService = RazorPayService();
-              razorPayService.initPaymentGateway();
-              razorPayService.getPayment(amount, widget.billing.phone, widget.customerModel.email);
+              razorPayService.initPaymentGateway(paymentSuccess);
+              razorPayService.getPayment(
+                  amount, widget.billing.phone, widget.customerModel.email);
             }
 
             if (ret) {
