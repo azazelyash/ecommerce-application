@@ -145,6 +145,7 @@ class _PaymentPageState extends State<PaymentPage> {
             }
 
             int amount = 0;
+            bool ret = false;
 
             for (var item in widget.products) {
               amount += int.parse(item.price!) * item.quantity!;
@@ -153,6 +154,7 @@ class _PaymentPageState extends State<PaymentPage> {
             if (_paymentMethod == PaymentMethod.COD) {
               widget.orderModel.paymentMethod = "cod";
               widget.orderModel.paymentMethodTitle = "Cash on Delivery";
+              ret = await APIService.createOrder(widget.orderModel);
             } else {
               widget.orderModel.paymentMethod = "razorpay";
               widget.orderModel.paymentMethodTitle = "RazorPay";
@@ -160,23 +162,21 @@ class _PaymentPageState extends State<PaymentPage> {
               razorPayService.initPaymentGateway();
               razorPayService.getPayment(amount, widget.billing.phone, widget.customerModel.email);
             }
-            // bool ret = await APIService.createOrder(widget.orderModel);
 
-            // if (ret) {
-            //   log("Order Created Successfully");
-            //   if (!mounted) return;
-            //   Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => OrderSuccessPage(
-            //         customerModel: widget.customerModel,
-            //         products: widget.products,
-            //       ),
-            //     ),
-            //   );
-            // } else {
-            //   log("Order Creation Failed");
-            // }
+            if (ret) {
+              log("Order Created Successfully");
+              if (!mounted) return;
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => OrderSuccessPage(
+                    customerModel: widget.customerModel,
+                    products: widget.products,
+                  ),
+                ),
+              );
+            } else {
+              log("Order Creation Failed");
+            }
           },
           label: const Text("Confirm Order"),
         ),
