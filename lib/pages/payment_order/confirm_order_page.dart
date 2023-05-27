@@ -593,6 +593,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
               orderModel: orderModel,
               customerModel: widget.customerModel,
               products: widget.products,
+              billing: billing,
             ),
           ),
         );

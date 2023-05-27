@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
@@ -15,11 +16,12 @@ import 'package:flutter_svg/svg.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({super.key, required this.orderModel, required this.customerModel, required this.products});
+  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products});
 
   OrderModel orderModel;
   CustomerModel customerModel;
   List<CartDetails> products;
+  Billing billing;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -142,31 +144,39 @@ class _PaymentPageState extends State<PaymentPage> {
               log("Item: ${item.quantity}");
             }
 
+            int amount = 0;
+
+            for (var item in widget.products) {
+              amount += int.parse(item.price!) * item.quantity!;
+            }
+
             if (_paymentMethod == PaymentMethod.COD) {
               widget.orderModel.paymentMethod = "cod";
               widget.orderModel.paymentMethodTitle = "Cash on Delivery";
             } else {
               widget.orderModel.paymentMethod = "razorpay";
               widget.orderModel.paymentMethodTitle = "RazorPay";
+              RazorPayService razorPayService = RazorPayService();
+              razorPayService.initPaymentGateway();
+              razorPayService.getPayment(amount, widget.billing.phone, widget.customerModel.email);
             }
+            // bool ret = await APIService.createOrder(widget.orderModel);
 
-            bool ret = await APIService.createOrder(widget.orderModel);
-
-            if (ret) {
-              log("Order Created Successfully");
-              if (!mounted) return;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderSuccessPage(
-                    customerModel: widget.customerModel,
-                    products: widget.products,
-                  ),
-                ),
-              );
-            } else {
-              log("Order Creation Failed");
-            }
+            // if (ret) {
+            //   log("Order Created Successfully");
+            //   if (!mounted) return;
+            //   Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => OrderSuccessPage(
+            //         customerModel: widget.customerModel,
+            //         products: widget.products,
+            //       ),
+            //     ),
+            //   );
+            // } else {
+            //   log("Order Creation Failed");
+            // }
           },
           label: const Text("Confirm Order"),
         ),

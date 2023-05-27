@@ -1,5 +1,7 @@
 import 'package:abhyukthafoods/models/address.dart';
 
+OrderModel tempOrderModel = OrderModel();
+
 class OrderModel {
   int? customerId;
   String? paymentMethod;

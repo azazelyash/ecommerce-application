@@ -149,13 +149,29 @@ class OrderSuccessPage extends StatelessWidget {
                   const SizedBox(
                     width: 16,
                   ),
-                  Text(
-                    "${product.name} x ${product.quantity}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 160,
+                        child: Text(
+                          product.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        " x ${product.quantity}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),
