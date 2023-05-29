@@ -141,14 +141,15 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void paymentSuccess(PaymentSuccessResponse response) async {
     log("Success: ${response.paymentId}");
-    OrderModel orderModel = OrderModel();
-    orderModel.paymentMethod = "razorpay";
-    orderModel.paymentMethodTitle = "RazorPay";
-    orderModel.setPaid = true;
-    orderModel.transactionId = response.paymentId.toString();
 
-    log("Order ID: ${orderModel.orderId}");
-    log("Order TrasactionId: ${orderModel.transactionId}");
+    // OrderModel orderModel = OrderModel();
+    widget.orderModel.paymentMethod = "razorpay";
+    widget.orderModel.paymentMethodTitle = "RazorPay";
+    widget.orderModel.setPaid = true;
+    widget.orderModel.transactionId = response.paymentId.toString();
+
+    log("Order ID: ${widget.orderModel.orderId}");
+    log("Order TrasactionId: ${widget.orderModel.transactionId}");
     var ret = await APIService.createOrder(widget.orderModel);
     if (ret) {
       log("Order Created Successfully");
