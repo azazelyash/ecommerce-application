@@ -14,10 +14,10 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({super.key, required this.customerModel});
+  MainPage({super.key, required this.customerModel, this.rerouteIndex = 0});
 
   final CustomerModel customerModel;
-
+  final int rerouteIndex;
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -30,6 +30,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    selectedIndex = widget.rerouteIndex;
     model = widget.customerModel;
   }
 
@@ -60,9 +61,7 @@ class _MainPageState extends State<MainPage> {
             switch (snapshot.data) {
               case InternetConnectionStatus.disconnected:
                 return LostInternet(callback: () {
-                  setState(() {
-             
-                  });
+                  setState(() {});
                 });
               case null:
               case InternetConnectionStatus.connected:

@@ -9,6 +9,7 @@ import 'package:abhyukthafoods/network/fetch_variations.dart';
 import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -68,6 +69,7 @@ class _ProductPageState extends State<ProductPage> {
     if (widget.product.variations!.isEmpty) return;
     isSelected = [...widget.product.variations!.map((e) => false)];
     isSelected[0] = true;
+    getVariationId();
   }
 
   Future<void> getVariationId() async {
@@ -292,11 +294,17 @@ class _ProductPageState extends State<ProductPage> {
                           cartItem.price = variationList![varIndex].price;
                           Cart().addItemToCart(cartItem);
                           Cart().printCart();
+                          Fluttertoast.showToast(
+                              msg:
+                                  '${widget.product.name} (${variationList![varIndex].name}) has been added to cart!');
                           return;
                         }
                         log("Adding product to cart");
                         Cart().addItemToCart(cartItem);
                         Cart().printCart();
+                        Fluttertoast.showToast(
+                            msg:
+                                '${widget.product.name} has been added to cart!');
                       },
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),

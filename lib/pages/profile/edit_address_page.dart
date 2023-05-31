@@ -70,15 +70,24 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               children: [
-                addressPageFields("First Name", firstNameController, TextInputType.name),
-                addressPageFields("Last Name", lastNameController, TextInputType.name),
-                addressPageFields("Phone", phoneController, TextInputType.phone),
-                addressPageFields("Email", emailController, TextInputType.emailAddress),
-                addressPageFields("Address", addressController, TextInputType.streetAddress),
-                addressPageFields("City", cityController, TextInputType.streetAddress),
-                addressPageFields("State", stateController, TextInputType.streetAddress),
-                addressPageFields("Pincode", pincodeController, TextInputType.number),
-                addressPageFields("Country", countryController, TextInputType.streetAddress),
+                addressPageFields(
+                    "First Name", firstNameController, TextInputType.name),
+                addressPageFields(
+                    "Last Name", lastNameController, TextInputType.name),
+                addressPageFields(
+                    "Phone", phoneController, TextInputType.phone),
+                addressPageFields(
+                    "Email", emailController, TextInputType.emailAddress),
+                addressPageFields(
+                    "Address", addressController, TextInputType.streetAddress),
+                addressPageFields(
+                    "City", cityController, TextInputType.streetAddress),
+                addressPageFields(
+                    "State", stateController, TextInputType.streetAddress),
+                addressPageFields(
+                    "Pincode", pincodeController, TextInputType.number),
+                addressPageFields(
+                    "Country", countryController, TextInputType.streetAddress),
                 const SizedBox(
                   height: 16,
                 ),
@@ -113,13 +122,15 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
 
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) {
+                        builder: (BuildContext dialogContext) {
                           return AlertDialog(
                             title: const Text("Address Updated"),
-                            content: const Text("Your address has been updated successfully"),
+                            content: const Text(
+                                "Your address has been updated successfully"),
                             actions: [
                               TextButton(
                                 onPressed: () {
+                                  Navigator.pop(dialogContext);
                                   Navigator.pop(context);
                                 },
                                 child: const Text("OK"),
@@ -129,7 +140,8 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                         },
                       );
                     },
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Colors.black,
                     label: Center(
                       child: Text(
@@ -152,7 +164,8 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
     );
   }
 
-  Widget addressPageFields(String title, TextEditingController? controller, TextInputType keyboardType) {
+  Widget addressPageFields(String title, TextEditingController? controller,
+      TextInputType keyboardType) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
