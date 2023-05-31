@@ -57,12 +57,8 @@ class _SignUpPageState extends State<SignUpPage> {
     return password == confirmPassword;
   }
 
-  bool isFilled(
-      String email, String password, String confirmPassword, String name) {
-    return email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirmPassword.isNotEmpty &&
-        name.isNotEmpty;
+  bool isFilled(String email, String password, String confirmPassword, String name) {
+    return email.isNotEmpty && password.isNotEmpty && confirmPassword.isNotEmpty && name.isNotEmpty;
   }
 
   /* ------------------------------ Sign Up User ------------------------------ */
@@ -83,8 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (!mounted) return;
 
     if (success) {
-      LoginResponseModel model = await APIService.loginCustomer(
-          emailController.text, passwordController.text);
+      LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
 
       getCustomerData();
 
@@ -94,16 +89,13 @@ class _SignUpPageState extends State<SignUpPage> {
       if (model.statusCode == 200) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => MainPage(
-                customerModel:
-                    customerModel!), // Replace with your homepage widget
+            builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
           ),
         );
       } else {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) =>
-                const LoginPage(), // Replace with your homepage widget
+            builder: (_) => const LoginPage(), // Replace with your homepage widget
           ),
         );
       }
@@ -148,10 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sign Up here",
-                          style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
+                          style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -198,8 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: Text(
                           "By signing up, you are agreeing to our Terms & Conditions, Privacy Policy.",
                           textAlign: TextAlign.center,
-                          style: kauthTextFieldStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -212,13 +200,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (!isFilled(
-                              emailController.text,
-                              passwordController.text,
-                              cfmPasswordController.text,
-                              nameController.text)) {
+                          if (!isFilled(emailController.text, passwordController.text, cfmPasswordController.text, nameController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -235,7 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -250,11 +234,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                             );
-                          } else if (!arePasswordsMatching(
-                              passwordController.text,
-                              cfmPasswordController.text)) {
+                          } else if (!arePasswordsMatching(passwordController.text, cfmPasswordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -332,10 +314,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           Text(
                             "Have an account ? ",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(

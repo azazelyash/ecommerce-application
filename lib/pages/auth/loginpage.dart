@@ -5,6 +5,7 @@ import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/forgotpassword.dart';
 import 'package:abhyukthafoods/pages/auth/loginpage.dart';
+import 'package:abhyukthafoods/pages/auth/otp_verification.dart';
 
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/comps/auth_text_field.dart';
@@ -52,8 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    LoginResponseModel model = await APIService.loginCustomer(
-        emailController.text, passwordController.text);
+    LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
     getCustomerData();
 
     // if (!mounted) return;
@@ -63,9 +63,7 @@ class _LoginPageState extends State<LoginPage> {
     if (model.statusCode == 200) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => MainPage(
-              customerModel:
-                  customerModel!), // Replace with your homepage widget
+          builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
         ),
       );
     } else {
@@ -107,8 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login here",
-                          style: kauthTextFieldStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -132,30 +129,24 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    //info
+                    /* ----------------------------- Forgot Password ---------------------------- */
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            "Remember Me",
-                            style: kauthTextFieldStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                            textScaleFactor: 1.0,
-                          ),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => ForgotPasswordPage(),
+                                  builder: (_) => const OTPVerification(),
                                 ),
                               );
                             },
                             child: Text(
                               "Forgot Password",
-                              style: kauthTextFieldStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w600),
+                              style: kauthTextFieldStyle(fontSize: 14, fontWeight: FontWeight.w600),
                               textScaleFactor: 1.0,
                             ),
                           ),
@@ -169,10 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (isFieldEmpty(emailController.text) ||
-                              isFieldEmpty(passwordController.text)) {
+                          if (isFieldEmpty(emailController.text) || isFieldEmpty(passwordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -189,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                             );
                           } else if (!isValidEmail(emailController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -218,8 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Center(
                             child: Text(
                               "Login in",
-                              style: kauthTextFieldStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                              style: kauthTextFieldStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               textScaleFactor: 1.0,
                             ),
                           ),
@@ -253,17 +242,14 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Text(
                             "Don't have an account ? ",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => SignUpPage(),
+                                  builder: (_) => const SignUpPage(),
                                 ),
                               );
                             },
