@@ -46,10 +46,12 @@ class ProductCard extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductPage(product: product, customerModel: customerModel),
-          )),
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              ProductPage(product: product, customerModel: customerModel),
+        ),
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
@@ -78,7 +80,9 @@ class ProductCard extends StatelessWidget {
               child: SizedBox(
                 width: 125,
                 child: product.images != null && product.images!.isNotEmpty
-                    ? Image(fit: BoxFit.cover, image: NetworkImage(product.images![0]['src'])
+                    ? Image(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(product.images![0]['src'])
 
                         // NetworkImage(snapshot.data[index].image['src']),
                         )
@@ -92,7 +96,10 @@ class ProductCard extends StatelessWidget {
               product.name,
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.black87, fontSize: 15, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
@@ -101,7 +108,10 @@ class ProductCard extends StatelessWidget {
               resolvePrice(product),
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
             ),
             const SizedBox(
               height: 10,
@@ -111,20 +121,33 @@ class ProductCard extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConfirmOrderPage(
-                        customerModel: customerModel,
-                        products: [cartItem],
+                  if (product.variations!.isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmOrderPage(
+                          customerModel: customerModel,
+                          products: [cartItem],
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductPage(
+                            product: product, customerModel: customerModel),
+                      ),
+                    );
+                  }
                 },
                 child: const Center(
                   child: Text(
                     "Buy",
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

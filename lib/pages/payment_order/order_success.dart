@@ -8,7 +8,8 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 
 class OrderSuccessPage extends StatelessWidget {
-  OrderSuccessPage({super.key, required this.customerModel, required this.products});
+  OrderSuccessPage(
+      {super.key, required this.customerModel, required this.products});
 
   CustomerModel customerModel;
   List<CartDetails> products;
@@ -83,14 +84,14 @@ class OrderSuccessPage extends StatelessWidget {
   FloatingActionButton viewDetailsButton(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MainPage(
+              rerouteIndex: 3,
               customerModel: customerModel,
             ),
           ),
-          (route) => false,
         );
       },
       shape: RoundedRectangleBorder(
