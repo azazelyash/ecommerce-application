@@ -6,7 +6,6 @@ import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
-import 'package:abhyukthafoods/models/order.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:dio/dio.dart';
@@ -218,5 +217,71 @@ class APIService {
     }
 
     return data;
+  }
+
+  static Future<dynamic> verifyEmail(String email) async {
+    var res = null;
+
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        APIConfig.url + APIConfig.customerURl,
+        queryParameters: {
+          "email": email,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        if (response.data.length == 0) {
+          res = null;
+        } else {
+          res = response.data[0];
+          // log("Response at verifyEmail() : ${response.data.toString()}");
+        }
+      }
+    } on DioError catch (e) {
+      log(e.response.toString());
+    }
+
+    return res;
+  }
+
+  static Future<bool> updatePassword(String password, String id) async {
+    bool isPasswordUpdated = false;
+
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().post("${APIConfig.url}${APIConfig.customerURl}/$id",
+          data: {
+            "password": password,
+          },
+          options: Options(headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          }));
+
+      if (response.statusCode == 200) {
+        log("Password Updated");
+        isPasswordUpdated = true;
+      } else {
+        log(response.statusCode.toString());
+      }
+    } on DioError catch (e) {
+      log(e.response.toString());
+    }
+
+    return isPasswordUpdated;
   }
 }
