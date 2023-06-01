@@ -28,26 +28,31 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-        elevation: 0,
-        leading: GestureDetector(
-          child: Container(
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(100))),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              )),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          title,
-          textScaleFactor: 1.3,
-          style: const TextStyle(color: Colors.black),
-        ));
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: AppBar(
+          elevation: 0,
+          leading: GestureDetector(
+            child: Container(
+                margin: const EdgeInsets.all(11),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: const BorderRadius.all(Radius.circular(100))),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                )),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            title,
+            textScaleFactor: 1.0,
+            style: const TextStyle(color: Colors.black),
+          )),
+    );
   }
 }
 
@@ -130,7 +135,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
 }
 
 class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
-  AddressAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
+  AddressAppBar({super.key, required this.title})
+      : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   String title;
 
@@ -171,7 +177,8 @@ class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class PaymentAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PaymentAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
+  PaymentAppBar({super.key, required this.title})
+      : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   String title;
 
