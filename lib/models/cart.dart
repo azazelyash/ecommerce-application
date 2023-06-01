@@ -40,6 +40,8 @@ class Cart {
     // check if the cart already has only 1 item then decrease the quantity
     if (cartItems[cartItems.indexOf(item)].quantity == 1) {
       cartItems.remove(item);
+      updateCartLength();
+
       return;
     }
     cartItems[cartItems.indexOf(item)].quantity -= 1;
