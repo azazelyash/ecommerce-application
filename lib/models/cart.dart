@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+
 List<CartDetails> cartItems = [];
+ValueNotifier<int> cartCount = ValueNotifier<int>(0);
 
 class CartDetails {
   int id;
@@ -30,6 +33,7 @@ class Cart {
       return;
     }
     cartItems.add(item);
+    updateCartLength();
   }
 
   void decreaseItemQuantity(CartDetails item) {
@@ -39,18 +43,22 @@ class Cart {
       return;
     }
     cartItems[cartItems.indexOf(item)].quantity -= 1;
+    updateCartLength();
   }
 
   void increaseItemQuantity(CartDetails item) {
     cartItems[cartItems.indexOf(item)].quantity += 1;
+    updateCartLength();
   }
 
   void removeItemFromCart(CartDetails item) {
     cartItems.remove(item);
+    updateCartLength();
   }
 
   void clearCart() {
     cartItems.clear();
+    updateCartLength();
   }
 
   void printCart() {
@@ -67,37 +75,7 @@ class Cart {
     }
   }
 
-  // void addItemToCart(int id) {
-  //   // check if the cart already has the item then increase the quantity
-  //   if (cartItems.containsKey(id)) {
-  //     cartItems[id] = cartItems[id]! + 1;
-  //     return;
-  //   }
-  //   cartItems[id] = 1;
-  // }
-
-  // void decreaseItemQuantity(int id) {
-  //   // check if the cart already has only 1 item then decrease the quantity
-  //   if (cartItems[id] == 1) {
-  //     cartItems.remove(id);
-  //     return;
-  //   }
-  //   cartItems[id] = cartItems[id]! - 1;
-  // }
-
-  // void increaseItemQuantity(int id) {
-  //   cartItems[id] = cartItems[id]! + 1;
-  // }
-
-  // void removeItemFromCart(int id) {
-  //   cartItems.remove(id);
-  // }
-
-  // void clearCart() {
-  //   cartItems.clear();
-  // }
-
-  // void printCart() {
-  //   log(cartItems.toString());
-  // }
+  void updateCartLength() {
+    cartCount.value = cartItems.length;
+  }
 }

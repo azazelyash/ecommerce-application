@@ -165,14 +165,14 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
   Container productTile(BuildContext context, int index) {
     String name = widget.products[index].name;
-    // String imageUrl = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
     String imageUrl = (widget.products[index].image == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : widget.products[index].image!;
     String quantity = widget.products[index].quantity.toString();
     String price = widget.products[index].price!;
     String description = widget.products[index].description!;
     int displayPrice = calculatePrice(int.parse(price), int.parse(quantity));
-    log(index.toString());
-    log("Name : $name, Image : $imageUrl, Quantity : $quantity, Price : $price, Description : $description, Display Price : $displayPrice");
+    // log(index.toString());
+    // log("Name : $name, Image : $imageUrl, Quantity : $quantity, Price : $price, Description : $description, Display Price : $displayPrice");
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

@@ -67,40 +67,67 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 }),
             Titletile(
-                imagepath: "assets/profile/fluent_location-16-regular.svg",
-                title: "Addresses",
-                onTapp: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => AddressPage(
-                        id: customerModel!.id.toString(),
-                      ),
+              imagepath: "assets/profile/fluent_location-16-regular.svg",
+              title: "Addresses",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => AddressPage(
+                      id: customerModel!.id.toString(),
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
+
+            /* -------------------------- Choose Language Tile -------------------------- */
+
+            // Titletile(
+            //   imagepath: "assets/profile/uil_language.svg",
+            //   title: "Choose Language",
+            //   onTapp: () {
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute(
+            //         builder: (_) => const LanguagePage(),
+            //       ),
+            //     );
+            //   },
+            // ),
+
+            /* ------------------------------ Settings Tile ----------------------------- */
+
+            // Titletile(
+            //   imagepath: "assets/profile/solar_settings-outline.svg",
+            //   title: "Settings",
+            //   onTapp: () {},
+            // ),
             Titletile(
-                imagepath: "assets/profile/uil_language.svg",
-                title: "Choose Language",
-                onTapp: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const LanguagePage(),
-                    ),
-                  );
-                }),
-            Titletile(imagepath: "assets/profile/solar_settings-outline.svg", title: "Settings", onTapp: () {}),
-            Titletile(
-                imagepath: "assets/profile/mdi_about-circle-outline.svg",
-                title: "About us",
-                onTapp: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const AboutUsPage(),
-                    ),
-                  );
-                }),
-            Titletile(imagepath: "assets/profile/tabler_help.svg", title: "Help desk", onTapp: () {}),
-            Titletile(imagepath: "assets/profile/send feedback.svg", title: "Send Feedback", onTapp: () {}),
+              imagepath: "assets/profile/mdi_about-circle-outline.svg",
+              title: "About us",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const AboutUsPage(),
+                  ),
+                );
+              },
+            ),
+
+            /* ------------------------------ Settings Tile ----------------------------- */
+
+            // Titletile(
+            //   imagepath: "assets/profile/tabler_help.svg",
+            //   title: "Help desk",
+            //   onTapp: () {},
+            // ),
+
+            /* --------------------------- Send Feedback Tiles -------------------------- */
+
+            // Titletile(
+            //   imagepath: "assets/profile/send feedback.svg",
+            //   title: "Send Feedback",
+            //   onTapp: () {},
+            // ),
             Titletile(
                 imagepath: "assets/profile/material-symbols_logout-rounded.svg",
                 title: "Logout",
@@ -138,7 +165,6 @@ class _ProfileBoxState extends State<ProfileBox> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     model = widget.customerModel;
   }
@@ -191,10 +217,6 @@ class _ProfileBoxState extends State<ProfileBox> {
                         ],
                       ),
                     ],
-                  ),
-                  SvgPicture.asset(
-                    "assets/profile/righwhite.svg",
-                    height: 14,
                   ),
                 ],
               ),

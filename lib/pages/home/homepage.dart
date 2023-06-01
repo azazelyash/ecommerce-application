@@ -6,7 +6,6 @@ import 'package:abhyukthafoods/comps/category_listview.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_categories.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
-import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void startAutoScroll() {
-    timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentPage < pages.length - 1) {
         currentPage++;
       } else {
@@ -55,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       }
       controller.animateToPage(
         currentPage,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.ease,
       );
     });
@@ -108,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 SizedBox(
                   width: 20,
@@ -122,23 +121,26 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            FutureBuilder(
-              future: fetchCategories(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return shimmerContainer.categoryShimmer();
-                } else {
-                  return Categories(
-                    categories: snapshot.data,
-                    customerModel: model!,
-                  );
-                }
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: FutureBuilder(
+                future: fetchCategories(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return shimmerContainer.categoryShimmer();
+                  } else {
+                    return Categories(
+                      categories: snapshot.data,
+                      customerModel: model!,
+                    );
+                  }
+                },
+              ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 SizedBox(
                   width: 20,
@@ -168,8 +170,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio:
-                            MediaQuery.of(context).size.height / 1350,
+                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
                       ),
                       itemBuilder: (BuildContext gridcontext, int index) {
                         return ProductCard(

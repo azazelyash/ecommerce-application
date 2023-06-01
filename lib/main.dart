@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-            secondary: Colors.black,
-            seedColor: const Color.fromRGBO(20, 120, 70, 1)),
+        colorScheme: ColorScheme.fromSeed(secondary: Colors.black, seedColor: const Color.fromRGBO(20, 120, 70, 1)),
         textTheme: textTheme(
           const TextTheme(
             titleLarge: TextStyle(fontWeight: FontWeight.bold),
