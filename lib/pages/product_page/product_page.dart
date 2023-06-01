@@ -14,8 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage(
-      {required this.product, super.key, required this.customerModel});
+  const ProductPage({required this.product, super.key, required this.customerModel});
   final Product product;
   final CustomerModel customerModel;
   @override
@@ -26,6 +25,7 @@ class _ProductPageState extends State<ProductPage> {
   final PageController pageController = PageController();
   Future<List>? variationData;
   List<dynamic>? variationList;
+  int count = 1;
 
   int varIndex = 0;
   late List<bool> isSelected = [];
@@ -37,6 +37,21 @@ class _ProductPageState extends State<ProductPage> {
       isSelected[index] = true;
     });
     getVariationId();
+  }
+
+  void increaseQuantity() {
+    setState(() {
+      count++;
+    });
+  }
+
+  void decreaseQuantity() {
+    if (count == 1) {
+      return;
+    }
+    setState(() {
+      count--;
+    });
   }
 
   String resolvePrice(dynamic product) {
@@ -81,10 +96,12 @@ class _ProductPageState extends State<ProductPage> {
     // print(widget.product.images!.length);
     log(varIndex.toString());
     var pages = [
-      ...widget.product.images!.map((e) => Image(
-            image: NetworkImage(e['src']),
-            fit: BoxFit.fill,
-          ))
+      ...widget.product.images!.map(
+        (e) => Image(
+          image: NetworkImage(e['src']),
+          fit: BoxFit.fill,
+        ),
+      )
     ];
     var theme = Theme.of(context);
 
@@ -92,11 +109,9 @@ class _ProductPageState extends State<ProductPage> {
       id: widget.product.id,
       name: widget.product.name,
       description: widget.product.description,
-      image: widget.product.images!.isEmpty
-          ? null
-          : widget.product.images![0]['src'],
+      image: widget.product.images!.isEmpty ? null : widget.product.images![0]['src'],
       price: widget.product.price,
-      quantity: 1,
+      quantity: count,
     );
 
     return Scaffold(
@@ -117,15 +132,19 @@ class _ProductPageState extends State<ProductPage> {
                           future: variationData,
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return SizedBox(
-                                  height: 200,
-                                  child: const CircularProgressIndicator());
+                              return const SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
                             } else {
                               if (widget.product.variations!.isNotEmpty) {
+                                cartItem.id = variationList![varIndex].id;
+                                cartItem.price = variationList![varIndex].price;
                                 pages = [
                                   Image(
-                                    image: NetworkImage(
-                                        snapshot.data![varIndex].imageUrl),
+                                    image: NetworkImage(snapshot.data![varIndex].imageUrl),
                                     fit: BoxFit.cover,
                                   )
                                 ];
@@ -139,24 +158,23 @@ class _ProductPageState extends State<ProductPage> {
                                         child: PageView.builder(
                                           controller: pageController,
                                           itemCount: pages.length,
-                                          itemBuilder: (context, index) =>
-                                              pages[index],
+                                          itemBuilder: (context, index) => pages[index],
                                         ),
                                       ),
                                       //---------------------------------- Back Button -----------------------------
                                       GestureDetector(
                                         child: Container(
                                           margin: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  theme.colorScheme.secondary,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(100))),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(100),
+                                            ),
+                                          ),
                                           padding: const EdgeInsets.all(10),
                                           child: const Icon(
                                             Icons.arrow_back,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         onTap: () {
@@ -165,12 +183,12 @@ class _ProductPageState extends State<ProductPage> {
                                       ),
 
                                       Positioned(
-                                        right: 5,
-                                        left: 200,
+                                        left: MediaQuery.of(context).size.width / 2,
                                         bottom: 10,
                                         child: SmoothPageIndicator(
-                                            controller: pageController,
-                                            count: 1),
+                                          controller: pageController,
+                                          count: 1,
+                                        ),
                                       ),
                                     ],
                                   )
@@ -191,37 +209,44 @@ class _ProductPageState extends State<ProductPage> {
                 padding: const EdgeInsets.all(20),
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    color: const Color.fromRGBO(20, 120, 70, 1),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-//
-//---------------------------------- Title widget -----------------------------
+                    //
+                    //---------------------------------- Title widget -----------------------------
 
                     Row(
                       children: [
                         Expanded(
-                            child: Text(
-                          widget.product.name,
-                          style: GoogleFonts.dmSans(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                          child: Text(
+                            widget.product.name,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
                           ),
-                        )),
+                        ),
                         GestureDetector(
                           child: Container(
                             decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5))),
+                              color: theme.colorScheme.primary,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
                             padding: const EdgeInsets.all(10),
                             child: SvgPicture.asset(
-                                color: Colors.white, 'assets/Icons/love.svg'),
+                              color: Colors.white,
+                              'assets/Icons/love.svg',
+                            ),
                           ),
                           onTap: () {},
                         ),
@@ -231,7 +256,7 @@ class _ProductPageState extends State<ProductPage> {
                       height: 10,
                     ),
 
-//---------------------------------- Price and Counter -----------------------------
+                    //---------------------------------- Price and Counter -----------------------------
 
                     FutureBuilder(
                       future: variationData,
@@ -241,16 +266,14 @@ class _ProductPageState extends State<ProductPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.product.variations!.isEmpty
-                                      ? resolvePrice(widget.product)
-                                      : resolvePrice(snapshot.data![varIndex]),
+                                  widget.product.variations!.isEmpty ? resolvePrice(widget.product) : resolvePrice(snapshot.data![varIndex]),
                                   style: GoogleFonts.dmSans(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                const CounterWidget()
+                                counterButton(),
                               ],
                             ),
                     ),
@@ -258,7 +281,7 @@ class _ProductPageState extends State<ProductPage> {
                       height: 10,
                     ),
 
-//---------------------------------- Variation selector  -----------------------------
+                    //---------------------------------- Variation selector  -----------------------------
 
                     FutureBuilder(
                       future: variationData,
@@ -278,7 +301,7 @@ class _ProductPageState extends State<ProductPage> {
                         );
                       },
                     ),
-// ------------------------------------------------------------------------------------
+                    // ------------------------------------------------------------------------------------
                     const SizedBox(
                       height: 20,
                     ),
@@ -294,33 +317,27 @@ class _ProductPageState extends State<ProductPage> {
                           cartItem.price = variationList![varIndex].price;
                           Cart().addItemToCart(cartItem);
                           Cart().printCart();
-                          Fluttertoast.showToast(
-                              msg:
-                                  '${widget.product.name} (${variationList![varIndex].name}) has been added to cart!');
+                          Fluttertoast.showToast(msg: '${widget.product.name} (${variationList![varIndex].name}) has been added to cart!');
                           return;
                         }
                         log("Adding product to cart");
                         Cart().addItemToCart(cartItem);
                         Cart().printCart();
-                        Fluttertoast.showToast(
-                            msg:
-                                '${widget.product.name} has been added to cart!');
+                        Fluttertoast.showToast(msg: '${widget.product.name} has been added to cart!');
                       },
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 50),
-                          backgroundColor: Colors.black),
+                      style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.black),
                       child: const Text('Add to Cart'),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (widget.product.variations!.isNotEmpty) {
                           cartItem.id = variationList![varIndex].id;
                           cartItem.price = variationList![varIndex].price;
                         }
-                        Navigator.push(
+                        bool ret = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ConfirmOrderPage(
@@ -329,6 +346,10 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                           ),
                         );
+
+                        if (ret) {
+                          setState(() {});
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
@@ -340,8 +361,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Product Description',
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -349,9 +369,7 @@ class _ProductPageState extends State<ProductPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(widget.product.shortDescription == ''
-                              ? 'No description'
-                              : widget.product.shortDescription!),
+                          child: Text(widget.product.shortDescription == '' ? 'No description' : widget.product.shortDescription!),
                         ),
                       ],
                     ),
@@ -360,8 +378,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Suggested Products',
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -398,14 +415,69 @@ class _ProductPageState extends State<ProductPage> {
       ),
     );
   }
+
+  Widget counterButton() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      width: MediaQuery.of(context).size.width * 0.27,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          /* ------------------------ Decrease quantity Button ------------------------ */
+
+          GestureDetector(
+            onTap: () {
+              decreaseQuantity();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                // border: Border.all(color: Colors.grey.shade300),
+                color: Colors.grey.shade100,
+              ),
+              child: const Icon(Icons.remove),
+            ),
+          ),
+          const SizedBox(
+            width: 14,
+          ),
+          Text(
+            count.toString(),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(
+            width: 14,
+          ),
+          /* ------------------------ Increase quantity Button ------------------------ */
+
+          GestureDetector(
+            onTap: () {
+              increaseQuantity();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                // border: Border.all(color: Colors.grey.shade300),
+                color: Colors.grey.shade100,
+              ),
+              child: const Icon(Icons.add),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class VariationButton extends StatefulWidget {
-  const VariationButton(
-      {super.key,
-      required this.label,
-      required this.selectButtonCallback,
-      required this.isSelected});
+  const VariationButton({super.key, required this.label, required this.selectButtonCallback, required this.isSelected});
   final String label;
   final Function selectButtonCallback;
   final bool isSelected;
@@ -417,102 +489,157 @@ class _VariationButtonState extends State<VariationButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(left: 0, right: 12, top: 12),
       child: ElevatedButton(
         onPressed: () {
           widget.selectButtonCallback();
         },
-        style: ElevatedButton.styleFrom(
-            backgroundColor: widget.isSelected ? null : Colors.white,
-            minimumSize: const Size(80, 50)),
+        style: ElevatedButton.styleFrom(backgroundColor: widget.isSelected ? null : Colors.white, minimumSize: const Size(80, 50)),
         child: Text(
           widget.label,
-          style:
-              TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
+          style: TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
 
-class CounterWidget extends StatefulWidget {
-  const CounterWidget({super.key});
+// class CounterWidget extends StatefulWidget {
+//   const CounterWidget({super.key});
 
-  @override
-  State<CounterWidget> createState() => _CounterWidgetState();
-}
+//   @override
+//   State<CounterWidget> createState() => _CounterWidgetState();
+// }
 
-class _CounterWidgetState extends State<CounterWidget> {
-  int count = 1;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InkWell(
-          onTap: () => count > 1
-              ? setState(() {
-                  count--;
-                })
-              : null,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 0),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
-              color: Colors.black,
-            ),
-            height: 40,
-            width: 50,
-            child: const Center(
-              child: Text(
-                '-',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 0,
-            ),
-            color: Colors.black,
-          ),
-          height: 40,
-          width: 50,
-          child: Center(
-            child: Text(
-              count.toString(),
-              style: const TextStyle(color: Colors.white, fontSize: 15),
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () => setState(() {
-            count++;
-          }),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 0),
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
-              color: Colors.black,
-            ),
-            height: 40,
-            width: 50,
-            child: const Center(
-              child: Text(
-                '+',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
+// class _CounterWidgetState extends State<CounterWidget> {
+//   // int count = 1;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+//       width: MediaQuery.of(context).size.width * 0.27,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(10),
+//         border: Border.all(color: Colors.grey.shade300),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           /* ------------------------ Decrease quantity Button ------------------------ */
+
+//           GestureDetector(
+//             onTap: () {
+//               decreaseQuantity();
+//             },
+//             child: Container(
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(4),
+//                 // border: Border.all(color: Colors.grey.shade300),
+//                 color: Colors.grey.shade100,
+//               ),
+//               child: const Icon(Icons.remove),
+//             ),
+//           ),
+//           const SizedBox(
+//             width: 14,
+//           ),
+//           Text(
+//             count.toString(),
+//             style: const TextStyle(
+//               fontSize: 16,
+//               fontWeight: FontWeight.w600,
+//             ),
+//           ),
+//           const SizedBox(
+//             width: 14,
+//           ),
+//           /* ------------------------ Increase quantity Button ------------------------ */
+
+//           GestureDetector(
+//             onTap: () {
+//               increaseQuantity();
+//             },
+//             child: Container(
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(4),
+//                 // border: Border.all(color: Colors.grey.shade300),
+//                 color: Colors.grey.shade100,
+//               ),
+//               child: const Icon(Icons.add),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+
+//     // return Row(
+//     //   children: [
+//     //     InkWell(
+//     //       onTap: () => count > 1
+//     //           ? setState(() {
+//     //               count--;
+//     //             })
+//     //           : null,
+//     //       child: Container(
+//     //         decoration: BoxDecoration(
+//     //           border: Border.all(width: 0),
+//     //           borderRadius: const BorderRadius.only(
+//     //             topLeft: Radius.circular(10),
+//     //             bottomLeft: Radius.circular(10),
+//     //           ),
+//     //           color: Colors.black,
+//     //         ),
+//     //         height: 40,
+//     //         width: 50,
+//     //         child: const Center(
+//     //           child: Text(
+//     //             '-',
+//     //             style: TextStyle(color: Colors.white, fontSize: 20),
+//     //           ),
+//     //         ),
+//     //       ),
+//     //     ),
+//     //     Container(
+//     //       decoration: BoxDecoration(
+//     //         border: Border.all(
+//     //           width: 0,
+//     //         ),
+//     //         color: Colors.black,
+//     //       ),
+//     //       height: 40,
+//     //       width: 50,
+//     //       child: Center(
+//     //         child: Text(
+//     //           count.toString(),
+//     //           style: const TextStyle(color: Colors.white, fontSize: 15),
+//     //         ),
+//     //       ),
+//     //     ),
+//     //     InkWell(
+//     //       onTap: () => setState(() {
+//     //         count++;
+//     //       }),
+//     //       child: Container(
+//     //         decoration: BoxDecoration(
+//     //           border: Border.all(width: 0),
+//     //           borderRadius: const BorderRadius.only(
+//     //             topRight: Radius.circular(10),
+//     //             bottomRight: Radius.circular(10),
+//     //           ),
+//     //           color: Colors.black,
+//     //         ),
+//     //         height: 40,
+//     //         width: 50,
+//     //         child: const Center(
+//     //           child: Text(
+//     //             '+',
+//     //             style: TextStyle(color: Colors.white, fontSize: 20),
+//     //           ),
+//     //         ),
+//     //       ),
+//     //     )
+//     //   ],
+//     // );
+//   }
+// }

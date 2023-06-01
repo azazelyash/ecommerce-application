@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:abhyukthafoods/comps/internetlostpage.dart';
+import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/cart/cartpage.dart';
 import 'package:abhyukthafoods/pages/orders/orderspage.dart';
@@ -14,7 +12,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({super.key, required this.customerModel, this.rerouteIndex = 0});
+  const MainPage({super.key, required this.customerModel, this.rerouteIndex = 0});
 
   final CustomerModel customerModel;
   final int rerouteIndex;
@@ -72,7 +70,7 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class NavBox extends StatelessWidget {
+class NavBox extends StatefulWidget {
   final int index;
   final Function(int) onTap;
 
@@ -83,13 +81,18 @@ class NavBox extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<NavBox> createState() => _NavBoxState();
+}
+
+class _NavBoxState extends State<NavBox> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 280,
       height: 87,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Color(0xff1D1F24),
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topRight: Radius.circular(25),
           topLeft: Radius.circular(25),
         ),
@@ -102,12 +105,12 @@ class NavBox extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                onTap(0);
+                widget.onTap(0);
               },
               child: Column(
                 children: [
                   SvgPicture.asset(
-                    "assets/Icons/home-2-${index == 0 ? 'white' : 'color'}.svg",
+                    "assets/Icons/home-2-${widget.index == 0 ? 'white' : 'color'}.svg",
                     height: 25,
                   ),
                   const SizedBox(height: 7),
@@ -116,7 +119,7 @@ class NavBox extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: index == 0 ? Colors.white : Colors.grey,
+                      color: widget.index == 0 ? Colors.white : Colors.grey,
                     ),
                     textScaleFactor: 1.0,
                   ),
@@ -125,12 +128,12 @@ class NavBox extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                onTap(1);
+                widget.onTap(1);
               },
               child: Column(
                 children: [
                   SvgPicture.asset(
-                    "assets/Icons/search-normal-${index == 1 ? 'white' : 'color'}.svg",
+                    "assets/Icons/search-normal-${widget.index == 1 ? 'white' : 'color'}.svg",
                     height: 25,
                   ),
                   const SizedBox(height: 7),
@@ -139,7 +142,7 @@ class NavBox extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: index == 1 ? Colors.white : Colors.grey,
+                      color: widget.index == 1 ? Colors.white : Colors.grey,
                     ),
                     textScaleFactor: 1.0,
                   ),
@@ -148,33 +151,72 @@ class NavBox extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                onTap(2);
+                setState(() {
+                  widget.onTap(2);
+                });
               },
-              child: Container(
-                width: 53,
-                height: 53,
-                decoration: BoxDecoration(
-                  color: const Color(0xff147846),
-                  // color: index == 2 ? Color(0xff147846) : Colors.green.shade300,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.white),
-                ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    "assets/Icons/Vector-only cart-white.svg",
-                    height: 20,
+              child: Stack(
+                children: [
+                  Container(
+                    width: 53,
+                    height: 53,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff147846),
+                      // color: index == 2 ? Color(0xff147846) : Colors.green.shade300,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: Colors.white),
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/Icons/Vector-only cart-white.svg",
+                        height: 20,
+                      ),
+                    ),
                   ),
-                ),
+
+                  /* ------------------------- Cart Notification Badge ------------------------ */
+
+                  ValueListenableBuilder(
+                    valueListenable: cartCount,
+                    builder: (BuildContext context, int value, Widget? child) {
+                      return (cartCount.value != 0)
+                          ? Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.shade400,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    value.toString(),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                    textScaleFactor: 1.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const SizedBox();
+                    },
+                  ),
+                ],
               ),
             ),
             GestureDetector(
               onTap: () {
-                onTap(3);
+                widget.onTap(3);
               },
               child: Column(
                 children: [
                   SvgPicture.asset(
-                    "assets/Icons/clock-${index == 3 ? 'white' : 'color'}.svg",
+                    "assets/Icons/clock-${widget.index == 3 ? 'white' : 'color'}.svg",
                     height: 25,
                   ),
                   const SizedBox(height: 7),
@@ -183,7 +225,7 @@ class NavBox extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: index == 3 ? Colors.white : Colors.grey,
+                      color: widget.index == 3 ? Colors.white : Colors.grey,
                     ),
                     textScaleFactor: 1.0,
                   ),
@@ -192,12 +234,12 @@ class NavBox extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                onTap(4);
+                widget.onTap(4);
               },
               child: Column(
                 children: [
                   SvgPicture.asset(
-                    "assets/Icons/user-${index == 4 ? 'white' : 'color'}.svg",
+                    "assets/Icons/user-${widget.index == 4 ? 'white' : 'color'}.svg",
                     height: 25,
                   ),
                   const SizedBox(height: 7),
@@ -206,7 +248,7 @@ class NavBox extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: index == 4 ? Colors.white : Colors.grey,
+                      color: widget.index == 4 ? Colors.white : Colors.grey,
                     ),
                     textScaleFactor: 1.0,
                   ),

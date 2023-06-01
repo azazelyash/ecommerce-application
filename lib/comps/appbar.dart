@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/api_config.dart';
+import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
+import 'package:abhyukthafoods/pages/profile/profilepage.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +37,7 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
           leading: GestureDetector(
             child: Container(
                 margin: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(Radius.circular(100))),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(100))),
                 child: const Icon(
                   Icons.arrow_back,
                   color: Colors.white,
@@ -96,38 +96,37 @@ class _HomeAppBarState extends State<HomeAppBar> {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.notifications_none),
-          color: Colors.black,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: CircleAvatar(
-            backgroundColor: Colors.grey[300],
-            backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
+        /* --------------------------- Notification Button -------------------------- */
+
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.notifications_none_outlined,
+            color: Colors.black,
           ),
-          // child: FutureBuilder(
-          //   future: SharedService.loginDetails(),
-          //   builder: (context, AsyncSnapshot<LoginResponseModel> loginModel) {
-          //     if (loginModel.hasData) {
-          //       return FutureBuilder(
-          //         future: APIService.getCustomerDetails(loginModel.data!.data!.id.toString()),
-          //         builder: (context, AsyncSnapshot<CustomerModel?> snapshot) {
-          //           if (loginModel.hasData) {
-          //             return CircleAvatar(
-          //               backgroundImage: NetworkImage(snapshot.data!.avatarUrl.toString()),
-          //             );
-          //           } else {
-          //             return const Center(child: CircularProgressIndicator());
-          //           }
-          //         },
-          //       );
-          //     } else {
-          //       return const Center(child: CircularProgressIndicator());
-          //     }
-          //   },
-          // ),
+        ),
+
+        /* ----------------------------- Profile Button ----------------------------- */
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(
+                    customerModel: customerModel!,
+                    rerouteIndex: 4,
+                  ),
+                ),
+              );
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.grey[300],
+              backgroundImage: NetworkImage(customerModel!.avatarUrl.toString()),
+            ),
+          ),
         ),
       ],
     );
@@ -135,8 +134,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
 }
 
 class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
-  AddressAppBar({super.key, required this.title})
-      : preferredSize = const Size.fromHeight(kToolbarHeight);
+  AddressAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   String title;
 
@@ -177,8 +175,7 @@ class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class PaymentAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PaymentAppBar({super.key, required this.title})
-      : preferredSize = const Size.fromHeight(kToolbarHeight);
+  PaymentAppBar({super.key, required this.title}) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   String title;
 
