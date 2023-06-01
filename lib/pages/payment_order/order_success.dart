@@ -99,7 +99,7 @@ class OrderSuccessPage extends StatelessWidget {
       ),
       elevation: 0,
       backgroundColor: Colors.white,
-      label: const Row(
+      label:  Row(
         children: [
           Text(
             "View Order",

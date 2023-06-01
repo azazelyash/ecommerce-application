@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/comps/category_listview.dart';
@@ -11,9 +13,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.customerModel});
+  HomePage({Key? key, required this.customerModel}) : super(key: key);
 
-  CustomerModel? customerModel;
+  final CustomerModel customerModel;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,25 +23,52 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final controller = PageController(viewportFraction: 1, keepPage: true);
-  CustomerModel? model = CustomerModel();
+  CustomerModel? model;
+  Timer? timer;
+  int currentPage = 0;
 
-  final List pages = [
+  final List<Widget> pages = [
     SvgPicture.asset('assets/Banners/banner 3.svg'),
     SvgPicture.asset('assets/Banners/banner 4.svg'),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     model = widget.customerModel;
+    startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    stopAutoScroll();
+    controller.dispose();
+    super.dispose();
+  }
+
+  void startAutoScroll() {
+    timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+      controller.animateToPage(
+        currentPage,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
+    });
+  }
+
+  void stopAutoScroll() {
+    timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    int a = 2;
     ShimmerContainer shimmerContainer = ShimmerContainer();
-    // APIService().getCustomerDetails("21");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: HomeAppBar(customerModel: model),
@@ -53,11 +82,16 @@ class _HomePageState extends State<HomePage> {
               height: 200,
               child: PageView.builder(
                 controller: controller,
-                itemCount: 2,
+                itemCount: pages.length,
                 itemBuilder: (context, index) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: pages[index],
                 ),
+                onPageChanged: (int index) {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
               ),
             ),
             const SizedBox(
@@ -74,7 +108,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-             Row(
+            Row(
               children: [
                 SizedBox(
                   width: 20,
@@ -89,18 +123,22 @@ class _HomePageState extends State<HomePage> {
               height: 10,
             ),
             FutureBuilder(
-                future: fetchCategories(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return shimmerContainer.categoryShimmer();
-                  } else {
-                    return Categories(categories: snapshot.data, customerModel: model!);
-                  }
-                }),
+              future: fetchCategories(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return shimmerContainer.categoryShimmer();
+                } else {
+                  return Categories(
+                    categories: snapshot.data,
+                    customerModel: model!,
+                  );
+                }
+              },
+            ),
             const SizedBox(
               height: 10,
             ),
-             Row(
+            Row(
               children: [
                 SizedBox(
                   width: 20,
@@ -130,10 +168,14 @@ class _HomePageState extends State<HomePage> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.height / 1350,
                       ),
                       itemBuilder: (BuildContext gridcontext, int index) {
-                        return ProductCard(product: snapshot.data![index], customerModel: model!);
+                        return ProductCard(
+                          product: snapshot.data![index],
+                          customerModel: model!,
+                        );
                       },
                     ),
                   );

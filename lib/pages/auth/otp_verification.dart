@@ -88,7 +88,7 @@ class _OTPVerificationState extends State<OTPVerification> {
             onTap: () async {
               if (isFieldEmpty(emailController.text)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                   SnackBar(
                     content: Row(
                       children: [
                         Icon(
@@ -105,7 +105,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 );
               } else if (!isValidEmail(emailController.text)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                   SnackBar(
                     content: Row(
                       children: [
                         Icon(
@@ -144,7 +144,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 } else {
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                     SnackBar(
                       content: Row(
                         children: [
                           Icon(

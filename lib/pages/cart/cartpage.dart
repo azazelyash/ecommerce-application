@@ -40,7 +40,8 @@ class _CartPageState extends State<CartPage> {
                 padding: const EdgeInsets.all(22.0),
                 child: Text(
                   "Cart",
-                  style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.dmSans(
+                      fontSize: 25, fontWeight: FontWeight.w700),
                 ),
               ),
               (cartItems.isEmpty)
@@ -96,7 +97,9 @@ class _CartPageState extends State<CartPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(seconds: 1),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             content: Text("Your cart is empty"),
                           ),
                         );
@@ -116,7 +119,8 @@ class _CartPageState extends State<CartPage> {
                         setState(() {});
                       }
                     },
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Colors.black,
                     label: Center(
                       child: Text(
@@ -166,7 +170,9 @@ class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
     String name = cartItems[widget.index].name;
-    String imageUrl = (cartItems[widget.index].image == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : cartItems[widget.index].image!;
+    String imageUrl = (cartItems[widget.index].image == null)
+        ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"
+        : cartItems[widget.index].image!;
     String quantity = cartItems[widget.index].quantity.toString();
     String price = cartItems[widget.index].price!;
     String description = cartItems[widget.index].description!;
@@ -242,12 +248,16 @@ class _CartCardState extends State<CartCard> {
                             children: [
                               Row(
                                 children: [
-                                  IconButton(icon: const Icon(Icons.remove), onPressed: widget.decreaseFunction),
+                                  IconButton(
+                                      icon: const Icon(Icons.remove),
+                                      onPressed: widget.decreaseFunction),
                                   Text(
                                     quantity,
                                     style: const TextStyle(fontSize: 16),
                                   ),
-                                  IconButton(icon: const Icon(Icons.add), onPressed: widget.increaseFunction),
+                                  IconButton(
+                                      icon: const Icon(Icons.add),
+                                      onPressed: widget.increaseFunction),
                                 ],
                               ),
                               const SizedBox(
@@ -376,7 +386,9 @@ class ApplyCouponBox extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 70,
-          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
@@ -391,7 +403,7 @@ class ApplyCouponBox extends StatelessWidget {
                   textScaleFactor: 1.0,
                 ),
                 Text(
-                  "Saved Amount : 144.00",
+                  "Saved Amount : 0.00",
                   style: GoogleFonts.dmSans(
                     color: Colors.green.shade600,
                     fontSize: 12,
@@ -497,7 +509,9 @@ class _TotalBoxState extends State<TotalBox> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 70,
-          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
