@@ -68,9 +68,12 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter_icons:
-    android: "assets/splash_screen/Abhyuktha Logo.png"
+    android: "launcher_icon"
     ios: true
-    image_path: "assets/splash_screen/Abhyuktha Logo.png"
+    image_path: "assets/splash_screen/logo.png"
+    min_sdk_android: 21
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
