@@ -148,7 +148,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               onTap: () {
                 if (!isFilled(passwordController.text, confirmpasswordController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                     SnackBar(
                       content: Row(
                         children: [
                           Icon(
@@ -165,7 +165,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   );
                 } else if (!arePasswordsMatching(passwordController.text, confirmpasswordController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                     SnackBar(
                       content: Row(
                         children: [
                           Icon(

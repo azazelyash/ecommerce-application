@@ -130,7 +130,7 @@ class _EnterOTPScreenState extends State<EnterOTPScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red.shade600,
-          content: const Row(
+          content:  Row(
             children: [
               Icon(
                 Icons.error,

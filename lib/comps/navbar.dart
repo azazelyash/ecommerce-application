@@ -43,7 +43,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      HomePage(customerModel: model),
+      HomePage(customerModel: model!),
       SearchPage(),
       CartPage(customerModel: model!),
       OrdersPage(customerModel: model),
