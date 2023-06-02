@@ -48,12 +48,11 @@ class ProductCard extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              ProductPage(product: product, customerModel: customerModel),
+          builder: (context) => ProductPage(product: product, customerModel: customerModel),
         ),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -66,30 +65,34 @@ class ProductCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                const Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset(height: 20, 'assets/Icons/love.svg'),
-                )
-              ],
-            ),
+            /* ---------------------------- Favourite Button ---------------------------- */
+
+            // Row(
+            //   children: [
+            //     const Spacer(),
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: SvgPicture.asset(height: 20, 'assets/Icons/love.svg'),
+            //     )
+            //   ],
+            // ),
             Expanded(
               child: SizedBox(
-                width: 125,
+                width: MediaQuery.of(context).size.width,
                 child: product.images != null && product.images!.isNotEmpty
-                    ? Image(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(product.images![0]['src'])
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image(fit: BoxFit.cover, image: NetworkImage(product.images![0]['src'])
 
-                        // NetworkImage(snapshot.data[index].image['src']),
-                        )
+                            // NetworkImage(snapshot.data[index].image['src']),
+                            ),
+                      )
                     : const Placeholder(),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
@@ -97,9 +100,10 @@ class ProductCard extends StatelessWidget {
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
+                color: Colors.black87,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -108,47 +112,41 @@ class ProductCard extends StatelessWidget {
               resolvePrice(product),
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(
               height: 10,
             ),
-            GestureDetector(
-              onTap: () {},
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                onPressed: () {
-                  if (product.variations!.isEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ConfirmOrderPage(
-                          customerModel: customerModel,
-                          products: [cartItem],
-                        ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              onPressed: () {
+                if (product.variations!.isEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConfirmOrderPage(
+                        customerModel: customerModel,
+                        products: [cartItem],
                       ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductPage(
-                            product: product, customerModel: customerModel),
-                      ),
-                    );
-                  }
-                },
-                child: const Center(
-                  child: Text(
-                    "Buy",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductPage(product: product, customerModel: customerModel),
+                    ),
+                  );
+                }
+              },
+              child: const Center(
+                child: Text(
+                  "Buy",
+                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ),
             ),

@@ -234,22 +234,25 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primary,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(10),
-                            child: SvgPicture.asset(
-                              color: Colors.white,
-                              'assets/Icons/love.svg',
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
+
+                        /* ---------------------------- Favourite Button ---------------------------- */
+
+                        // GestureDetector(
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color: theme.colorScheme.primary,
+                        //       borderRadius: const BorderRadius.all(
+                        //         Radius.circular(5),
+                        //       ),
+                        //     ),
+                        //     padding: const EdgeInsets.all(10),
+                        //     child: SvgPicture.asset(
+                        //       color: Colors.white,
+                        //       'assets/Icons/love.svg',
+                        //     ),
+                        //   ),
+                        //   onTap: () {},
+                        // ),
                       ],
                     ),
                     const SizedBox(
