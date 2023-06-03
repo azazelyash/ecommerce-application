@@ -56,6 +56,8 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
+/* ----------------------------- HomePage AppBar ---------------------------- */
+
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({Key? key, required this.customerModel})
       : preferredSize = const Size.fromHeight(kToolbarHeight),
@@ -98,18 +100,18 @@ class _HomeAppBarState extends State<HomeAppBar> {
       actions: [
         /* --------------------------- Notification Button -------------------------- */
 
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.notifications_none_outlined,
-            color: Colors.black,
-          ),
-        ),
+        // const Padding(
+        //   padding: EdgeInsets.all(8.0),
+        //   child: Icon(
+        //     Icons.notifications_none_outlined,
+        //     color: Colors.black,
+        //   ),
+        // ),
 
         /* ----------------------------- Profile Button ----------------------------- */
 
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(right: 12.0, left: 8.0),
           child: GestureDetector(
             onTap: () {
               Navigator.push(

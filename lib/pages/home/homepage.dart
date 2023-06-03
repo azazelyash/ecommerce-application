@@ -6,6 +6,7 @@ import 'package:abhyukthafoods/comps/category_listview.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_categories.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
+import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -77,33 +78,10 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 200,
-              child: PageView.builder(
-                controller: controller,
-                itemCount: pages.length,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: pages[index],
-                ),
-                onPageChanged: (int index) {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SmoothPageIndicator(
-              controller: controller,
-              count: pages.length,
-              effect: const ExpandingDotsEffect(
-                dotHeight: 10,
-                dotWidth: 10,
-              ),
-            ),
+
+            /* ----------------------------- Slidding Banner ---------------------------- */
+
+            const HeroSection(),
             const SizedBox(
               height: 10,
             ),
@@ -121,22 +99,10 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: FutureBuilder(
-                future: fetchCategories(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return shimmerContainer.categoryShimmer();
-                  } else {
-                    return Categories(
-                      categories: snapshot.data,
-                      customerModel: model!,
-                    );
-                  }
-                },
-              ),
-            ),
+
+            /* --------------------------- Categories Section --------------------------- */
+
+            CategoriesSection(shimmerContainer: shimmerContainer, model: model),
             const SizedBox(
               height: 10,
             ),
@@ -186,6 +152,127 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CategoriesSection extends StatelessWidget {
+  const CategoriesSection({
+    super.key,
+    required this.shimmerContainer,
+    required this.model,
+  });
+
+  final ShimmerContainer shimmerContainer;
+  final CustomerModel? model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: FutureBuilder(
+        future: fetchCategories(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return shimmerContainer.categoryShimmer();
+          } else {
+            return Categories(
+              categories: snapshot.data,
+              customerModel: model!,
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class HeroSection extends StatefulWidget {
+  const HeroSection({super.key});
+
+  @override
+  State<HeroSection> createState() => HeroSectionState();
+}
+
+class HeroSectionState extends State<HeroSection> {
+  final controller = PageController(viewportFraction: 1, keepPage: true);
+  int currentPage = 0;
+  Timer? timer;
+
+  final List<Widget> pages = [
+    SvgPicture.asset('assets/Banners/banner 3.svg'),
+    SvgPicture.asset('assets/Banners/banner 4.svg'),
+    SvgPicture.asset('assets/Banners/banner 4.svg'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    stopAutoScroll();
+    controller.dispose();
+    super.dispose();
+  }
+
+  void startAutoScroll() {
+    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+      controller.animateToPage(
+        currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
+    });
+  }
+
+  void stopAutoScroll() {
+    timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          child: PageView.builder(
+            controller: controller,
+            itemCount: pages.length,
+            itemBuilder: (context, index) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: pages[index],
+            ),
+            onPageChanged: (int index) {
+              setState(() {
+                currentPage = index;
+              });
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SmoothPageIndicator(
+          controller: controller,
+          count: pages.length,
+          effect: ExpandingDotsEffect(
+            dotHeight: 6,
+            dotWidth: 6,
+            spacing: 4,
+            expansionFactor: 2,
+            activeDotColor: kPrimaryColor,
+            dotColor: Colors.grey.shade400,
+          ),
+        ),
+      ],
     );
   }
 }
