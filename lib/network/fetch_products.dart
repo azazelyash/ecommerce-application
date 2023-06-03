@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:abhyukthafoods/api_config.dart';
-import 'package:abhyukthafoods/utils/api_key.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 

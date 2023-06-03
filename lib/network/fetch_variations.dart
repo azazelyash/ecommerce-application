@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/network/network_helper.dart';
-import 'package:abhyukthafoods/utils/api_key.dart';
 import 'package:dio/dio.dart';
 
 import '../models/variations.dart';

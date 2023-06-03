@@ -6,7 +6,8 @@ import 'package:abhyukthafoods/pages/category_page/category_page.dart';
 import 'package:flutter/material.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({super.key, required this.categories, required this.customerModel});
+  const Categories(
+      {super.key, required this.categories, required this.customerModel});
   final categories;
   final CustomerModel customerModel;
   Color generateRandomLightColor() {
@@ -17,19 +18,22 @@ class Categories extends StatelessWidget {
     return Color.fromRGBO(r, g, b, 1.0);
   }
 
-  Widget category(BuildContext context, int index, List<ProductCategory> categories) {
+  Widget category(
+      BuildContext context, int index, List<ProductCategory> categories) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CategoryView(category: categories[index], customerModel: customerModel),
+              builder: (context) => CategoryView(
+                  category: categories[index], customerModel: customerModel),
             ));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
+            key: ValueKey(categories[index].id),
             decoration: BoxDecoration(
               color: generateRandomLightColor(),
               borderRadius: BorderRadius.circular(10),
@@ -41,11 +45,13 @@ class Categories extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
               child: categories[index].image != null
-                  ? Image(fit: BoxFit.cover, image: NetworkImage(categories[index].image['src'])
+                  ? Image(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(categories[index].image['src'])
 
                       // NetworkImage(snapshot.data[index].image['src']),
                       )
-                  : Placeholder(),
+                  : const Placeholder(),
             ),
           ),
           const SizedBox(height: 6),
@@ -57,7 +63,10 @@ class Categories extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
 
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
             ),
           ),
         ],
