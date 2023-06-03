@@ -7,6 +7,7 @@ import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/network/fetch_variations.dart';
 import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
+import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -182,12 +183,20 @@ class _ProductPageState extends State<ProductPage> {
                                         },
                                       ),
 
+                                      /* ----------------------------- Page Indicator ----------------------------- */
+
                                       Positioned(
                                         left: MediaQuery.of(context).size.width / 2,
                                         bottom: 10,
                                         child: SmoothPageIndicator(
                                           controller: pageController,
                                           count: 1,
+                                          effect: WormEffect(
+                                            dotColor: Colors.grey.shade300,
+                                            activeDotColor: kPrimaryColor,
+                                            dotHeight: 6,
+                                            dotWidth: 6,
+                                          ),
                                         ),
                                       ),
                                     ],
