@@ -103,9 +103,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       const Image(
                         image: AssetImage(
-                          'assets/splash_screen/Abhyuktha Logo.png',
+                          'assets/app_logo/logo.png',
                         ),
                         fit: BoxFit.cover,
+                        height: 150,
                       ),
                       const SizedBox(height: 16),
                       Text(

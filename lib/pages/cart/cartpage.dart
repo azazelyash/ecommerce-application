@@ -4,6 +4,7 @@ import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
+import 'package:abhyukthafoods/pages/product_page/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,8 +41,7 @@ class _CartPageState extends State<CartPage> {
                 padding: const EdgeInsets.all(22.0),
                 child: Text(
                   "Cart",
-                  style: GoogleFonts.dmSans(
-                      fontSize: 25, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
                 ),
               ),
               (cartItems.isEmpty)
@@ -97,9 +97,7 @@ class _CartPageState extends State<CartPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             duration: Duration(seconds: 1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                             content: Text("Your cart is empty"),
                           ),
                         );
@@ -119,8 +117,7 @@ class _CartPageState extends State<CartPage> {
                         setState(() {});
                       }
                     },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Colors.black,
                     label: Center(
                       child: Text(
@@ -170,129 +167,153 @@ class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
     String name = cartItems[widget.index].name;
-    String imageUrl = (cartItems[widget.index].image == null)
-        ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"
-        : cartItems[widget.index].image!;
+    String imageUrl = (cartItems[widget.index].image == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : cartItems[widget.index].image!;
     String quantity = cartItems[widget.index].quantity.toString();
     String price = cartItems[widget.index].price!;
     String description = cartItems[widget.index].description!;
     int displayPrice = calculatePrice(int.parse(price), int.parse(quantity));
 
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-        child: Stack(
-          children: [
-            Container(
-              width: 390,
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.white54,
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Row(
-                  children: [
-                    // Picture
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(imageUrl),
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            child: Text(
-                              name,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.dmSans(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textScaleFactor: 1.0,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Text(
-                              "$quantity",
-                              style: GoogleFonts.dmSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textScaleFactor: 1.0,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 22,
-                          ),
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                      icon: const Icon(Icons.remove),
-                                      onPressed: widget.decreaseFunction),
-                                  Text(
-                                    quantity,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  IconButton(
-                                      icon: const Icon(Icons.add),
-                                      onPressed: widget.increaseFunction),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Text(
-                                  displayPrice.toString(),
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textScaleFactor: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16, left: 12, right: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: 124,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ProductPage(
+                  //       product: cartItems[widget.index],
+                  //     ),
+                  //   ),
+                  // );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image(
+                    image: NetworkImage(imageUrl),
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              left: 330,
-              top: 20,
-              child: GestureDetector(
-                onTap: widget.deleteFunction,
-                child: SvgPicture.asset('assets/Icons/delete red.svg'),
+              const SizedBox(
+                width: 12,
               ),
-            )
-          ],
-        ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child: Text(
+                          name,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "$quantity x $price",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      /* ------------------------ Decrease quantity Button ------------------------ */
+
+                      GestureDetector(
+                        onTap: widget.decreaseFunction,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            // border: Border.all(color: Colors.grey.shade300),
+                            color: Colors.grey.shade100,
+                          ),
+                          child: const Icon(Icons.remove),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 14,
+                      ),
+                      Text(
+                        quantity,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 14,
+                      ),
+                      /* ------------------------ Increase quantity Button ------------------------ */
+
+                      GestureDetector(
+                        onTap: widget.increaseFunction,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            // border: Border.all(color: Colors.grey.shade300),
+                            color: Colors.grey.shade100,
+                          ),
+                          child: const Icon(Icons.add),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /* -------------------------- Product Delete Button ------------------------- */
+
+              GestureDetector(
+                onTap: widget.deleteFunction,
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+              ),
+              Text(
+                "₹ ${displayPrice.toString()}",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -386,9 +407,7 @@ class ApplyCouponBox extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 70,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
@@ -509,9 +528,7 @@ class _TotalBoxState extends State<TotalBox> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 70,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
