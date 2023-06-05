@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 
 List<CartDetails> cartItems = [];
@@ -21,6 +22,26 @@ class CartDetails {
     required this.price,
     required this.quantity,
   });
+
+  factory CartDetails.fromJson(Map<String, dynamic> json) {
+    return CartDetails(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
+      price: json['price'],
+      quantity: json['quantity'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'description': description,
+        'image': image,
+        'price': price,
+        'quantity': quantity,
+      };
 }
 
 class Cart {
@@ -34,6 +55,7 @@ class Cart {
     }
     cartItems.add(item);
     updateCartLength();
+    SharedService.setCartDetails(cartItems);
   }
 
   void decreaseItemQuantity(CartDetails item) {
@@ -41,6 +63,7 @@ class Cart {
     if (cartItems[cartItems.indexOf(item)].quantity == 1) {
       cartItems.remove(item);
       updateCartLength();
+      SharedService.setCartDetails(cartItems);
 
       return;
     }
@@ -51,16 +74,19 @@ class Cart {
   void increaseItemQuantity(CartDetails item) {
     cartItems[cartItems.indexOf(item)].quantity += 1;
     updateCartLength();
+    SharedService.setCartDetails(cartItems);
   }
 
   void removeItemFromCart(CartDetails item) {
     cartItems.remove(item);
     updateCartLength();
+    SharedService.setCartDetails(cartItems);
   }
 
   void clearCart() {
     cartItems.clear();
     updateCartLength();
+    SharedService.setCartDetails(cartItems);
   }
 
   void printCart() {

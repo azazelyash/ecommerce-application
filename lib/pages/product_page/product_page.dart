@@ -15,8 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage(
-      {required this.product, super.key, required this.customerModel});
+  const ProductPage({required this.product, super.key, required this.customerModel});
   final Product product;
   final CustomerModel customerModel;
   @override
@@ -111,9 +110,7 @@ class _ProductPageState extends State<ProductPage> {
       id: widget.product.id,
       name: widget.product.name,
       description: widget.product.description,
-      image: widget.product.images!.isEmpty
-          ? null
-          : widget.product.images![0]['src'],
+      image: widget.product.images!.isEmpty ? null : widget.product.images![0]['src'],
       price: widget.product.price,
       quantity: count,
     );
@@ -148,8 +145,7 @@ class _ProductPageState extends State<ProductPage> {
                                 cartItem.price = variationList![varIndex].price;
                                 pages = [
                                   Image(
-                                    image: NetworkImage(
-                                        snapshot.data![varIndex].imageUrl),
+                                    image: NetworkImage(snapshot.data![varIndex].imageUrl),
                                     fit: BoxFit.cover,
                                   )
                                 ];
@@ -163,8 +159,7 @@ class _ProductPageState extends State<ProductPage> {
                                         child: PageView.builder(
                                           controller: pageController,
                                           itemCount: pages.length,
-                                          itemBuilder: (context, index) =>
-                                              pages[index],
+                                          itemBuilder: (context, index) => pages[index],
                                         ),
                                       ),
                                       //---------------------------------- Back Button -----------------------------
@@ -191,9 +186,7 @@ class _ProductPageState extends State<ProductPage> {
                                       /* ----------------------------- Page Indicator ----------------------------- */
 
                                       Positioned(
-                                        left:
-                                            MediaQuery.of(context).size.width /
-                                                2,
+                                        left: MediaQuery.of(context).size.width / 2 - 4,
                                         bottom: 10,
                                         child: SmoothPageIndicator(
                                           controller: pageController,
@@ -201,8 +194,8 @@ class _ProductPageState extends State<ProductPage> {
                                           effect: WormEffect(
                                             dotColor: Colors.grey.shade300,
                                             activeDotColor: kPrimaryColor,
-                                            dotHeight: 6,
-                                            dotWidth: 6,
+                                            dotHeight: 8,
+                                            dotWidth: 8,
                                           ),
                                         ),
                                       ),
@@ -285,9 +278,7 @@ class _ProductPageState extends State<ProductPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.product.variations!.isEmpty
-                                      ? resolvePrice(widget.product)
-                                      : resolvePrice(snapshot.data![varIndex]),
+                                  widget.product.variations!.isEmpty ? resolvePrice(widget.product) : resolvePrice(snapshot.data![varIndex]),
                                   style: GoogleFonts.dmSans(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
@@ -338,21 +329,15 @@ class _ProductPageState extends State<ProductPage> {
                           cartItem.price = variationList![varIndex].price;
                           Cart().addItemToCart(cartItem);
                           Cart().printCart();
-                          Fluttertoast.showToast(
-                              msg:
-                                  '${widget.product.name} (${variationList![varIndex].name}) has been added to cart!');
+                          Fluttertoast.showToast(msg: '${widget.product.name} (${variationList![varIndex].name}) has been added to cart!');
                           return;
                         }
                         log("Adding product to cart");
                         Cart().addItemToCart(cartItem);
                         Cart().printCart();
-                        Fluttertoast.showToast(
-                            msg:
-                                '${widget.product.name} has been added to cart!');
+                        Fluttertoast.showToast(msg: '${widget.product.name} has been added to cart!');
                       },
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 50),
-                          backgroundColor: Colors.black),
+                      style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.black),
                       child: const Text('Add to Cart'),
                     ),
                     const SizedBox(
@@ -388,8 +373,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Product Description',
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -397,9 +381,7 @@ class _ProductPageState extends State<ProductPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(widget.product.shortDescription == ''
-                              ? 'No description'
-                              : widget.product.shortDescription!),
+                          child: Text(widget.product.shortDescription == '' ? 'No description' : widget.product.shortDescription!),
                         ),
                       ],
                     ),
@@ -408,8 +390,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     Text(
                       'Suggested Products',
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -508,11 +489,7 @@ class _ProductPageState extends State<ProductPage> {
 }
 
 class VariationButton extends StatefulWidget {
-  const VariationButton(
-      {super.key,
-      required this.label,
-      required this.selectButtonCallback,
-      required this.isSelected});
+  const VariationButton({super.key, required this.label, required this.selectButtonCallback, required this.isSelected});
   final String label;
   final Function selectButtonCallback;
   final bool isSelected;
@@ -529,13 +506,10 @@ class _VariationButtonState extends State<VariationButton> {
         onPressed: () {
           widget.selectButtonCallback();
         },
-        style: ElevatedButton.styleFrom(
-            backgroundColor: widget.isSelected ? null : Colors.white,
-            minimumSize: const Size(80, 50)),
+        style: ElevatedButton.styleFrom(backgroundColor: widget.isSelected ? null : Colors.white, minimumSize: const Size(80, 50)),
         child: Text(
           widget.label,
-          style:
-              TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
+          style: TextStyle(color: widget.isSelected ? Colors.white : Colors.black),
         ),
       ),
     );
