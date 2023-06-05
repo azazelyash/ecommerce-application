@@ -12,7 +12,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../pages/home/homepage.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.customerModel, this.rerouteIndex = 0});
+  const MainPage(
+      {super.key, required this.customerModel, this.rerouteIndex = 0});
 
   final CustomerModel customerModel;
   final int rerouteIndex;
@@ -42,7 +43,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       HomePage(customerModel: model!),
-      SearchPage(),
+      SearchPage(customerModel: model!),
       CartPage(customerModel: model!),
       OrdersPage(customerModel: model),
       ProfilePage(customerModel: model),
