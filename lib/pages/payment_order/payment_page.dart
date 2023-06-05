@@ -12,6 +12,7 @@ import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 enum PaymentMethod { COD, RazorPay }
@@ -35,6 +36,7 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   PaymentMethod? _paymentMethod = PaymentMethod.COD;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +48,21 @@ class _PaymentPageState extends State<PaymentPage> {
       log("Order Item: ${item.productId}");
       log("Order Item: ${item.quantity}");
     }
-    return Scaffold(
-      appBar: PaymentAppBar(title: "Payment Options"),
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          paymentOptions(),
-          paymentButton(),
-        ],
-      ),
-    );
+    return isLoading
+        ? Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            appBar: PaymentAppBar(title: "Payment Options"),
+            backgroundColor: Colors.white,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                paymentOptions(),
+                paymentButton(),
+              ],
+            ),
+          );
   }
 
   Widget paymentOptions() {
@@ -153,6 +159,7 @@ class _PaymentPageState extends State<PaymentPage> {
     var ret = await APIService.createOrder(widget.orderModel);
     if (ret) {
       log("Order Created Successfully");
+      //loading ends
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -163,8 +170,23 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       );
     } else {
+      setState(() {
+        isLoading = false;
+      });
+
+      Fluttertoast.showToast(msg: 'Order Creation Failed');
+
       log("Order Creation Failed");
     }
+  }
+
+  void paymentError(PaymentFailureResponse response) {
+    setState(() {
+      isLoading = false;
+    });
+    log("Razorpay Failed");
+    Fluttertoast.showToast(msg: 'Payment Failed');
+    log("Error: ${response.message} - ${response.code}");
   }
 
   Widget paymentButton() {
@@ -179,6 +201,9 @@ class _PaymentPageState extends State<PaymentPage> {
           backgroundColor: kPrimaryColor,
           elevation: 0,
           onPressed: () async {
+            setState(() {
+              isLoading = true;
+            });
             // RazorPayService razorPayService = RazorPayService();
             // razorPayService.initPaymentGateway();
             // razorPayService.getPayment(context);
@@ -199,28 +224,31 @@ class _PaymentPageState extends State<PaymentPage> {
               widget.orderModel.paymentMethod = "cod";
               widget.orderModel.paymentMethodTitle = "Cash on Delivery";
               ret = await APIService.createOrder(widget.orderModel);
+              if (ret) {
+                log("Order Created Successfully");
+                if (!mounted) return;
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => OrderSuccessPage(
+                      customerModel: widget.customerModel,
+                      products: widget.products,
+                    ),
+                  ),
+                );
+              } else {
+                isLoading = false;
+                Fluttertoast.showToast(
+                    msg: 'Order Creation Failed, try again later');
+                log("Order Creation Failed");
+              }
             } else {
               widget.orderModel.paymentMethod = "razorpay";
               widget.orderModel.paymentMethodTitle = "RazorPay";
               RazorPayService razorPayService = RazorPayService();
-              razorPayService.initPaymentGateway(paymentSuccess);
+              razorPayService.initPaymentGateway(paymentSuccess, paymentError);
+              //loading starts
               razorPayService.getPayment(
                   amount, widget.billing.phone, widget.customerModel.email);
-            }
-
-            if (ret) {
-              log("Order Created Successfully");
-              if (!mounted) return;
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => OrderSuccessPage(
-                    customerModel: widget.customerModel,
-                    products: widget.products,
-                  ),
-                ),
-              );
-            } else {
-              log("Order Creation Failed");
             }
           },
           label: const Text("Confirm Order"),
