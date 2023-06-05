@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/navbar.dart';
+import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
@@ -28,7 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsFlutterBinding.ensureInitialized();
     super.initState();
     getCustomerData();
+    getCartDetials();
     updateUI();
+  }
+
+  Future<void> getCartDetials() async {
+    cartItems = await SharedService.cartDetails();
+    Cart().updateCartLength();
   }
 
   Future<void> getCustomerData() async {
