@@ -18,10 +18,7 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: Text(
           'Past Orders',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       body: Padding(
@@ -42,8 +39,7 @@ class OrdersPage extends StatelessWidget {
                         hintStyle: const TextStyle(
                           color: Colors.white,
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                         filled: true,
                         fillColor: Colors.black),
                   ),
@@ -56,20 +52,21 @@ class OrdersPage extends StatelessWidget {
             SliverFillRemaining(
               child: FutureBuilder(
                 future: fetchOrders(customerModel!.id.toString()),
-                builder: (context, snapshot) =>
-                    snapshot.connectionState == ConnectionState.waiting
+                builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : !snapshot.hasData
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: Text(
+                              'No data',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           )
-                        : !snapshot.hasData
-                            ? const Center(
-                                child: Text('No data'),
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) =>
-                                    OrderCard(order: snapshot.data![index]),
-                              ),
+                        : ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) => OrderCard(order: snapshot.data![index]),
+                          ),
               ),
             )
           ],
@@ -128,15 +125,13 @@ class OrderCard extends StatelessWidget {
                         child: Text('Order No. ${order.id}'),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: buttonRadius,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         child: Text(
-                          order.status[0].toUpperCase() +
-                              order.status.substring(1),
+                          order.status[0].toUpperCase() + order.status.substring(1),
                           style: const TextStyle(color: Colors.white),
                         ),
                       )
@@ -160,9 +155,7 @@ class OrderCard extends StatelessWidget {
                             90,
                             (index) => Expanded(
                               child: Container(
-                                color: index % 2 == 0
-                                    ? Colors.transparent
-                                    : Colors.grey,
+                                color: index % 2 == 0 ? Colors.transparent : Colors.grey,
                                 height: 1,
                               ),
                             ),
@@ -173,8 +166,7 @@ class OrderCard extends StatelessWidget {
                   )
                   .toList(),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

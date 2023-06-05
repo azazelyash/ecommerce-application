@@ -130,9 +130,9 @@ class _AddressViewState extends State<AddressView> {
                     }
                     String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
                     String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
-                    return ListView(
-                      shrinkWrap: true,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
+                    return Column(
+                      // shrinkWrap: true,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Shipping Address",
@@ -165,52 +165,34 @@ class _AddressViewState extends State<AddressView> {
                         const SizedBox(
                           height: 24,
                         ),
-                        Row(
-                          children: [
-                            FloatingActionButton.extended(
-                              heroTag: "delete",
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              backgroundColor: Colors.grey.shade100,
-                              label: const Icon(
-                                Icons.delete,
-                                size: 18,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {},
+                        SizedBox(
+                          width: 60,
+                          child: FloatingActionButton(
+                            heroTag: "edit",
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            const SizedBox(
-                              width: 16,
+                            backgroundColor: Colors.grey.shade100,
+                            child: Icon(
+                              Icons.edit,
+                              size: 18,
+                              color: kPrimaryColor,
                             ),
-                            FloatingActionButton.extended(
-                              heroTag: "edit",
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              backgroundColor: Colors.grey.shade100,
-                              label: Icon(
-                                Icons.edit,
-                                size: 18,
-                                color: kPrimaryColor,
-                              ),
-                              onPressed: () async {
-                                bool ref = await Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => EditAddressPage(
-                                      id: widget.id,
-                                    ),
+                            onPressed: () async {
+                              bool ref = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => EditAddressPage(
+                                    id: widget.id,
                                   ),
-                                );
+                                ),
+                              );
 
-                                if (ref) {
-                                  setState(() {});
-                                }
-                              },
-                            ),
-                          ],
+                              if (ref) {
+                                setState(() {});
+                              }
+                            },
+                          ),
                         )
                       ],
                     );

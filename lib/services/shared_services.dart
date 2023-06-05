@@ -60,13 +60,6 @@ class SharedService {
     return prefs.getString("address_details") != null ? Billing.fromJson(jsonDecode(prefs.getString("address_details")!)) : Billing();
   }
 
-  /* ------------------------------ Is Cart Empty ----------------------------- */
-
-  static Future<bool> isCartEmpty() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("cart_details") != null ? true : false;
-  }
-
   /* ---------------------------- Save Cart Details --------------------------- */
 
   static Future<void> setCartDetails(List<CartDetails>? cart) async {
@@ -90,6 +83,9 @@ class SharedService {
     prefs.remove("login_details");
     prefs.remove("customer_details");
     prefs.remove("address_details");
+    cartItems = [];
+    cartCount.value = 0;
+    prefs.clear();
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
