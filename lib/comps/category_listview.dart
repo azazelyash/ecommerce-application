@@ -33,7 +33,6 @@ class Categories extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            key: ValueKey(categories[index].id),
             decoration: BoxDecoration(
               color: generateRandomLightColor(),
               borderRadius: BorderRadius.circular(10),
@@ -51,7 +50,7 @@ class Categories extends StatelessWidget {
 
                       // NetworkImage(snapshot.data[index].image['src']),
                       )
-                  : const Placeholder(),
+                  : Placeholder(),
             ),
           ),
           const SizedBox(height: 6),

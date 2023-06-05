@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/pages/product_page/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,31 +18,21 @@ class APIConfig {
   String customerURl = "customers";
 }
 
-class Product {
-  final String name;
-
-  Product({required this.name});
-
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      name: json['name'],
-    );
-  }
-}
-
 class API {
   static Future<List<Product>> searchProducts(String query) async {
     final APIConfig apiConfig = APIConfig();
     final response = await http.get(
       Uri.parse("${apiConfig.url}products?search=$query"),
       headers: {
-        'Authorization': 'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
       },
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
-      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
+      final List<Product> products =
+          jsonList.map((e) => Product.fromJson(e)).toList();
       return products;
     } else {
       throw Exception('Failed to search products');
@@ -47,23 +41,51 @@ class API {
 }
 
 class SearchPage extends StatefulWidget {
+  SearchPage({Key? key, required this.customerModel}) : super(key: key);
   @override
+  CustomerModel customerModel;
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController searchController = TextEditingController();
-  List<Product> products = [];
+  Timer? _debounce;
+  _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _searchProducts(searchController.text);
+    });
+  }
 
-  Future<void> searchProducts(String query) async {
+  List<Product> products = [];
+  bool isLoading = false;
+  Future<void> _searchProducts(String query) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       List<Product> searchedProducts = await API.searchProducts(query);
+
       setState(() {
         products = searchedProducts;
+        isLoading = false;
       });
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    searchController.addListener(_onSearchChanged);
+  }
+
+  void dispose() {
+    searchController.removeListener(_onSearchChanged);
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -74,38 +96,48 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SearchTextfield(
                 controller: searchController,
-                onSearch: searchProducts,
+                onSearch: _searchProducts,
               ),
-              SizedBox(height: 20),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ListTile(
-                      title: Text(
-                        product.name,
-                        style: GoogleFonts.dmSans(
-                          color: Colors.black,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
+              const SizedBox(height: 20),
+              isLoading == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : products.isEmpty
+                      ? const Center(
+                          child: Text('No results'),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+
+                            return ListTile(
+                                title: Text(
+                                  product.name,
+                                  style: GoogleFonts.dmSans(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductPage(
+                                        product: product,
+                                        customerModel: widget.customerModel,
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
                         ),
-                      ),
-                      onTap: () {}
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductPage(
-                      //       product: products,
-                      //     ),
-                      //   ),
-                      // );},
-                      );
-                },
-              ),
             ],
           ),
         ),
@@ -131,14 +163,15 @@ class SearchTextfield extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: TextField(
           controller: controller,
+
           decoration: InputDecoration(
             hintText: 'Search products...',
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: const Icon(Icons.search),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onSubmitted: onSearch,
+          // onSubmitted: onSearch,
         ),
       ),
     );

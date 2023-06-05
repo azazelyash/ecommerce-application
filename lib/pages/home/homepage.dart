@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
               future: fetchProducts(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return shimmerContainer.categoryShimmer();
+                  return shimmerContainer.offerProductShimmer();
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(10),
@@ -136,7 +136,8 @@ class _HomePageState extends State<HomePage> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.height / 1350,
                       ),
                       itemBuilder: (BuildContext gridcontext, int index) {
                         return ProductCard(
