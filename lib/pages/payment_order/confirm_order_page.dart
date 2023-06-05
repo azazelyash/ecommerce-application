@@ -120,6 +120,13 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     }
   }
 
+  bool checkAddress() {
+    if (billing.address1 == "" || billing.city == "" || billing.country == "" || billing.firstName == "" || billing.lastName == "" || billing.postcode == "" || billing.state == "") {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     log("Customer Id: ${widget.customerModel.id}");
@@ -577,6 +584,30 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       backgroundColor: kPrimaryColor,
       elevation: 0,
       onPressed: () {
+        /* --------------------------- Check Address Field -------------------------- */
+
+        if (checkAddress()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red.shade500,
+              duration: const Duration(milliseconds: 1500),
+              content: const Row(
+                children: [
+                  Icon(
+                    Icons.error,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text("Please add your address"),
+                ],
+              ),
+            ),
+          );
+          return;
+        }
+
         /* -------------------------- Creating Order Model -------------------------- */
 
         orderModel.customerId = widget.customerModel.id;

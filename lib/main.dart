@@ -12,9 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  cartItems = await SharedService.cartDetails();
-  Cart().updateCartLength();
-
   runApp(const MyApp());
 }
 

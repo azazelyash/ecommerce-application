@@ -18,12 +18,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage(
-      {super.key,
-      required this.billing,
-      required this.orderModel,
-      required this.customerModel,
-      required this.products});
+  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products});
 
   OrderModel orderModel;
   CustomerModel customerModel;
@@ -70,22 +65,13 @@ class _PaymentPageState extends State<PaymentPage> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        paymentCard(
-            imagePath: "assets/payment_options/money.svg",
-            title: "Cash on Delivery",
-            radioValue: PaymentMethod.COD),
-        paymentCard(
-            imagePath: "assets/payment_options/razorpay.svg",
-            title: "RazorPay",
-            radioValue: PaymentMethod.RazorPay),
+        paymentCard(imagePath: "assets/payment_options/money.svg", title: "Cash on Delivery", radioValue: PaymentMethod.COD),
+        paymentCard(imagePath: "assets/payment_options/razorpay.svg", title: "RazorPay", radioValue: PaymentMethod.RazorPay),
       ],
     );
   }
 
-  Widget paymentCard(
-      {required String imagePath,
-      required String title,
-      required PaymentMethod radioValue}) {
+  Widget paymentCard({required String imagePath, required String title, required PaymentMethod radioValue}) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -124,8 +110,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
                 Text(
                   title,
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -173,6 +158,8 @@ class _PaymentPageState extends State<PaymentPage> {
       setState(() {
         isLoading = false;
       });
+      if (!mounted) return;
+      Navigator.of(context).pop();
 
       Fluttertoast.showToast(msg: 'Order Creation Failed');
 
@@ -237,8 +224,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
               } else {
                 isLoading = false;
-                Fluttertoast.showToast(
-                    msg: 'Order Creation Failed, try again later');
+                Fluttertoast.showToast(msg: 'Order Creation Failed, try again later');
                 log("Order Creation Failed");
               }
             } else {
@@ -247,8 +233,7 @@ class _PaymentPageState extends State<PaymentPage> {
               RazorPayService razorPayService = RazorPayService();
               razorPayService.initPaymentGateway(paymentSuccess, paymentError);
               //loading starts
-              razorPayService.getPayment(
-                  amount, widget.billing.phone, widget.customerModel.email);
+              razorPayService.getPayment(amount, widget.billing.phone, widget.customerModel.email);
             }
           },
           label: const Text("Confirm Order"),

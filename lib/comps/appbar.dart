@@ -30,28 +30,38 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: AppBar(
-          elevation: 0,
-          leading: GestureDetector(
-            child: Container(
-                margin: const EdgeInsets.all(11),
-                decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(100))),
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                )),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            title,
-            textScaleFactor: 1.0,
-            style: const TextStyle(color: Colors.black),
-          )),
+    return AppBar(
+      elevation: 0,
+      leading: GestureDetector(
+        child: Container(
+            margin: const EdgeInsets.all(11),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(100),
+              ),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(0),
+        child: Container(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          height: 0.5,
+        ),
+      ),
+      backgroundColor: Colors.white,
+      title: Text(
+        title,
+        textScaleFactor: 1.0,
+        style: const TextStyle(color: Colors.black),
+      ),
     );
   }
 }
