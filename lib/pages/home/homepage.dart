@@ -22,47 +22,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final controller = PageController(viewportFraction: 1, keepPage: true);
   CustomerModel? model;
-  Timer? timer;
-  int currentPage = 0;
-
-  final List<Widget> pages = [
-    SvgPicture.asset('assets/Banners/banner 3.svg'),
-    SvgPicture.asset('assets/Banners/banner 4.svg'),
-  ];
 
   @override
   void initState() {
     super.initState();
     model = widget.customerModel;
-    startAutoScroll();
-  }
-
-  @override
-  void dispose() {
-    stopAutoScroll();
-    controller.dispose();
-    super.dispose();
-  }
-
-  void startAutoScroll() {
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentPage < pages.length - 1) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
-      controller.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      );
-    });
-  }
-
-  void stopAutoScroll() {
-    timer?.cancel();
   }
 
   @override
@@ -136,8 +101,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio:
-                            MediaQuery.of(context).size.height / 1350,
+                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
                       ),
                       itemBuilder: (BuildContext gridcontext, int index) {
                         return ProductCard(
