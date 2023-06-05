@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:abhyukthafoods/models/address.dart';
+import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
@@ -59,6 +60,21 @@ class SharedService {
     return prefs.getString("address_details") != null ? Billing.fromJson(jsonDecode(prefs.getString("address_details")!)) : Billing();
   }
 
+  /* ---------------------------- Save Cart Details --------------------------- */
+
+  static Future<void> setCartDetails(List<CartDetails>? cart) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("cart_details", cart != null ? jsonEncode(cart.map((e) => e.toJson()).toList()) : "");
+    log("Cart Details : stored");
+  }
+
+  /* --------------------------- Fetch Cart Detials --------------------------- */
+
+  static Future<List<CartDetails>> cartDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("cart_details") != null ? (jsonDecode(prefs.getString("cart_details")!) as List).map((e) => CartDetails.fromJson(e)).toList() : [];
+  }
+
   /* ---------------------------- Will Log Out User --------------------------- */
 
   static Future<void> logout(BuildContext context) async {
@@ -66,6 +82,7 @@ class SharedService {
     prefs.remove("login_details");
     prefs.remove("customer_details");
     prefs.remove("address_details");
+    prefs.remove("cart_details");
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
