@@ -45,8 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.all(22.0),
               child: Text(
                 "Profile",
-                style: GoogleFonts.dmSans(
-                    fontSize: 25, fontWeight: FontWeight.w700),
+                style: GoogleFonts.dmSans(fontSize: 25, fontWeight: FontWeight.w700),
               ),
             ),
 
@@ -130,21 +129,22 @@ class _ProfilePageState extends State<ProfilePage> {
             //   onTapp: () {},
             // ),
             Titletile(
-                imagepath: "assets/profile/material-symbols_logout-rounded.svg",
-                title: "Logout",
-                onTapp: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return MyAlertDialog(
-                        content: 'Are you sure you want to Logout ?',
-                        yes: () {
-                          SharedService.logout(context);
-                        },
-                      );
-                    },
-                  );
-                }),
+              imagepath: "assets/profile/material-symbols_logout-rounded.svg",
+              title: "Logout",
+              onTapp: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return MyAlertDialog(
+                      content: 'Are you sure you want to Logout ?',
+                      yes: () {
+                        SharedService.logout(context);
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       )),
@@ -181,12 +181,9 @@ class _ProfileBoxState extends State<ProfileBox> {
 
             /* ------------------------------ Profile Color ----------------------------- */
 
-            decoration: BoxDecoration(
-                color: const Color(0xff147846),
-                borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: const Color(0xff147846), borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -210,18 +207,12 @@ class _ProfileBoxState extends State<ProfileBox> {
                         children: [
                           Text(
                             "${model!.firstname} ${model!.lastname}",
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           Text(
                             model!.email!,
-                            style: GoogleFonts.dmSans(
-                                color: Colors.white.withOpacity(0.7),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
+                            style: GoogleFonts.dmSans(color: Colors.white.withOpacity(0.7), fontSize: 14, fontWeight: FontWeight.w500),
                             textScaleFactor: 1.0,
                           ),
                         ],
@@ -244,11 +235,7 @@ class Titletile extends StatelessWidget {
   final String title;
   final VoidCallback onTapp;
 
-  const Titletile(
-      {super.key,
-      required this.imagepath,
-      required this.title,
-      required this.onTapp});
+  const Titletile({super.key, required this.imagepath, required this.title, required this.onTapp});
 
   @override
   Widget build(BuildContext context) {

@@ -43,6 +43,21 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
 
   Billing billing = Billing();
 
+  bool isFilled() {
+    if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty && phoneController.text.isNotEmpty && emailController.text.isNotEmpty && addressController.text.isNotEmpty && cityController.text.isNotEmpty && stateController.text.isNotEmpty && pincodeController.text.isNotEmpty && countryController.text.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /* ----------------------- Check Username and Password ---------------------- */
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
   @override
   Widget build(BuildContext context) {
     String id = widget.id;
@@ -86,6 +101,44 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                   width: MediaQuery.of(context).size.width,
                   child: FloatingActionButton.extended(
                     onPressed: () {
+                      if (!isFilled()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.error,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text("All fields are Mandatory"),
+                              ],
+                            ),
+                          ),
+                        );
+                        return;
+                      } else if (!isValidEmail(emailController.text)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.error,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text("Invalid Email"),
+                              ],
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
