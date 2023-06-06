@@ -37,85 +37,84 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: HomeAppBar(customerModel: model),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
 
-            /* ----------------------------- Slidding Banner ---------------------------- */
+          /* ----------------------------- Slidding Banner ---------------------------- */
 
-            const HeroSection(),
-            const SizedBox(
-              height: 10,
-            ),
-            const Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  'Categories',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+          const HeroSection(),
+          const SizedBox(
+            height: 10,
+          ),
+          const Row(
+            children: [
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Categories',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
 
-            /* --------------------------- Categories Section --------------------------- */
+          /* --------------------------- Categories Section --------------------------- */
 
-            CategoriesSection(shimmerContainer: shimmerContainer, model: model),
-            const SizedBox(
-              height: 10,
-            ),
-            const Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  'Recently viewed',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            FutureBuilder(
-              future: fetchProducts(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return shimmerContainer.offerProductShimmer();
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 4,
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
-                      ),
-                      itemBuilder: (BuildContext gridcontext, int index) {
-                        return ProductCard(
-                          product: snapshot.data![index],
-                          customerModel: model!,
-                        );
-                      },
+          CategoriesSection(shimmerContainer: shimmerContainer, model: model),
+          const SizedBox(
+            height: 10,
+          ),
+          const Row(
+            children: [
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Recently viewed',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          FutureBuilder(
+            future: fetchProducts(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return shimmerContainer.offerProductShimmer();
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: MediaQuery.of(context).size.height / 1350,
                     ),
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+                    itemBuilder: (BuildContext gridcontext, int index) {
+                      return ProductCard(
+                        product: snapshot.data![index],
+                        customerModel: model!,
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

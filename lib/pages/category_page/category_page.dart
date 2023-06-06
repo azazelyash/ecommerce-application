@@ -81,14 +81,10 @@ class _CategoryViewState extends State<CategoryView> {
                       ShimmerContainer().offerProductShimmer(),
                       const SizedBox(height: 16),
                       ShimmerContainer().offerProductShimmer(),
-                      const SizedBox(height: 16),
-                      ShimmerContainer().offerProductShimmer(),
                     ],
                   ),
                   Column(
                     children: [
-                      ShimmerContainer().offerProductShimmer(),
-                      const SizedBox(height: 16),
                       ShimmerContainer().offerProductShimmer(),
                       const SizedBox(height: 16),
                       ShimmerContainer().offerProductShimmer(),

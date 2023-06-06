@@ -1,9 +1,4 @@
-import 'package:abhyukthafoods/models/cart.dart';
-import 'package:abhyukthafoods/pages/auth/forgotpassword.dart';
-import 'package:abhyukthafoods/pages/auth/loginpage.dart';
-import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/pages/splash_screen/splash_screen.dart';
-import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

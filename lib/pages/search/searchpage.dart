@@ -24,15 +24,13 @@ class API {
     final response = await http.get(
       Uri.parse("${apiConfig.url}products?search=$query"),
       headers: {
-        'Authorization':
-            'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
+        'Authorization': 'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
       },
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
-      final List<Product> products =
-          jsonList.map((e) => Product.fromJson(e)).toList();
+      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
       return products;
     } else {
       throw Exception('Failed to search products');
@@ -111,31 +109,50 @@ class _SearchPageState extends State<SearchPage> {
                           child: Text('No results'),
                         )
                       : ListView.builder(
+                          // physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: products.length,
                           itemBuilder: (context, index) {
                             final product = products[index];
 
-                            return ListTile(
-                                title: Text(
-                                  product.name,
-                                  style: GoogleFonts.dmSans(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductPage(
-                                        product: product,
-                                        customerModel: widget.customerModel,
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    color: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProductPage(
+                                              product: product,
+                                              customerModel: widget.customerModel,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        product.name.toString(),
+                                        style: GoogleFonts.dmSans(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
-                                  );
-                                });
+                                  ),
+                                  // Container(
+                                  //   width: MediaQuery.of(context).size.width,
+                                  //   height: 1,
+                                  //   color: Colors.black.withOpacity(0.1),
+                                  // ),
+                                ],
+                              ),
+                            );
                           },
                         ),
             ],
