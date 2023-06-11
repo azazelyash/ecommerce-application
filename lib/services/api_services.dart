@@ -7,6 +7,7 @@ import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
+import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -283,5 +284,22 @@ class APIService {
     }
 
     return isPasswordUpdated;
+  }
+
+  static Future<List<Product>> searchProducts(String query) async {
+    final response = await http.get(
+      Uri.parse("${APIConfig.url}products?search=$query"),
+      headers: {
+        'Authorization': 'Basic ${base64Encode(utf8.encode('${APIConfig.key}:${APIConfig.secret}'))}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
+      return products;
+    } else {
+      throw Exception('Failed to search products');
+    }
   }
 }
