@@ -136,7 +136,7 @@ class Product {
       slug: json['slug'],
       categories: json['categories'],
       tags: json['tags'],
-      images: json['images'],
+      images: (json['images'] == null) ? image : json['images'],
       variations: json['variations'],
       status: json['status'],
       featured: json['featured'],
@@ -150,3 +150,7 @@ class Product {
     );
   }
 }
+
+var image = [
+  {"src": "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"}
+];

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
@@ -8,8 +10,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 
 class OrderSuccessPage extends StatelessWidget {
-  OrderSuccessPage(
-      {super.key, required this.customerModel, required this.products});
+  OrderSuccessPage({super.key, required this.customerModel, required this.products});
 
   CustomerModel customerModel;
   List<CartDetails> products;
@@ -99,7 +100,7 @@ class OrderSuccessPage extends StatelessWidget {
       ),
       elevation: 0,
       backgroundColor: Colors.white,
-      label:  Row(
+      label: Row(
         children: [
           Text(
             "View Order",
@@ -122,6 +123,7 @@ class OrderSuccessPage extends StatelessWidget {
   }
 
   Widget productsCard(CartDetails product) {
+    log("Image URL : ${product.image}");
     return Padding(
       padding: const EdgeInsets.only(top: 12.0),
       child: Column(
@@ -142,7 +144,9 @@ class OrderSuccessPage extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image(
-                        image: NetworkImage(product.image.toString()),
+                        image: NetworkImage(
+                          (product.image == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : product.image.toString(),
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),

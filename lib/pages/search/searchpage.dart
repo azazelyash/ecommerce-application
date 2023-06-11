@@ -121,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    color: Colors.white,
+                                    color: Colors.transparent,
                                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
                                     child: GestureDetector(
                                       onTap: () {

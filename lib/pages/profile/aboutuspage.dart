@@ -30,14 +30,14 @@ class AboutUsPage extends StatelessWidget {
                   children: [
                     Text(
                       "India's largest Pickles store",
-                      style: GoogleFonts.dmSans(color: Colors.grey.shade600, fontSize: 17, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.dmSans(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w700),
                       textScaleFactor: 1.0,
                     ),
                     const SizedBox(height: 20),
                     Center(
                       child: Text(
-                        "Abhyukta Foods is a reliable and reputed site where you can order pickles online and also can get your desired items at your home only. You don’t need to go anywhere as it is available online.",
-                        style: GoogleFonts.dmSans(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
+                        "Abhyuktha Traditional Foods is a well-known brand that specializes in making homemade veg and non-veg pickles, sweets, and powders.",
+                        style: GoogleFonts.dmSans(color: Colors.black45, fontSize: 13, fontWeight: FontWeight.w600),
                         textScaleFactor: 1.0,
                         textAlign: TextAlign.justify,
                       ),
@@ -45,8 +45,8 @@ class AboutUsPage extends StatelessWidget {
                     const SizedBox(height: 40),
                     Center(
                       child: Text(
-                        "Privacy Policy         |         Terms & Conditions",
-                        style: GoogleFonts.dmSans(color: Colors.grey.shade600, fontSize: 10, fontWeight: FontWeight.w600),
+                        "Privacy Policy       |       Terms & Conditions",
+                        style: GoogleFonts.dmSans(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.w600),
                         textScaleFactor: 1.0,
                       ),
                     ),

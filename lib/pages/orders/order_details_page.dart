@@ -27,10 +27,11 @@ class OrderDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: StandardAppBar(title: 'Order No: ${order.id}'),
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          StandardAppBar(title: 'Order No: ${order.id}'),
+          // StandardAppBar(title: 'Order No: ${order.id}'),
           OrderDetailsCard(order: order),
           Container(
             margin: const EdgeInsets.all(10),
@@ -38,27 +39,24 @@ class OrderDetailsPage extends StatelessWidget {
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.all(20),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(
+                    'Delivery Address',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
                     children: [
-                      Text(
-                        'Delivery Address',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: SvgPicture.asset('assets/Icons/mdi_address-marker.svg'),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: SvgPicture.asset(
-                                'assets/Icons/mdi_address-marker.svg'),
-                          ),
-                          Expanded(child: Text(resolveAddress(order))),
-                        ],
-                      )
-                    ]),
+                      Expanded(child: Text(resolveAddress(order))),
+                    ],
+                  )
+                ]),
               ),
             ),
           )
@@ -109,15 +107,13 @@ class OrderDetailsCard extends StatelessWidget {
                         child: Text('Order Status'),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: buttonRadius,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         child: Text(
-                          order.status[0].toUpperCase() +
-                              order.status.substring(1),
+                          order.status[0].toUpperCase() + order.status.substring(1),
                           style: const TextStyle(color: Colors.white),
                         ),
                       )
@@ -126,8 +122,7 @@ class OrderDetailsCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -165,9 +160,7 @@ class OrderDetailsCard extends StatelessWidget {
                               90,
                               (index) => Expanded(
                                 child: Container(
-                                  color: index % 2 == 0
-                                      ? Colors.transparent
-                                      : Colors.grey,
+                                  color: index % 2 == 0 ? Colors.transparent : Colors.grey,
                                   height: 1,
                                 ),
                               ),

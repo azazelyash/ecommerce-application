@@ -94,10 +94,17 @@ class _ProductPageState extends State<ProductPage> {
     variationList = await variationData;
   }
 
+  String convertFromHtml(String input) {
+    String data = input.replaceAll('<p>', '');
+    data = data.replaceAll('</p>', '');
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // print(widget.product.images!.length);
     log(varIndex.toString());
+    log("Short Description: ${widget.product.shortDescription}");
+    log("Description: ${widget.product.description}");
     var pages = [
       ...widget.product.images!.map(
         (e) => Image(
@@ -106,6 +113,7 @@ class _ProductPageState extends State<ProductPage> {
         ),
       )
     ];
+
     var theme = Theme.of(context);
 
     CartDetails cartItem = CartDetails(
@@ -137,9 +145,12 @@ class _ProductPageState extends State<ProductPage> {
                             if (!snapshot.hasData) {
                               return shimmerContainer.productPageImage();
                             } else {
+                              log("Snapshot data");
+                              log(snapshot.data![varIndex].imageUrl.toString());
                               if (widget.product.variations!.isNotEmpty) {
                                 cartItem.id = variationList![varIndex].id;
                                 cartItem.price = variationList![varIndex].price;
+
                                 pages = [
                                   Image(
                                     image: NetworkImage(snapshot.data![varIndex].imageUrl),
@@ -377,19 +388,18 @@ class _ProductPageState extends State<ProductPage> {
                     const SizedBox(
                       height: 20,
                     ),
+
+                    /* --------------------------- Product Description -------------------------- */
+
                     Text(
-                      'Product Description',
+                      'Short Description',
                       style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(widget.product.shortDescription == '' ? 'No description' : widget.product.shortDescription!),
-                        ),
-                      ],
+                    Text(
+                      widget.product.shortDescription == '' ? 'No description' : convertFromHtml(widget.product.shortDescription!),
                     ),
                     const SizedBox(
                       height: 20,
@@ -423,6 +433,19 @@ class _ProductPageState extends State<ProductPage> {
                                 ],
                               ),
                             ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Product Description',
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      widget.product.description == '' ? 'No description' : convertFromHtml(widget.product.description!),
                     ),
                   ],
                 ),

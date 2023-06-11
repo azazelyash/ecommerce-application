@@ -158,29 +158,31 @@ class AddressAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0.3,
-      backgroundColor: Colors.white,
-      title: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context, true);
-            },
+      leading: GestureDetector(
+        child: Container(
+            margin: const EdgeInsets.all(11),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(100),
+              ),
+            ),
             child: const Icon(
-              Icons.arrow_back_ios,
-              size: 18,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(width: 18),
-          Text(
-            title,
-            style: GoogleFonts.dmSans(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-        ],
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+      backgroundColor: Colors.white,
+      title: Text(
+        title,
+        style: GoogleFonts.dmSans(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
       ),
     );
   }
@@ -199,29 +201,31 @@ class PaymentAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0.3,
-      backgroundColor: Colors.white,
-      title: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context, true);
-            },
+      leading: GestureDetector(
+        child: Container(
+            margin: const EdgeInsets.all(11),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(100),
+              ),
+            ),
             child: const Icon(
-              Icons.arrow_back_ios,
-              size: 18,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(width: 18),
-          Text(
-            title,
-            style: GoogleFonts.dmSans(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-        ],
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+      backgroundColor: Colors.white,
+      title: Text(
+        title,
+        style: GoogleFonts.dmSans(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
       ),
     );
   }

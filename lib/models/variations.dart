@@ -19,7 +19,7 @@ class Variation {
     return Variation(
       id: json['id'],
       name: json['attributes'][0]['option'],
-      imageUrl: json['image']['src'],
+      imageUrl: (json['image'] == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : json['image']['src'],
       price: (json['price']),
       regularPrice: (json['regular_price']),
       salePrice: (json['sale_price']),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/products.dart';
@@ -41,9 +43,10 @@ class ProductCard extends StatelessWidget {
       quantity: 1,
       name: product.name,
       price: product.price,
-      image: product.images!.isEmpty ? null : product.images![0]['src'],
+      image: product.images!.isEmpty ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : product.images![0]['src'],
       description: product.description,
     );
+    log(product.images.toString());
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -78,18 +81,31 @@ class ProductCard extends StatelessWidget {
             //     )
             //   ],
             // ),
+
+            /* ---------------------------------- Image --------------------------------- */
+
             Expanded(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: product.images != null && product.images!.isNotEmpty
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(6),
-                        child: Image(fit: BoxFit.cover, image: NetworkImage(product.images![0]['src'])
-
-                            // NetworkImage(snapshot.data[index].image['src']),
-                            ),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            product.images![0]['src'],
+                          ),
+                        ),
                       )
-                    : const Placeholder(),
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: const Image(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
+                          ),
+                        ),
+                      ),
               ),
             ),
             const SizedBox(

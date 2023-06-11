@@ -1,13 +1,14 @@
+import 'dart:developer' as out;
 import 'dart:math';
 import 'package:abhyukthafoods/models/categories.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/pages/category_page/category_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class Categories extends StatelessWidget {
-  const Categories(
-      {super.key, required this.categories, required this.customerModel});
+  const Categories({super.key, required this.categories, required this.customerModel});
   final categories;
   final CustomerModel customerModel;
   Color generateRandomLightColor() {
@@ -18,16 +19,22 @@ class Categories extends StatelessWidget {
     return Color.fromRGBO(r, g, b, 1.0);
   }
 
-  Widget category(
-      BuildContext context, int index, List<ProductCategory> categories) {
+  String renameCategory(String text) {
+    HtmlUnescape unescape = HtmlUnescape();
+    String data = unescape.convert(text);
+    return data;
+  }
+
+  Widget category(BuildContext context, int index, List<ProductCategory> categories) {
+    out.log(categories[index].name);
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CategoryView(
-                  category: categories[index], customerModel: customerModel),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryView(category: categories[index], customerModel: customerModel),
+          ),
+        );
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -44,9 +51,7 @@ class Categories extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
               child: categories[index].image != null
-                  ? Image(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(categories[index].image['src'])
+                  ? Image(fit: BoxFit.cover, image: NetworkImage(categories[index].image['src'])
 
                       // NetworkImage(snapshot.data[index].image['src']),
                       )
@@ -58,14 +63,11 @@ class Categories extends StatelessWidget {
             width: 100,
             child: Text(
               // snapshot.data[index].name,
-              categories[index].name,
+              renameCategory(categories[index].name),
               overflow: TextOverflow.ellipsis,
 
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500),
+              style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w500),
             ),
           ),
         ],

@@ -54,6 +54,7 @@ dependencies:
   flutter_otp_text_field: ^1.1.1
   fluttertoast: ^8.2.2
   badges: ^3.1.1
+  html_unescape: ^2.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.2"
@@ -98,6 +99,7 @@ flutter:
     - assets/order/
     - assets/forgot_password/
     - assets/app_logo/
+    - assets/errors/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
