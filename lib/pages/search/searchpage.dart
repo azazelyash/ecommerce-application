@@ -1,42 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/pages/product_page/product_page.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-
-class APIConfig {
-  String url = "https://www.mrsfood.in/wp-json/wc/v3/";
-  String loginUrl = "https://www.mrsfood.in";
-  String tokenUrl = "https://www.mrsfood.in/wp-json/jwt-auth/v1/token";
-  String key = "ck_e199fec7666dea64b4661cd48fa6a72719bc9004";
-  String secret = "cs_c6f4f6cb07505bb7b0d4926fc519f80db8352cd1";
-  String customerURl = "customers";
-}
-
-class API {
-  static Future<List<Product>> searchProducts(String query) async {
-    final APIConfig apiConfig = APIConfig();
-    final response = await http.get(
-      Uri.parse("${apiConfig.url}products?search=$query"),
-      headers: {
-        'Authorization': 'Basic ${base64Encode(utf8.encode('${apiConfig.key}:${apiConfig.secret}'))}',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonList = json.decode(response.body);
-      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
-      return products;
-    } else {
-      throw Exception('Failed to search products');
-    }
-  }
-}
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key, required this.customerModel}) : super(key: key);
@@ -62,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         isLoading = true;
       });
-      List<Product> searchedProducts = await API.searchProducts(query);
+      List<Product> searchedProducts = await APIService.searchProducts(query);
 
       setState(() {
         products = searchedProducts;
@@ -109,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
                           child: Text('No results'),
                         )
                       : ListView.builder(
-                          // physics: BouncingScrollPhysics(),
+                          physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: products.length,
                           itemBuilder: (context, index) {
