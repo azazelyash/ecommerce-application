@@ -6,6 +6,7 @@ import 'package:abhyukthafoods/pages/profile/address_page.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
 import 'package:abhyukthafoods/pages/profile/languagepage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
+import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -134,15 +135,47 @@ class _ProfilePageState extends State<ProfilePage> {
               onTapp: () {
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return MyAlertDialog(
-                      content: 'Are you sure you want to Logout ?',
-                      yes: () {
-                        SharedService.logout(context);
-                      },
+                  builder: (BuildContext dialogContext) {
+                    return AlertDialog(
+                      title: const Text("Logout Confirmation"),
+                      content: const Text("Are you sure you want to Logout?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                          child: const Text("No"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            SharedService.logout(context);
+                          },
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all<double>(1),
+                            backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
+                          ),
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 );
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return MyAlertDialog(
+                //       content: 'Are you sure you want to Logout ?',
+                //       yes: () {
+                //         SharedService.logout(context);
+                //       },
+                //     );
+                //   },
+                // );
               },
             ),
           ],

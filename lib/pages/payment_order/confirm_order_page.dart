@@ -12,6 +12,7 @@ import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ConfirmOrderPage extends StatefulWidget {
   ConfirmOrderPage({super.key, required this.customerModel, required this.products});
@@ -121,10 +122,10 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   }
 
   bool checkAddress() {
-    if (billing.address1 == "" || billing.city == "" || billing.country == "" || billing.firstName == "" || billing.lastName == "" || billing.postcode == "" || billing.state == "") {
-      return false;
+    if (billing.address1 == null || billing.city == null || billing.country == null || billing.firstName == null || billing.lastName == null || billing.postcode == null || billing.state == null) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   @override
@@ -300,10 +301,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                 onTap: () {
                   deleteProduct(index);
                 },
-                child: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
+                child: SvgPicture.asset('assets/Icons/delete red.svg'),
               ),
               Text(
                 "₹ ${displayPrice.toString()}",
@@ -416,6 +414,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   billing.lastName = snapshot.data!.lastName;
                   billing.postcode = snapshot.data!.postcode;
                   billing.state = snapshot.data!.state;
+                  billing.email = snapshot.data!.email;
                   String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
                   String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
                   return Column(
@@ -576,6 +575,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     );
   }
 
+  /* ----------------------------- Payment Button ----------------------------- */
+
   FloatingActionButton paymentButton() {
     return FloatingActionButton.extended(
       shape: RoundedRectangleBorder(
@@ -585,6 +586,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       elevation: 0,
       onPressed: () {
         /* --------------------------- Check Address Field -------------------------- */
+
+        log(billing.toJson().toString());
 
         if (checkAddress()) {
           ScaffoldMessenger.of(context).showSnackBar(

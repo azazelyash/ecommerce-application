@@ -130,71 +130,74 @@ class _AddressViewState extends State<AddressView> {
                     }
                     String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
                     String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
-                    return Column(
-                      // shrinkWrap: true,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Shipping Address",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          address,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        SizedBox(
-                          width: 60,
-                          child: FloatingActionButton(
-                            heroTag: "edit",
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            backgroundColor: Colors.grey.shade100,
-                            child: Icon(
-                              Icons.edit,
-                              size: 18,
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        // shrinkWrap: true,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Shipping Address",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                               color: kPrimaryColor,
                             ),
-                            onPressed: () async {
-                              bool ref = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => EditAddressPage(
-                                    id: widget.id,
-                                  ),
-                                ),
-                              );
-
-                              if (ref) {
-                                setState(() {});
-                              }
-                            },
                           ),
-                        )
-                      ],
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            address,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          SizedBox(
+                            width: 60,
+                            child: FloatingActionButton(
+                              heroTag: "edit",
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              backgroundColor: Colors.grey.shade100,
+                              child: Icon(
+                                Icons.edit,
+                                size: 18,
+                                color: kPrimaryColor,
+                              ),
+                              onPressed: () async {
+                                bool ref = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => EditAddressPage(
+                                      id: widget.id,
+                                    ),
+                                  ),
+                                );
+
+                                if (ref) {
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   }
                 },

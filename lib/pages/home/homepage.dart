@@ -34,87 +34,92 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ShimmerContainer shimmerContainer = ShimmerContainer();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: HomeAppBar(customerModel: model),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: HomeAppBar(customerModel: model),
+        body: ListView(
+          shrinkWrap: true,
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
 
-          /* ----------------------------- Slidding Banner ---------------------------- */
+            /* ----------------------------- Slidding Banner ---------------------------- */
 
-          const HeroSection(),
-          const SizedBox(
-            height: 10,
-          ),
-          const Row(
-            children: [
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                'Categories',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+            const HeroSection(),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Categories',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
 
-          /* --------------------------- Categories Section --------------------------- */
+            /* --------------------------- Categories Section --------------------------- */
 
-          CategoriesSection(shimmerContainer: shimmerContainer, model: model),
-          const SizedBox(
-            height: 10,
-          ),
-          const Row(
-            children: [
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                'Recently viewed',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          FutureBuilder(
-            future: fetchProducts(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return shimmerContainer.offerProductShimmer();
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: MediaQuery.of(context).size.height / 1350,
+            CategoriesSection(shimmerContainer: shimmerContainer, model: model),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Recently viewed',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            FutureBuilder(
+              future: fetchProducts(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return shimmerContainer.offerProductShimmer();
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: MediaQuery.of(context).size.height / 1350,
+                      ),
+                      itemBuilder: (BuildContext gridcontext, int index) {
+                        return ProductCard(
+                          product: snapshot.data![index],
+                          customerModel: model!,
+                        );
+                      },
                     ),
-                    itemBuilder: (BuildContext gridcontext, int index) {
-                      return ProductCard(
-                        product: snapshot.data![index],
-                        customerModel: model!,
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-          ),
-        ],
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -164,9 +169,38 @@ class HeroSectionState extends State<HeroSection> {
   Timer? timer;
 
   final List<Widget> pages = [
-    SvgPicture.asset('assets/Banners/banner 3.svg'),
-    SvgPicture.asset('assets/Banners/banner 4.svg'),
-    SvgPicture.asset('assets/Banners/banner 4.svg'),
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: const Image(
+        image: AssetImage('assets/Banners/Nonveg new.png'),
+        fit: BoxFit.cover,
+        height: double.infinity,
+      ),
+    ),
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: const Image(
+        image: AssetImage('assets/Banners/spcies and powders.png'),
+        fit: BoxFit.cover,
+        height: double.infinity,
+      ),
+    ),
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: const Image(
+        image: AssetImage('assets/Banners/Sweetsnew.png'),
+        fit: BoxFit.cover,
+        height: double.infinity,
+      ),
+    ),
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: const Image(
+        image: AssetImage('assets/Banners/veg pcikels.png'),
+        fit: BoxFit.cover,
+        height: double.infinity,
+      ),
+    ),
   ];
 
   @override

@@ -89,7 +89,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             backgroundColor: Colors.transparent,
           ),
           backgroundColor: Colors.transparent,
-          body: resetPasswordBody(context),
+          body: SingleChildScrollView(
+            child: resetPasswordBody(context),
+          ),
         ),
       ],
     );
@@ -148,7 +150,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               onTap: () {
                 if (!isFilled(passwordController.text, confirmpasswordController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
+                    SnackBar(
                       content: Row(
                         children: [
                           Icon(
@@ -165,7 +167,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   );
                 } else if (!arePasswordsMatching(passwordController.text, confirmpasswordController.text)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
+                    SnackBar(
                       content: Row(
                         children: [
                           Icon(

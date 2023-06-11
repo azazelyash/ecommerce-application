@@ -7,9 +7,15 @@ import 'package:abhyukthafoods/network/fetch_orders.dart';
 import 'package:abhyukthafoods/pages/orders/order_details_page.dart';
 import 'package:flutter/material.dart';
 
-class OrdersPage extends StatelessWidget {
+class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key, this.customerModel});
   final CustomerModel? customerModel;
+
+  @override
+  State<OrdersPage> createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,55 +28,65 @@ class OrdersPage extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TextField(
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                        hintText: 'Search',
-                        hintStyle: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        filled: true,
-                        fillColor: Colors.black),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            ),
-            SliverFillRemaining(
-              child: FutureBuilder(
-                future: fetchOrders(customerModel!.id.toString()),
-                builder: (context, snapshot) {
-                  log(snapshot.data.toString());
-                  return snapshot.connectionState == ConnectionState.waiting
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : snapshot.data!.isEmpty
-                          ? const Center(
-                              child: Text('No orders yet!'),
-                            )
-                          : ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) => OrderCard(order: snapshot.data![index]),
-                            );
-                },
-              ),
-            )
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: CustomScrollView(
+            slivers: [
+              // const SliverToBoxAdapter(
+              //   child: Column(
+              //     children: [
+              //       // TextField(
+              //       //   style: const TextStyle(color: Colors.white),
+              //       //   decoration: InputDecoration(
+              //       //       prefixIcon: const Icon(
+              //       //         Icons.search,
+              //       //         color: Colors.white,
+              //       //       ),
+              //       //       hintText: 'Search',
+              //       //       hintStyle: const TextStyle(
+              //       //         color: Colors.white,
+              //       //       ),
+              //       //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              //       //       filled: true,
+              //       //       fillColor: Colors.black),
+              //       // ),
+              //       // const SizedBox(
+              //       //   height: 10,
+              //       // ),
+              //     ],
+              //   ),
+              // ),
+              SliverFillRemaining(
+                child: FutureBuilder(
+                  future: fetchOrders(widget.customerModel!.id.toString()),
+                  builder: (context, snapshot) {
+                    log(snapshot.data.toString());
+                    return snapshot.connectionState == ConnectionState.waiting
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : snapshot.data!.isEmpty
+                            ? const Center(
+                                child: Text('No orders yet!'),
+                              )
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  setState(() {});
+                                },
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) => OrderCard(order: snapshot.data![index]),
+                                ),
+                              );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
