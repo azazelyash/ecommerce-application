@@ -161,6 +161,10 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
           const SizedBox(
             height: 20,
           ),
+          applyCoupon(context),
+          const SizedBox(
+            height: 20,
+          ),
           priceSummary(),
           const SizedBox(
             height: 20,
@@ -311,6 +315,88 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container applyCoupon(BuildContext newContext) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text(
+              "Apply Coupon",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Row(
+              children: [
+                const Text(
+                  "Coupon Code : ",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      hintText: "Enter Coupon Code",
+                      hintStyle: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(newContext).size.width,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 24.0, left: 24, right: 24),
+              child: FloatingActionButton.extended(
+                heroTag: "Coupon",
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                backgroundColor: Colors.black,
+                elevation: 0,
+                onPressed: () {
+                  setState(() {
+                    couponAmount = 100;
+                  });
+                },
+                label: const Text("Verify Coupon"),
+              ),
+            ),
           ),
         ],
       ),
@@ -579,6 +665,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
   FloatingActionButton paymentButton() {
     return FloatingActionButton.extended(
+      heroTag: "Payment",
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
@@ -628,6 +715,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
               customerModel: widget.customerModel,
               products: widget.products,
               billing: billing,
+              couponDiscount: couponAmount,
             ),
           ),
         );
