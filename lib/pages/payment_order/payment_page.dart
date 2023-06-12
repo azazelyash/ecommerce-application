@@ -18,12 +18,13 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products});
+  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products, required this.couponDiscount});
 
   OrderModel orderModel;
   CustomerModel customerModel;
   List<CartDetails> products;
   Billing billing;
+  int couponDiscount;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -206,6 +207,8 @@ class _PaymentPageState extends State<PaymentPage> {
             for (var item in widget.products) {
               amount += int.parse(item.price!) * item.quantity!;
             }
+
+            amount -= widget.couponDiscount;
 
             if (_paymentMethod == PaymentMethod.COD) {
               widget.orderModel.paymentMethod = "cod";

@@ -9,12 +9,17 @@ import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 
-class OrderSuccessPage extends StatelessWidget {
+class OrderSuccessPage extends StatefulWidget {
   OrderSuccessPage({super.key, required this.customerModel, required this.products});
 
   CustomerModel customerModel;
   List<CartDetails> products;
 
+  @override
+  State<OrderSuccessPage> createState() => _OrderSuccessPageState();
+}
+
+class _OrderSuccessPageState extends State<OrderSuccessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,9 +70,9 @@ class OrderSuccessPage extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: products.length,
+                itemCount: widget.products.length,
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = widget.products[index];
                   return productsCard(product);
                 },
               ),
@@ -85,12 +90,14 @@ class OrderSuccessPage extends StatelessWidget {
   FloatingActionButton viewDetailsButton(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
+        Cart().clearCart();
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MainPage(
               rerouteIndex: 3,
-              customerModel: customerModel,
+              customerModel: widget.customerModel,
             ),
           ),
         );
@@ -100,7 +107,7 @@ class OrderSuccessPage extends StatelessWidget {
       ),
       elevation: 0,
       backgroundColor: Colors.white,
-      label: Row(
+      label: const Row(
         children: [
           Text(
             "View Order",
@@ -208,11 +215,13 @@ class OrderSuccessPage extends StatelessWidget {
       backgroundColor: Colors.transparent,
       leading: GestureDetector(
         onTap: () {
+          Cart().clearCart();
+
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => MainPage(
-                customerModel: customerModel,
+                customerModel: widget.customerModel,
               ),
             ),
             (route) => false,
