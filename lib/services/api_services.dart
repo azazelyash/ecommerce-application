@@ -10,6 +10,7 @@ import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
@@ -300,6 +301,35 @@ class APIService {
       return products;
     } else {
       throw Exception('Failed to search products');
+    }
+  }
+
+  static Future<dynamic> validCoupon(String couponCode) async {
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      log("Varifying Coupon Code");
+
+      var response = await Dio().get(
+        "${APIConfig.url}coupons",
+        queryParameters: {
+          "code": couponCode,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      log("Coupon Code Response: ${response.data}");
+
+      return response.data;
+    } on DioError catch (e) {
+      log(e.response.toString());
     }
   }
 }
