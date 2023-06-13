@@ -9,6 +9,7 @@ class OrderModel {
   bool? setPaid;
   String? transactionId;
   List<LineItems>? lineItems;
+  List<CouponLines>? couponLines;
   int? orderId;
   String? orderNumber;
   String? status;
@@ -22,6 +23,7 @@ class OrderModel {
     this.setPaid,
     this.transactionId,
     this.lineItems,
+    this.couponLines,
     this.orderId,
     this.orderNumber,
     this.status,
@@ -51,6 +53,10 @@ class OrderModel {
       data['line_items'] = lineItems!.map((v) => v.toJson()).toList();
     }
 
+    if (couponLines != null) {
+      data['coupon_lines'] = couponLines!.map((v) => v.toJson()).toList();
+    }
+
     return data;
   }
 }
@@ -70,6 +76,20 @@ class LineItems {
     if (variationId != null) {
       data['variation_id'] = variationId;
     }
+
+    return data;
+  }
+}
+
+class CouponLines {
+  String? code;
+
+  CouponLines({this.code});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+
+    data['code'] = code;
 
     return data;
   }
