@@ -4,10 +4,10 @@ import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
-import 'package:abhyukthafoods/models/order.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
 import 'package:abhyukthafoods/pages/profile/edit_address_page.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +32,10 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   int totalAmt = 0;
   int couponAmount = 0;
   int payableAmount = 0;
+
+  String couponCode = "";
+
+  TextEditingController couponController = TextEditingController();
 
   int calculatePrice(int price, int quantity) {
     return price * quantity;
@@ -349,6 +353,8 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Row(
+              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
               children: [
                 const Text(
                   "Coupon Code : ",
@@ -361,19 +367,44 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   width: 8,
                 ),
                 Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      hintText: "Enter Coupon Code",
-                      hintStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
+                  child: (couponCode != "")
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              couponCode,
+                              style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  couponCode = "";
+                                  couponAmount = 0;
+                                  couponController.clear();
+                                });
+                              },
+                              child: SvgPicture.asset('assets/Icons/delete red.svg'),
+                            ),
+                          ],
+                        )
+                      : TextFormField(
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            hintText: "Enter Coupon Code",
+                            hintStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          controller: couponController,
+                        ),
                 ),
               ],
             ),
@@ -389,9 +420,64 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                 ),
                 backgroundColor: Colors.black,
                 elevation: 0,
-                onPressed: () {
+                onPressed: () async {
+                  if (couponController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red.shade500,
+                        duration: const Duration(milliseconds: 1500),
+                        content: const Row(
+                          children: [
+                            Icon(
+                              Icons.error,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text("Please enter coupon code"),
+                          ],
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  );
+                  var data = await APIService.validCoupon(couponController.text);
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                  log("Coupon Data: $data");
+
+                  if (data[0] == null) {
+                    log("Invalid Coupon Code");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red.shade500,
+                        duration: const Duration(milliseconds: 1500),
+                        content: const Row(
+                          children: [
+                            Icon(
+                              Icons.error,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text("Invalid Coupon Code"),
+                          ],
+                        ),
+                      ),
+                    );
+                    return;
+                  }
                   setState(() {
-                    couponAmount = 100;
+                    // couponCode = couponController.text;
+                    // couponAmount = 100;
                   });
                 },
                 label: const Text("Verify Coupon"),
