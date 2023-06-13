@@ -17,7 +17,7 @@ class RazorPayService {
     log(response.walletName.toString());
   }
 
-  getPayment(int amount, String? phone, String? email) {
+  getPayment(double amount, String? phone, String? email) {
     var options = {
       'key': 'rzp_test_ON820cOfjs8bJX',
       'amount': amount * 100,

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/models/address.dart';
+import 'package:abhyukthafoods/models/coupon.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
@@ -325,9 +326,17 @@ class APIService {
         ),
       );
 
-      log("Coupon Code Response: ${response.data}");
+      // log("Coupon Code Response: ${response.data}");
 
-      return response.data;
+      if (response.statusCode == 200) {
+        if (response.data.length == 0) {
+          return null;
+        }
+        Coupon coupon = Coupon.fromJson(response.data[0]);
+        return coupon;
+      } else {
+        log(response.statusCode.toString());
+      }
     } on DioError catch (e) {
       log(e.response.toString());
     }

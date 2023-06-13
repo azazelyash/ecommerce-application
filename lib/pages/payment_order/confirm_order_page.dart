@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/cart.dart';
+import 'package:abhyukthafoods/models/coupon.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
@@ -27,11 +28,12 @@ class ConfirmOrderPage extends StatefulWidget {
 class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   OrderModel orderModel = OrderModel();
   Billing billing = Billing();
+  Coupon coupon = Coupon();
   List<LineItems> lineItems = [];
 
-  int totalAmt = 0;
-  int couponAmount = 0;
-  int payableAmount = 0;
+  double totalAmt = 0;
+  double couponAmount = 0;
+  double payableAmount = 0;
 
   String couponCode = "";
 
@@ -53,7 +55,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   }
 
   void totalAmount() {
-    int total = 0;
+    double total = 0;
     for (int i = 0; i < widget.products.length; i++) {
       total += calculatePrice(int.parse(widget.products[i].price!), widget.products[i].quantity);
     }
@@ -413,75 +415,100 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
             width: MediaQuery.of(newContext).size.width,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 24.0, left: 24, right: 24),
-              child: FloatingActionButton.extended(
-                heroTag: "Coupon",
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: Colors.black,
-                elevation: 0,
-                onPressed: () async {
-                  if (couponController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red.shade500,
-                        duration: const Duration(milliseconds: 1500),
-                        content: const Row(
-                          children: [
-                            Icon(
-                              Icons.error,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text("Please enter coupon code"),
-                          ],
-                        ),
+              child: (couponCode != "")
+                  ? const SizedBox()
+                  : FloatingActionButton.extended(
+                      heroTag: "Coupon",
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    );
-                    return;
-                  }
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  );
-                  var data = await APIService.validCoupon(couponController.text);
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                  log("Coupon Data: $data");
+                      backgroundColor: Colors.black,
+                      elevation: 0,
+                      onPressed: () async {
+                        if (couponController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red.shade500,
+                              duration: const Duration(milliseconds: 1500),
+                              content: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.error,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text("Please enter coupon code"),
+                                ],
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const Center(child: CircularProgressIndicator());
+                          },
+                        );
+                        var data = await APIService.validCoupon(couponController.text);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        // log("Coupon Data: $data");
 
-                  if (data[0] == null) {
-                    log("Invalid Coupon Code");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red.shade500,
-                        duration: const Duration(milliseconds: 1500),
-                        content: const Row(
-                          children: [
-                            Icon(
-                              Icons.error,
-                              color: Colors.white,
+                        if (data == null) {
+                          log("Invalid Coupon Code");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red.shade500,
+                              duration: const Duration(milliseconds: 1500),
+                              content: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.error,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text("Invalid Coupon Code"),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              width: 8,
+                          );
+                          return;
+                        }
+
+                        coupon = data;
+
+                        log("couponCode: ${coupon.id}");
+                        setState(() {
+                          couponCode = coupon.code!;
+                          couponAmount = double.parse(coupon.amount!);
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green.shade500,
+                            duration: const Duration(milliseconds: 1500),
+                            content: const Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text("Coupon Activated"),
+                              ],
                             ),
-                            Text("Invalid Coupon Code"),
-                          ],
-                        ),
-                      ),
-                    );
-                    return;
-                  }
-                  setState(() {
-                    // couponCode = couponController.text;
-                    // couponAmount = 100;
-                  });
-                },
-                label: const Text("Verify Coupon"),
-              ),
+                          ),
+                        );
+                      },
+                      label: const Text("Verify Coupon"),
+                    ),
             ),
           ),
         ],
@@ -708,7 +735,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   ),
                 ),
                 Text(
-                  "₹ $couponAmount",
+                  "- ₹ $couponAmount",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -793,6 +820,11 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         orderModel.transactionId = "";
         orderModel.billing = billing;
         orderModel.lineItems = lineItems;
+        if (couponCode != "") {
+          orderModel.couponLines = [
+            CouponLines(code: couponCode),
+          ];
+        }
         Navigator.push(
           context,
           MaterialPageRoute(

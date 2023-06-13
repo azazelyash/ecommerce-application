@@ -24,7 +24,7 @@ class PaymentPage extends StatefulWidget {
   CustomerModel customerModel;
   List<CartDetails> products;
   Billing billing;
-  int couponDiscount;
+  double couponDiscount;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -36,16 +36,17 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Order ID: ${widget.orderModel.orderId}");
-    log("Order CustomerId: ${widget.orderModel.customerId}");
-    log("Order PaymentMethod: ${widget.orderModel.paymentMethod}");
-    log("--------------------");
-    for (var item in widget.orderModel.lineItems!) {
-      log("Order Item: ${item.productId}");
-      log("Order Item: ${item.quantity}");
-    }
+    // log("Order ID: ${widget.orderModel.orderId}");
+    // log("Order CustomerId: ${widget.orderModel.customerId}");
+    // log("Order PaymentMethod: ${widget.orderModel.paymentMethod}");
+    // log("--------------------");
+    // for (var item in widget.orderModel.lineItems!) {
+    //   log("Order Item: ${item.productId}");
+    //   log("Order Item: ${item.quantity}");
+    // }
+    // log("Coupon Lines ------------- ${widget.orderModel.couponLines![0]}");
     return isLoading
-        ? Scaffold(
+        ? const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           )
         : Scaffold(
@@ -132,7 +133,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   void paymentSuccess(PaymentSuccessResponse response) async {
-    log("Success: ${response.paymentId}");
+    // log("Success: ${response.paymentId}");
 
     // OrderModel orderModel = OrderModel();
     widget.orderModel.paymentMethod = "razorpay";
@@ -140,8 +141,8 @@ class _PaymentPageState extends State<PaymentPage> {
     widget.orderModel.setPaid = true;
     widget.orderModel.transactionId = response.paymentId.toString();
 
-    log("Order ID: ${widget.orderModel.orderId}");
-    log("Order TrasactionId: ${widget.orderModel.transactionId}");
+    // log("Order ID: ${widget.orderModel.orderId}");
+    // log("Order TrasactionId: ${widget.orderModel.transactionId}");
     var ret = await APIService.createOrder(widget.orderModel);
     if (ret) {
       log("Order Created Successfully");
@@ -201,11 +202,11 @@ class _PaymentPageState extends State<PaymentPage> {
               log("Item: ${item.quantity}");
             }
 
-            int amount = 0;
+            double amount = 0;
             bool ret = false;
 
             for (var item in widget.products) {
-              amount += int.parse(item.price!) * item.quantity!;
+              amount += double.parse(item.price!) * item.quantity;
             }
 
             amount -= widget.couponDiscount;

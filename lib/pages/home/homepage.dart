@@ -9,7 +9,6 @@ import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -173,7 +172,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Nonveg new.png'),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         height: double.infinity,
       ),
     ),
@@ -181,7 +180,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/spcies and powders.png'),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         height: double.infinity,
       ),
     ),
@@ -189,7 +188,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Sweetsnew.png'),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         height: double.infinity,
       ),
     ),
@@ -197,7 +196,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/veg pcikels.png'),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         height: double.infinity,
       ),
     ),
