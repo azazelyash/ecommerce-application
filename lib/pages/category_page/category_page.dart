@@ -56,6 +56,7 @@ class _CategoryViewState extends State<CategoryView> {
 
   @override
   Widget build(BuildContext context) {
+    ShimmerContainer shimmerContainer = ShimmerContainer();
     return Scaffold(
       appBar: StandardAppBar(
         title: widget.category.name,
@@ -94,6 +95,22 @@ class _CategoryViewState extends State<CategoryView> {
             //   ),
             // ),
             firstPageProgressIndicatorBuilder: (context) => const Center(
+              // child: Row(
+              //   children: [
+              //     Column(
+              //       children: [
+              //         shimmerContainer.offerProductShimmer(),
+              //         shimmerContainer.offerProductShimmer(),
+              //       ],
+              //     ),
+              //     Column(
+              //       children: [
+              //         shimmerContainer.offerProductShimmer(),
+              //         shimmerContainer.offerProductShimmer(),
+              //       ],
+              //     ),
+              //   ],
+              // ),
               child: CircularProgressIndicator(),
             ),
             itemBuilder: (context, item, index) => ProductCard(product: item, customerModel: widget.customerModel),

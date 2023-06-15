@@ -1,6 +1,10 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/pages/policies_page/privacy_policy.dart';
+import 'package:abhyukthafoods/pages/policies_page/refund_policy.dart';
+import 'package:abhyukthafoods/pages/policies_page/return_policy.dart';
+import 'package:abhyukthafoods/pages/policies_page/terms_condition.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
 import 'package:abhyukthafoods/pages/profile/address_page.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
@@ -109,6 +113,54 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => const AboutUsPage(),
+                  ),
+                );
+              },
+            ),
+
+            Titletile(
+              imagepath: "assets/profile/tabler_help.svg",
+              title: "Privacy Policy",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const PrivacyPolicy(),
+                  ),
+                );
+              },
+            ),
+
+            Titletile(
+              imagepath: "assets/profile/tabler_help.svg",
+              title: "Terms & Conditions",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const TermsCondition(),
+                  ),
+                );
+              },
+            ),
+
+            Titletile(
+              imagepath: "assets/profile/tabler_help.svg",
+              title: "Refund Policy",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const RefundPolicy(),
+                  ),
+                );
+              },
+            ),
+
+            Titletile(
+              imagepath: "assets/profile/tabler_help.svg",
+              title: "Return Policy",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ReturnPolicy(),
                   ),
                 );
               },

@@ -10,6 +10,7 @@ import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,6 +33,8 @@ class _ProductPageState extends State<ProductPage> {
 
   int varIndex = 0;
   late List<bool> isSelected = [];
+
+  String _htmlData = "<div><p>Hello World</p><h1>Big World</h1></div>";
 
   void selectButton(int index) {
     setState(() {
@@ -94,11 +97,11 @@ class _ProductPageState extends State<ProductPage> {
     variationList = await variationData;
   }
 
-  String convertFromHtml(String input) {
-    String data = input.replaceAll('<p>', '');
-    data = data.replaceAll('</p>', '');
-    return data;
-  }
+  // String convertFromHtml(String input) {
+  //   String data = input.replaceAll('<p>', '');
+  //   data = data.replaceAll('</p>', '');
+  //   return data;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +225,7 @@ class _ProductPageState extends State<ProductPage> {
             ),
             SliverFillRemaining(
               hasScrollBody: false,
+              fillOverscroll: true,
               child: Container(
                 padding: const EdgeInsets.all(20),
                 width: double.infinity,
@@ -233,10 +237,11 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  // shrinkWrap: true,
+                  // physics: const NeverScrollableScrollPhysics(),
+                  // mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //
                     //---------------------------------- Title widget -----------------------------
 
                     Row(
@@ -398,8 +403,21 @@ class _ProductPageState extends State<ProductPage> {
                     const SizedBox(
                       height: 20,
                     ),
+
+                    // (widget.product.shortDescription == '')
+                    //     ? const Text('No description')
+                    //     : Html(
+                    //         data: widget.product.shortDescription,
+                    //       ),
+
+                    // Flexible(
+                    //   child: Html(
+                    //     data: widget.product.shortDescription,
+                    //   ),
+                    // ),
+
                     Text(
-                      widget.product.shortDescription == '' ? 'No description' : convertFromHtml(widget.product.shortDescription!),
+                      widget.product.shortDescription == '' ? 'No description' : widget.product.shortDescription!,
                     ),
                     const SizedBox(
                       height: 20,
@@ -444,8 +462,13 @@ class _ProductPageState extends State<ProductPage> {
                     const SizedBox(
                       height: 20,
                     ),
+                    // (widget.product.description == '')
+                    //     ? const Text('No description')
+                    //     : Html(
+                    //         data: widget.product.description,
+                    //       ),
                     Text(
-                      widget.product.description == '' ? 'No description' : convertFromHtml(widget.product.description!),
+                      widget.product.description == '' ? 'No description' : widget.product.description!,
                     ),
                   ],
                 ),
@@ -547,143 +570,3 @@ class _VariationButtonState extends State<VariationButton> {
     );
   }
 }
-
-// class CounterWidget extends StatefulWidget {
-//   const CounterWidget({super.key});
-
-//   @override
-//   State<CounterWidget> createState() => _CounterWidgetState();
-// }
-
-// class _CounterWidgetState extends State<CounterWidget> {
-//   // int count = 1;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-//       width: MediaQuery.of(context).size.width * 0.27,
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(10),
-//         border: Border.all(color: Colors.grey.shade300),
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           /* ------------------------ Decrease quantity Button ------------------------ */
-
-//           GestureDetector(
-//             onTap: () {
-//               decreaseQuantity();
-//             },
-//             child: Container(
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(4),
-//                 // border: Border.all(color: Colors.grey.shade300),
-//                 color: Colors.grey.shade100,
-//               ),
-//               child: const Icon(Icons.remove),
-//             ),
-//           ),
-//           const SizedBox(
-//             width: 14,
-//           ),
-//           Text(
-//             count.toString(),
-//             style: const TextStyle(
-//               fontSize: 16,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//           const SizedBox(
-//             width: 14,
-//           ),
-//           /* ------------------------ Increase quantity Button ------------------------ */
-
-//           GestureDetector(
-//             onTap: () {
-//               increaseQuantity();
-//             },
-//             child: Container(
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(4),
-//                 // border: Border.all(color: Colors.grey.shade300),
-//                 color: Colors.grey.shade100,
-//               ),
-//               child: const Icon(Icons.add),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-
-//     // return Row(
-//     //   children: [
-//     //     InkWell(
-//     //       onTap: () => count > 1
-//     //           ? setState(() {
-//     //               count--;
-//     //             })
-//     //           : null,
-//     //       child: Container(
-//     //         decoration: BoxDecoration(
-//     //           border: Border.all(width: 0),
-//     //           borderRadius: const BorderRadius.only(
-//     //             topLeft: Radius.circular(10),
-//     //             bottomLeft: Radius.circular(10),
-//     //           ),
-//     //           color: Colors.black,
-//     //         ),
-//     //         height: 40,
-//     //         width: 50,
-//     //         child: const Center(
-//     //           child: Text(
-//     //             '-',
-//     //             style: TextStyle(color: Colors.white, fontSize: 20),
-//     //           ),
-//     //         ),
-//     //       ),
-//     //     ),
-//     //     Container(
-//     //       decoration: BoxDecoration(
-//     //         border: Border.all(
-//     //           width: 0,
-//     //         ),
-//     //         color: Colors.black,
-//     //       ),
-//     //       height: 40,
-//     //       width: 50,
-//     //       child: Center(
-//     //         child: Text(
-//     //           count.toString(),
-//     //           style: const TextStyle(color: Colors.white, fontSize: 15),
-//     //         ),
-//     //       ),
-//     //     ),
-//     //     InkWell(
-//     //       onTap: () => setState(() {
-//     //         count++;
-//     //       }),
-//     //       child: Container(
-//     //         decoration: BoxDecoration(
-//     //           border: Border.all(width: 0),
-//     //           borderRadius: const BorderRadius.only(
-//     //             topRight: Radius.circular(10),
-//     //             bottomRight: Radius.circular(10),
-//     //           ),
-//     //           color: Colors.black,
-//     //         ),
-//     //         height: 40,
-//     //         width: 50,
-//     //         child: const Center(
-//     //           child: Text(
-//     //             '+',
-//     //             style: TextStyle(color: Colors.white, fontSize: 20),
-//     //           ),
-//     //         ),
-//     //       ),
-//     //     )
-//     //   ],
-//     // );
-//   }
-// }
