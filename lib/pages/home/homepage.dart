@@ -172,7 +172,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Nonveg new.png'),
-        fit: BoxFit.fill,
+        fit: BoxFit.scaleDown,
         height: double.infinity,
       ),
     ),
@@ -180,7 +180,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/spcies and powders.png'),
-        fit: BoxFit.fill,
+        fit: BoxFit.scaleDown,
         height: double.infinity,
       ),
     ),
@@ -188,7 +188,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Sweetsnew.png'),
-        fit: BoxFit.fill,
+        fit: BoxFit.scaleDown,
         height: double.infinity,
       ),
     ),
@@ -196,7 +196,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/veg pcikels.png'),
-        fit: BoxFit.fill,
+        fit: BoxFit.scaleDown,
         height: double.infinity,
       ),
     ),
@@ -235,11 +235,12 @@ class HeroSectionState extends State<HeroSection> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext newContext) {
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 142,
+          // width: MediaQuery.of(newContext).size.width * 0.9,
           child: PageView.builder(
             controller: controller,
             itemCount: pages.length,
