@@ -10,6 +10,7 @@ import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape_small.dart';
 
 class MyAppbar extends StatelessWidget {
   const MyAppbar({super.key});
@@ -27,6 +28,12 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   @override
   final Size preferredSize;
+
+  String htmlParser(String title) {
+    HtmlUnescape unescape = HtmlUnescape();
+    String data = unescape.convert(title);
+    return data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +65,7 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       backgroundColor: Colors.white,
       title: Text(
-        title,
+        htmlParser(title),
         textScaleFactor: 1.0,
         style: const TextStyle(color: Colors.black),
       ),

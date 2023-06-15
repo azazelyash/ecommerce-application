@@ -72,26 +72,29 @@ class _CategoryViewState extends State<CategoryView> {
           ),
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Product>(
-            firstPageProgressIndicatorBuilder: (context) => SingleChildScrollView(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      ShimmerContainer().offerProductShimmer(),
-                      const SizedBox(height: 16),
-                      ShimmerContainer().offerProductShimmer(),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      ShimmerContainer().offerProductShimmer(),
-                      const SizedBox(height: 16),
-                      ShimmerContainer().offerProductShimmer(),
-                    ],
-                  ),
-                ],
-              ),
+            // firstPageProgressIndicatorBuilder: (context) => SingleChildScrollView(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //     children: [
+            //       Column(
+            //         children: [
+            //           ShimmerContainer().offerProductShimmer(),
+            //           const SizedBox(height: 16),
+            //           ShimmerContainer().offerProductShimmer(),
+            //         ],
+            //       ),
+            //       Column(
+            //         children: [
+            //           ShimmerContainer().offerProductShimmer(),
+            //           const SizedBox(height: 16),
+            //           ShimmerContainer().offerProductShimmer(),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            firstPageProgressIndicatorBuilder: (context) => const Center(
+              child: CircularProgressIndicator(),
             ),
             itemBuilder: (context, item, index) => ProductCard(product: item, customerModel: widget.customerModel),
           ),
