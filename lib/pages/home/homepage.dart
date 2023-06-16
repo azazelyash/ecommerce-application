@@ -172,7 +172,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Nonveg new.png'),
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.cover,
         height: double.infinity,
       ),
     ),
@@ -180,7 +180,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/spcies and powders.png'),
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.cover,
         height: double.infinity,
       ),
     ),
@@ -188,7 +188,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/Sweetsnew.png'),
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.cover,
         height: double.infinity,
       ),
     ),
@@ -196,7 +196,7 @@ class HeroSectionState extends State<HeroSection> {
       borderRadius: BorderRadius.circular(8),
       child: const Image(
         image: AssetImage('assets/Banners/veg pcikels.png'),
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.cover,
         height: double.infinity,
       ),
     ),
