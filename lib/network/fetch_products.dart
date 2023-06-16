@@ -29,8 +29,9 @@ Future<List<Product>> fetchProducts() async {
   return products;
 }
 
-Future<List<Product>> fetchPaginatedCategory(
-    int page, String categoryId, int pageSize) async {
+Future<List<Product>> fetchPaginatedCategory(int page, String categoryId, int pageSize) async {
+  log('fetchPaginatedCategory called');
+  log('page: $page, categoryId: $categoryId, pageSize: $pageSize');
   List<Product> products = [];
   try {
     var url = '${APIConfig.url}products';
@@ -39,11 +40,7 @@ Future<List<Product>> fetchPaginatedCategory(
       utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
     );
     final response = await Dio().get(url,
-        queryParameters: {
-          'category': categoryId,
-          'page': page.toString(),
-          'per_page': pageSize.toString()
-        },
+        queryParameters: {'category': categoryId, 'page': page.toString(), 'per_page': pageSize.toString()},
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Basic $authToken',

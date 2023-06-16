@@ -1,15 +1,13 @@
+import 'dart:developer';
+
 import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/comps/product_card.dart';
 import 'package:abhyukthafoods/models/categories.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
-import 'package:abhyukthafoods/utils/shimmer_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:shimmer/shimmer.dart';
-
-import '../product_page/product_page.dart';
 
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key, required this.category, required this.customerModel});
@@ -42,11 +40,12 @@ class _CategoryViewState extends State<CategoryView> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems = await fetchPaginatedCategory(pageKey, widget.category.id.toString(), _pageSize);
+      log(newItems.length.toString());
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
       } else {
-        final nextPageKey = pageKey + newItems.length;
+        final nextPageKey = pageKey + 1;
         _pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
@@ -56,7 +55,6 @@ class _CategoryViewState extends State<CategoryView> {
 
   @override
   Widget build(BuildContext context) {
-    ShimmerContainer shimmerContainer = ShimmerContainer();
     return Scaffold(
       appBar: StandardAppBar(
         title: widget.category.name,
@@ -73,47 +71,17 @@ class _CategoryViewState extends State<CategoryView> {
           ),
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Product>(
-            // firstPageProgressIndicatorBuilder: (context) => SingleChildScrollView(
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     children: [
-            //       Column(
-            //         children: [
-            //           ShimmerContainer().offerProductShimmer(),
-            //           const SizedBox(height: 16),
-            //           ShimmerContainer().offerProductShimmer(),
-            //         ],
-            //       ),
-            //       Column(
-            //         children: [
-            //           ShimmerContainer().offerProductShimmer(),
-            //           const SizedBox(height: 16),
-            //           ShimmerContainer().offerProductShimmer(),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            firstPageProgressIndicatorBuilder: (context) => const Center(
-              // child: Row(
-              //   children: [
-              //     Column(
-              //       children: [
-              //         shimmerContainer.offerProductShimmer(),
-              //         shimmerContainer.offerProductShimmer(),
-              //       ],
-              //     ),
-              //     Column(
-              //       children: [
-              //         shimmerContainer.offerProductShimmer(),
-              //         shimmerContainer.offerProductShimmer(),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              child: CircularProgressIndicator(),
-            ),
-            itemBuilder: (context, item, index) => ProductCard(product: item, customerModel: widget.customerModel),
+            newPageProgressIndicatorBuilder: (context) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            itemBuilder: (context, item, index) {
+              return ProductCard(
+                product: item,
+                customerModel: widget.customerModel,
+              );
+            },
           ),
         ),
       ),
