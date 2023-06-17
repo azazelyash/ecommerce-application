@@ -7,6 +7,7 @@ import 'package:abhyukthafoods/pages/policies_page/return_policy.dart';
 import 'package:abhyukthafoods/pages/policies_page/terms_condition.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
 import 'package:abhyukthafoods/pages/profile/address_page.dart';
+import 'package:abhyukthafoods/pages/profile/coupons_page.dart';
 import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
 import 'package:abhyukthafoods/pages/profile/languagepage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
@@ -80,6 +81,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (_) => AddressPage(
                       id: customerModel!.id.toString(),
                     ),
+                  ),
+                );
+              },
+            ),
+
+            /* ------------------------------ Coupons Page ------------------------------ */
+
+            Titletile(
+              imagepath: "assets/Icons/offer.svg",
+              title: "My Coupons",
+              onTapp: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const CouponsPage(),
                   ),
                 );
               },

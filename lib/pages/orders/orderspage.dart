@@ -19,6 +19,7 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -36,30 +37,6 @@ class _OrdersPageState extends State<OrdersPage> {
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: CustomScrollView(
             slivers: [
-              // const SliverToBoxAdapter(
-              //   child: Column(
-              //     children: [
-              //       // TextField(
-              //       //   style: const TextStyle(color: Colors.white),
-              //       //   decoration: InputDecoration(
-              //       //       prefixIcon: const Icon(
-              //       //         Icons.search,
-              //       //         color: Colors.white,
-              //       //       ),
-              //       //       hintText: 'Search',
-              //       //       hintStyle: const TextStyle(
-              //       //         color: Colors.white,
-              //       //       ),
-              //       //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              //       //       filled: true,
-              //       //       fillColor: Colors.black),
-              //       // ),
-              //       // const SizedBox(
-              //       //   height: 10,
-              //       // ),
-              //     ],
-              //   ),
-              // ),
               SliverFillRemaining(
                 child: FutureBuilder(
                   future: fetchOrders(widget.customerModel!.id.toString()),
@@ -119,6 +96,7 @@ class OrderCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Card(
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

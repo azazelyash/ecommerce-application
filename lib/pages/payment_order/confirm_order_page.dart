@@ -51,7 +51,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       log("Empty");
       Navigator.pop(context, true);
     }
-    createLineItems();
+    // createLineItems();
   }
 
   void totalAmount() {
@@ -102,7 +102,6 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ],
       ),
     );
-    createLineItems();
   }
 
   void decreaseQuantity(int index) {
@@ -482,7 +481,36 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
                         coupon = data;
 
-                        log("couponCode: ${coupon.id}");
+                        // log("couponCode: ${coupon.id}");
+                        log(totalAmt.toString());
+                        if (coupon.minimumAmount != null) {
+                          double minAmt = double.parse(coupon.minimumAmount!);
+                          log(minAmt.toString());
+                          if (minAmt > totalAmt) {
+                            log("Minimum Amount: ${coupon.minimumAmount}");
+                            log("Total Amount: $totalAmt");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.red.shade500,
+                                duration: const Duration(milliseconds: 1500),
+                                content: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text("Minimum Value to avail this coupon is ₹ ${coupon.minimumAmount}"),
+                                  ],
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+                        }
+
                         setState(() {
                           couponCode = coupon.code!;
                           couponAmount = double.parse(coupon.amount!);
@@ -812,6 +840,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         }
 
         /* -------------------------- Creating Order Model -------------------------- */
+        createLineItems();
 
         orderModel.customerId = widget.customerModel.id;
         orderModel.paymentMethod = "";
