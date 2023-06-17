@@ -333,6 +333,8 @@ class APIService {
           return null;
         }
         Coupon coupon = Coupon.fromJson(response.data[0]);
+        log("Coupon Code Response: ${coupon.code.toString()}");
+        log("Coupon Min Amount: ${coupon.minimumAmount.toString()}");
         return coupon;
       } else {
         log(response.statusCode.toString());
@@ -340,5 +342,37 @@ class APIService {
     } on DioError catch (e) {
       log(e.response.toString());
     }
+  }
+
+  static Future<List<Coupon>> listCoupons() async {
+    List<Coupon> coupons = [];
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        "${APIConfig.url}coupons",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+
+        List<Coupon> coupons = (response.data as List).map((e) => Coupon.fromJson(e)).toList();
+
+        log(coupons[1].dateExpires.toString());
+        return coupons;
+      }
+    } on DioError catch (e) {
+      log(e.response.toString());
+    }
+
+    return coupons;
   }
 }

@@ -15,6 +15,7 @@ class OrderModel {
   String? status;
   DateTime? orderDate;
   Billing? billing;
+  Shipping? shipping;
 
   OrderModel({
     this.customerId,
@@ -48,6 +49,7 @@ class OrderModel {
     data['set_paid'] = setPaid;
     data['transaction_id'] = transactionId;
     data['shipping'] = billing!.toJson();
+    data['billing'] = billing!.toJson();
 
     if (lineItems != null) {
       data['line_items'] = lineItems!.map((v) => v.toJson()).toList();
@@ -92,5 +94,55 @@ class CouponLines {
     data['code'] = code;
 
     return data;
+  }
+}
+
+class Shipping {
+  String? firstName;
+  String? lastName;
+  String? address1;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
+  String? email;
+
+  Shipping({
+    this.firstName,
+    this.lastName,
+    this.address1,
+    this.city,
+    this.state,
+    this.postcode,
+    this.country,
+    this.email,
+  });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {};
+
+    map.addAll({
+      'first_name': firstName,
+      'last_name': lastName,
+      'address_1': address1,
+      'city': city,
+      'state': state,
+      'postcode': postcode,
+      'country': country,
+      'email': email,
+    });
+
+    return map;
+  }
+
+  Shipping.fromJson(Map<String, dynamic> json) {
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    address1 = json['address_1'];
+    city = json['city'];
+    state = json['state'];
+    postcode = json['postcode'];
+    country = json['country'];
+    email = json['email'];
   }
 }

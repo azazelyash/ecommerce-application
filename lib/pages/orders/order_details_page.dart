@@ -33,33 +33,54 @@ class OrderDetailsPage extends StatelessWidget {
         children: [
           // StandardAppBar(title: 'Order No: ${order.id}'),
           OrderDetailsCard(order: order),
+          deliveryAddress(context)
+        ],
+      ),
+    );
+  }
+
+  Widget deliveryAddress(BuildContext deliveryContext) {
+    return Container(
+      width: MediaQuery.of(deliveryContext).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
           Container(
-            margin: const EdgeInsets.all(10),
-            child: Card(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.all(20),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(
-                    'Delivery Address',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: SvgPicture.asset('assets/Icons/mdi_address-marker.svg'),
-                      ),
-                      Expanded(child: Text(resolveAddress(order))),
-                    ],
-                  )
-                ]),
+            width: MediaQuery.of(deliveryContext).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text(
+              "Delivery Address",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          )
+          ),
+          Container(
+            width: MediaQuery.of(deliveryContext).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Row(
+              children: [
+                SvgPicture.asset('assets/Icons/mdi_address-marker.svg'),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Text(
+                    resolveAddress(order),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -170,26 +191,6 @@ class OrderDetailsCard extends StatelessWidget {
                     ),
                   )
                   .toList(),
-              /* ----------------------------- Reorder Button ----------------------------- */
-
-              // const Divider(),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 20),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //     children: [
-              //       const Expanded(child: Text('Rate')),
-              //       ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           shape: RoundedRectangleBorder(borderRadius: buttonRadius),
-              //           backgroundColor: Colors.black,
-              //         ),
-              //         onPressed: () {},
-              //         child: const Text('Reorder'),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),

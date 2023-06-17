@@ -4,6 +4,7 @@ class Coupon {
   String? amount;
   String? discountType;
   String? dateExpires;
+  String? description;
   dynamic productCategories;
   String? minimumAmount;
   String? maximumAmount;
@@ -14,6 +15,7 @@ class Coupon {
     this.amount,
     this.discountType,
     this.dateExpires,
+    this.description,
     this.productCategories,
     this.minimumAmount,
     this.maximumAmount,
@@ -26,6 +28,7 @@ class Coupon {
       amount: json['amount'],
       discountType: json['discount_type'],
       dateExpires: json['date_expires'],
+      description: json['description'],
       productCategories: json['product_categories'],
       minimumAmount: json['minimum_amount'],
       maximumAmount: json['maximum_amount'],

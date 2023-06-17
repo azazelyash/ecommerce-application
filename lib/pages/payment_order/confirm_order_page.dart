@@ -28,6 +28,7 @@ class ConfirmOrderPage extends StatefulWidget {
 class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   OrderModel orderModel = OrderModel();
   Billing billing = Billing();
+  Shipping shipping = Shipping();
   Coupon coupon = Coupon();
   List<LineItems> lineItems = [];
 
@@ -51,7 +52,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       log("Empty");
       Navigator.pop(context, true);
     }
-    createLineItems();
+    // createLineItems();
   }
 
   void totalAmount() {
@@ -102,7 +103,6 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ],
       ),
     );
-    createLineItems();
   }
 
   void decreaseQuantity(int index) {
@@ -482,7 +482,36 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
                         coupon = data;
 
-                        log("couponCode: ${coupon.id}");
+                        // log("couponCode: ${coupon.id}");
+                        log(totalAmt.toString());
+                        if (coupon.minimumAmount != null) {
+                          double minAmt = double.parse(coupon.minimumAmount!);
+                          log(minAmt.toString());
+                          if (minAmt > totalAmt) {
+                            log("Minimum Amount: ${coupon.minimumAmount}");
+                            log("Total Amount: $totalAmt");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.red.shade500,
+                                duration: const Duration(milliseconds: 1500),
+                                content: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text("Minimum Value to avail this coupon is ₹ ${coupon.minimumAmount}"),
+                                  ],
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+                        }
+
                         setState(() {
                           couponCode = coupon.code!;
                           couponAmount = double.parse(coupon.amount!);
@@ -614,6 +643,16 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                   billing.postcode = snapshot.data!.postcode;
                   billing.state = snapshot.data!.state;
                   billing.email = snapshot.data!.email;
+                  billing.phone = snapshot.data!.phone;
+                  shipping.address1 = snapshot.data!.address1;
+                  shipping.city = snapshot.data!.city;
+                  shipping.country = snapshot.data!.country;
+                  shipping.firstName = snapshot.data!.firstName;
+                  shipping.lastName = snapshot.data!.lastName;
+                  shipping.postcode = snapshot.data!.postcode;
+                  shipping.state = snapshot.data!.state;
+                  shipping.email = snapshot.data!.email;
+
                   String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
                   String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
                   return Column(
@@ -812,6 +851,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         }
 
         /* -------------------------- Creating Order Model -------------------------- */
+        createLineItems();
 
         orderModel.customerId = widget.customerModel.id;
         orderModel.paymentMethod = "";
@@ -819,6 +859,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         orderModel.setPaid = false;
         orderModel.transactionId = "";
         orderModel.billing = billing;
+        orderModel.shipping = shipping;
         orderModel.lineItems = lineItems;
         if (couponCode != "") {
           orderModel.couponLines = [
