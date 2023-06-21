@@ -43,20 +43,24 @@ class APIService {
       );
 
       if (response.statusCode == 200) {
-        UserCredential user = await auth.signInWithEmailAndPassword(email: username, password: password);
+        UserCredential? user;
+        try {
+          user = await auth.signInWithEmailAndPassword(email: username, password: password);
+          log("User ID: ${user.user!.uid}");
+        } catch (e) {
+          log("Firebase Error : $e");
+          if (e.toString().contains("user-not-found")) {
+            user = await auth.createUserWithEmailAndPassword(email: username, password: password);
+            log("User ID: ${user.user!.uid}");
+          }
+        }
 
-        log("User ID: ${user.user!.uid}");
-
-        // log(response.data.toString());
         model = LoginResponseModel.fromJson(response.data);
         customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
         billing = await APIService().fetchAddressDetails(model.data!.id.toString());
-        // log("Billing Address at API SERVICE : ${billing.toJson().toString()}");
-        // log("Avatar Url at API SERVICE : ${customerModel.avatarUrl}");
         if (model.statusCode == 200) {
-          await SharedService.setLoginDetails(model, user.user!);
+          await SharedService.setLoginDetails(model, user!.user!);
           await SharedService.setCustomerDetails(customerModel);
-          // await SharedService.setAddressDetails(billing);
         }
       }
     } on DioError catch (e) {
