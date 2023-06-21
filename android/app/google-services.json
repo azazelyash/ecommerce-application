@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "644791122929",
+    "project_id": "abhyuktha-c59f8",
+    "storage_bucket": "abhyuktha-c59f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644791122929:android:2a9d754038fe276d166250",
+        "android_client_info": {
+          "package_name": "com.skygoal.abhyukthafoods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644791122929-m34a2sn36uq2gsjs4irq2nr2gh3he9kt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skygoal.abhyukthafoods",
+            "certificate_hash": "f8610bf8870b5d3374b95fce2d39b527a5ae45d7"
+          }
+        },
+        {
+          "client_id": "644791122929-ffcfson2d4th8vuvtuilosj32c9mj7au.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZIqf3EG3k3xisqwKNM3D15IUJMbWtN7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644791122929-ffcfson2d4th8vuvtuilosj32c9mj7au.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
