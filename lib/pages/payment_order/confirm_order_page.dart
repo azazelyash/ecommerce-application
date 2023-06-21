@@ -7,7 +7,9 @@ import 'package:abhyukthafoods/models/coupon.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
+import 'package:abhyukthafoods/pages/payment_order/select_delivery_address.dart';
 import 'package:abhyukthafoods/pages/profile/edit_address_page.dart';
+import 'package:abhyukthafoods/pages/profile/new_address_page.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
@@ -53,6 +55,26 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       Navigator.pop(context, true);
     }
     // createLineItems();
+  }
+
+  String resolveAddress(Billing billing) {
+    String address = "";
+    if (billing.address1 != null) {
+      address += billing.address1!;
+    }
+    if (billing.city != null) {
+      address += ", ${billing.city}";
+    }
+    if (billing.state != null) {
+      address += ", ${billing.state}";
+    }
+    if (billing.country != null) {
+      address += ", ${billing.country}";
+    }
+    if (billing.postcode != null) {
+      address += ", ${billing.postcode}";
+    }
+    return address;
   }
 
   void totalAmount() {
@@ -569,145 +591,88 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
               ),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: FutureBuilder(
-              future: SharedService.addressDetails(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  if (snapshot.data!.address1 == "") {
-                    return GestureDetector(
-                      onTap: () async {
-                        bool ref = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => EditAddressPage(
-                              id: widget.customerModel.id.toString(),
-                            ),
+          (billing.address1 != null)
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 24, top: 20, right: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            resolveAddress(billing),
                           ),
-                        );
-
-                        if (ref) {
-                          setState(() {});
-                        }
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        width: MediaQuery.of(context).size.width,
-                        // height: 40,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: kPrimaryColor,
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                const Text(
-                                  "Add Address",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 18,
-                              color: kPrimaryColor,
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  /* ---------------- Storing Address Details in Billing Model ---------------- */
-
-                  billing.address1 = snapshot.data!.address1;
-                  billing.city = snapshot.data!.city;
-                  billing.country = snapshot.data!.country;
-                  billing.firstName = snapshot.data!.firstName;
-                  billing.lastName = snapshot.data!.lastName;
-                  billing.postcode = snapshot.data!.postcode;
-                  billing.state = snapshot.data!.state;
-                  billing.email = snapshot.data!.email;
-                  billing.phone = snapshot.data!.phone;
-                  shipping.address1 = snapshot.data!.address1;
-                  shipping.city = snapshot.data!.city;
-                  shipping.country = snapshot.data!.country;
-                  shipping.firstName = snapshot.data!.firstName;
-                  shipping.lastName = snapshot.data!.lastName;
-                  shipping.postcode = snapshot.data!.postcode;
-                  shipping.state = snapshot.data!.state;
-                  shipping.email = snapshot.data!.email;
-
-                  String name = "${snapshot.data!.firstName} ${snapshot.data!.lastName}";
-                  String address = "${snapshot.data!.address1}, ${snapshot.data!.city}, ${snapshot.data!.state}, ${snapshot.data!.postcode}, ${snapshot.data!.country}";
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        address,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          bool ref = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => EditAddressPage(
-                                id: widget.customerModel.id.toString(),
-                              ),
-                            ),
-                          );
-
-                          if (ref) {
-                            setState(() {});
-                          }
-                        },
-                        child: Text(
-                          "Change Address",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: kPrimaryColor,
+                          const SizedBox(
+                            height: 4,
                           ),
-                        ),
+                          Text(
+                            billing.phone.toString(),
+                          ),
+                        ],
                       ),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
+                    ),
+                    selectDeliveryAddress(text: "Select Different Address"),
+                  ],
+                )
+              : selectDeliveryAddress(text: "Select Delivery Address"),
         ],
+      ),
+    );
+  }
+
+  Container selectDeliveryAddress({required String text}) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      child: GestureDetector(
+        onTap: () async {
+          billing = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const SelectDeliveryAddressPage(),
+            ),
+          );
+          shipping.address1 = billing.address1;
+          shipping.city = billing.city;
+          shipping.country = billing.country;
+          shipping.firstName = billing.firstName;
+          shipping.lastName = billing.lastName;
+          shipping.postcode = billing.postcode;
+          shipping.state = billing.state;
+          shipping.email = billing.email;
+          if (billing.address1 != null) {
+            log("Billing Address: ${billing.toJson().toString()}");
+            setState(() {});
+          }
+        },
+        child: Container(
+          color: Colors.transparent,
+          width: MediaQuery.of(context).size.width,
+          // height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: kPrimaryColor,
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

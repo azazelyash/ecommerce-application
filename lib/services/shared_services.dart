@@ -6,6 +6,7 @@ import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,9 +20,10 @@ class SharedService {
 
   /* ---------------------------- Saves Login Data ---------------------------- */
 
-  static Future<void> setLoginDetails(LoginResponseModel? model) async {
+  static Future<void> setLoginDetails(LoginResponseModel? model, User user) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("login_details", model != null ? jsonEncode(model.toJson()) : "");
+    prefs.setString("user_id", user.uid);
   }
 
   /* ---------------------------- Fetch Login Data ---------------------------- */
@@ -29,6 +31,13 @@ class SharedService {
   static Future<LoginResponseModel> loginDetails() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("login_details") != null ? LoginResponseModel.fromJson(jsonDecode(prefs.getString("login_details")!)) : LoginResponseModel();
+  }
+
+  /* ------------------------------ Fetch User ID ----------------------------- */
+
+  static Future<String> userId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("user_id") != null ? prefs.getString("user_id")! : "";
   }
 
   /* ------------------------- Will Save Customer Data ------------------------ */
@@ -48,17 +57,17 @@ class SharedService {
 
   /* ------------------------ Will Save Address of User ----------------------- */
 
-  static Future<void> setAddressDetails(Billing? billing) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString("address_details", billing != null ? jsonEncode(billing.toJson()) : "");
-  }
+  // static Future<void> setAddressDetails(Billing? billing) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setString("address_details", billing != null ? jsonEncode(billing.toJson()) : "");
+  // }
 
   /* ----------------------- Will Fetch Address of User ----------------------- */
 
-  static Future<Billing> addressDetails() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("address_details") != null ? Billing.fromJson(jsonDecode(prefs.getString("address_details")!)) : Billing();
-  }
+  // static Future<Billing> addressDetails() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString("address_details") != null ? Billing.fromJson(jsonDecode(prefs.getString("address_details")!)) : Billing();
+  // }
 
   /* ---------------------------- Save Cart Details --------------------------- */
 
@@ -82,7 +91,8 @@ class SharedService {
     prefs.remove("cart_details");
     prefs.remove("login_details");
     prefs.remove("customer_details");
-    prefs.remove("address_details");
+    // prefs.remove("address_details");
+    prefs.remove("user_id");
     cartItems = [];
     cartCount.value = 0;
     prefs.clear();

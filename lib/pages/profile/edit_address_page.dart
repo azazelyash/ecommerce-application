@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditAddressPage extends StatelessWidget {
-  EditAddressPage({super.key, required this.id});
+  EditAddressPage({super.key, required this.documentId});
 
-  String id;
+  String documentId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AddressAppBar(title: "Edit Shipping Address"),
-      body: EditAddressPageBody(id: id),
+      body: EditAddressPageBody(id: documentId),
     );
   }
 }
@@ -64,7 +64,7 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: FutureBuilder(
-        future: SharedService.addressDetails(),
+        future: APIService().fetchSpecificFirebaseAddress(id),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -160,7 +160,7 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
 
                       log("Billing Address at EDIT ADDRESS PAGE : ${billing.toJson().toString()}");
 
-                      APIService.updateAddress(billing, id);
+                      APIService().updateFirebaseAddress(id, billing);
 
                       Navigator.pop(context);
 

@@ -5,6 +5,9 @@ import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/network/fetch_products.dart';
 import 'package:abhyukthafoods/pages/payment_order/confirm_order_page.dart';
 import 'package:abhyukthafoods/pages/product_page/product_page.dart';
+import 'package:abhyukthafoods/services/shared_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +32,8 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(cartItems.length.toString());
+    // log(cartItems.length.toString());
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

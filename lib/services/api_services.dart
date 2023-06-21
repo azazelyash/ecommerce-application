@@ -6,20 +6,26 @@ import 'package:abhyukthafoods/api_config.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/models/coupon.dart';
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/firebase_address.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/models/products.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
   static var client = http.Client();
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   static Future<LoginResponseModel> loginCustomer(String username, String password) async {
     LoginResponseModel model = LoginResponseModel();
     CustomerModel customerModel = CustomerModel();
+    FirebaseAuth auth = FirebaseAuth.instance;
     Billing billing = Billing();
 
     try {
@@ -37,16 +43,20 @@ class APIService {
       );
 
       if (response.statusCode == 200) {
-        log(response.data.toString());
+        UserCredential user = await auth.signInWithEmailAndPassword(email: username, password: password);
+
+        log("User ID: ${user.user!.uid}");
+
+        // log(response.data.toString());
         model = LoginResponseModel.fromJson(response.data);
         customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
         billing = await APIService().fetchAddressDetails(model.data!.id.toString());
-        log("Billing Address at API SERVICE : ${billing.toJson().toString()}");
-        log("Avatar Url at API SERVICE : ${customerModel.avatarUrl}");
+        // log("Billing Address at API SERVICE : ${billing.toJson().toString()}");
+        // log("Avatar Url at API SERVICE : ${customerModel.avatarUrl}");
         if (model.statusCode == 200) {
-          await SharedService.setLoginDetails(model);
+          await SharedService.setLoginDetails(model, user.user!);
           await SharedService.setCustomerDetails(customerModel);
-          await SharedService.setAddressDetails(billing);
+          // await SharedService.setAddressDetails(billing);
         }
       }
     } on DioError catch (e) {
@@ -76,6 +86,8 @@ class APIService {
       utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
     );
 
+    FirebaseAuth auth = FirebaseAuth.instance;
+
     bool ret = false;
 
     try {
@@ -91,6 +103,7 @@ class APIService {
       );
 
       if (response.statusCode == 201) {
+        await auth.createUserWithEmailAndPassword(email: model.email!, password: model.password!);
         ret = true;
       }
     } on DioError catch (e) {
@@ -115,6 +128,82 @@ class APIService {
     }
 
     return billing;
+  }
+
+  Future<Billing> fetchSpecificFirebaseAddress(String docId) async {
+    Billing billing = Billing();
+
+    try {
+      var response = await firestore.collection(auth.currentUser!.uid).doc(docId).get();
+      // log(response.docs[0].data().toString());
+      if (response.data()!.isNotEmpty) {
+        billing = Billing.fromJson(response.data()!);
+      }
+    } catch (e) {
+      log("error = $e");
+    }
+    return billing;
+  }
+
+  Future<List<FirebaseAddress>> fetchFirebaseAddress() async {
+    List<FirebaseAddress> billing = [];
+
+    try {
+      var response = await firestore.collection(auth.currentUser!.uid).get();
+      log(response.docs[0].data().toString());
+      if (response.docs.isNotEmpty) {
+        billing = response.docs.map((e) => FirebaseAddress.fromJson(e.data(), e.id)).toList();
+      }
+    } catch (e) {
+      log("error = $e");
+    }
+    return billing;
+  }
+
+  Future<void> addFirebaseAddress(Billing billing) async {
+    try {
+      await firestore.collection(auth.currentUser!.uid).add({
+        'first_name': billing.firstName,
+        'last_name': billing.lastName,
+        'address_1': billing.address1,
+        'city': billing.city,
+        'state': billing.state,
+        'postcode': billing.postcode,
+        'country': billing.country,
+        'email': billing.email,
+        'phone': billing.phone,
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> updateFirebaseAddress(String docId, Billing billing) async {
+    try {
+      await firestore.collection(auth.currentUser!.uid).doc(docId).update({
+        'first_name': billing.firstName,
+        'last_name': billing.lastName,
+        'address_1': billing.address1,
+        'city': billing.city,
+        'state': billing.state,
+        'postcode': billing.postcode,
+        'country': billing.country,
+        'email': billing.email,
+        'phone': billing.phone,
+      });
+
+      log("Address Updated on firebase");
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> deleteFirebaseAddress(String docId) async {
+    try {
+      await firestore.collection(auth.currentUser!.uid).doc(docId).delete();
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   static Future<Billing> updateAddress(Billing billing, String id) async {
@@ -145,7 +234,7 @@ class APIService {
 
       billing = Billing.fromJson(data['billing']);
       log(billing.toJson().toString());
-      await SharedService.setAddressDetails(billing);
+      // await SharedService.setAddressDetails(billing);
     } catch (e) {
       log(e.toString());
     }
