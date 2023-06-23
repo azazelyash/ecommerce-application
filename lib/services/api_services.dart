@@ -468,4 +468,60 @@ class APIService {
 
     return coupons;
   }
+
+  Future<double> freeShippingEligiblility() async {
+    double minOrderValue = 0.0;
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        "${APIConfig.url}shipping/zones/1/methods",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        log("Min Order Value: ${response.data[0]["settings"]["method_free_shipping"]["value"]}");
+        minOrderValue = double.parse(response.data[0]["settings"]["method_free_shipping"]["value"]);
+      }
+    } on DioError catch (e) {
+      log("Shipping Error: ${e.response}");
+    }
+
+    return minOrderValue;
+  }
+
+  Future<double> shippingCharge() async {
+    double shippingCharge = 0.0;
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        "${APIConfig.url}shipping/zones/1/methods",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        log("Shipping Charge: ${response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]}");
+        shippingCharge = double.parse(response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]);
+      }
+    } on DioError catch (e) {
+      log("Shipping Error: ${e.response}");
+    }
+
+    return shippingCharge;
+  }
 }

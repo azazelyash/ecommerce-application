@@ -6,12 +6,10 @@ import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/coupon.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
+import 'package:abhyukthafoods/models/shipping.dart';
 import 'package:abhyukthafoods/pages/payment_order/payment_page.dart';
 import 'package:abhyukthafoods/pages/payment_order/select_delivery_address.dart';
-import 'package:abhyukthafoods/pages/profile/edit_address_page.dart';
-import 'package:abhyukthafoods/pages/profile/new_address_page.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
-import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -31,12 +29,14 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
   OrderModel orderModel = OrderModel();
   Billing billing = Billing();
   Shipping shipping = Shipping();
+  ShippingLines shippingLines = ShippingLines();
   Coupon coupon = Coupon();
   List<LineItems> lineItems = [];
 
   double totalAmt = 0;
   double couponAmount = 0;
   double payableAmount = 0;
+  double shippingCost = shippingCharges;
 
   String couponCode = "";
 
@@ -51,10 +51,19 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     // TODO: implement initState
     super.initState();
     if (widget.products.isEmpty) {
-      log("Empty");
+      // log("Empty");
       Navigator.pop(context, true);
     }
     // createLineItems();
+  }
+
+  void checkShippingCost() {
+    if (totalAmt >= minimumOrderForFreeDelivery) {
+      shippingCost = 0.0;
+    } else {
+      shippingCost = shippingCharges;
+    }
+    setState(() {});
   }
 
   String resolveAddress(Billing billing) {
@@ -89,10 +98,15 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     payableAmount = totalAmt - couponAmount;
   }
 
+  void totalAmountAfterShipping() {
+    payableAmount += shippingCost;
+  }
+
   void increaseQuantity(int index) {
     setState(() {
       widget.products[index].quantity++;
     });
+    checkShippingCost();
   }
 
   void deleteProduct(int index) {
@@ -125,6 +139,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         ],
       ),
     );
+    checkShippingCost();
   }
 
   void decreaseQuantity(int index) {
@@ -135,10 +150,11 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     setState(() {
       widget.products[index].quantity--;
     });
+    checkShippingCost();
   }
 
   void createLineItems() {
-    log("Num. of Products : ${widget.products.length}");
+    // log("Num. of Products : ${widget.products.length}");
     for (int i = 0; i < widget.products.length; i++) {
       lineItems.add(
         LineItems(
@@ -158,10 +174,11 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    log("Customer Id: ${widget.customerModel.id}");
-    log("No. of Products: ${widget.products.length}");
     totalAmount();
+    checkShippingCost();
     totalAmountAfterCoupon();
+    totalAmountAfterShipping();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PaymentAppBar(title: "Confirm Order"),
@@ -208,10 +225,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
     String imageUrl = (widget.products[index].image == null) ? "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" : widget.products[index].image!;
     String quantity = widget.products[index].quantity.toString();
     String price = widget.products[index].price!;
-    String description = widget.products[index].description!;
     int displayPrice = calculatePrice(int.parse(price), int.parse(quantity));
-    // log(index.toString());
-    // log("Name : $name, Image : $imageUrl, Quantity : $quantity, Price : $price, Description : $description, Display Price : $displayPrice");
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -480,7 +494,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                         // log("Coupon Data: $data");
 
                         if (data == null) {
-                          log("Invalid Coupon Code");
+                          // log("Invalid Coupon Code");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: Colors.red.shade500,
@@ -505,13 +519,13 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                         coupon = data;
 
                         // log("couponCode: ${coupon.id}");
-                        log(totalAmt.toString());
+                        // log(totalAmt.toString());
                         if (coupon.minimumAmount != null) {
                           double minAmt = double.parse(coupon.minimumAmount!);
-                          log(minAmt.toString());
+                          // log(minAmt.toString());
                           if (minAmt > totalAmt) {
-                            log("Minimum Amount: ${coupon.minimumAmount}");
-                            log("Total Amount: $totalAmt");
+                            // log("Minimum Amount: ${coupon.minimumAmount}");
+                            // log("Total Amount: $totalAmt");
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: Colors.red.shade500,
@@ -641,7 +655,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
           shipping.state = billing.state;
           shipping.email = billing.email;
           if (billing.address1 != null) {
-            log("Billing Address: ${billing.toJson().toString()}");
+            // log("Billing Address: ${billing.toJson().toString()}");
             setState(() {});
           }
         },
@@ -757,6 +771,31 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
+                  "Shipping Charges",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  (shippingCost == 0.0) ? "Free Delivery" : "+ ₹ $shippingCost",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: kPrimaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          dashedLine(context: context),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
                   "Payable Amount",
                   style: TextStyle(
                     fontSize: 12,
@@ -791,7 +830,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
       onPressed: () {
         /* --------------------------- Check Address Field -------------------------- */
 
-        log(billing.toJson().toString());
+        // log(billing.toJson().toString());
 
         if (checkAddress()) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -826,6 +865,18 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
         orderModel.billing = billing;
         orderModel.shipping = shipping;
         orderModel.lineItems = lineItems;
+
+        if (shippingCost == 0.0) {
+          shippingLines.methodId = "free_shipping";
+          shippingLines.methodTitle = "Free Shipping";
+          shippingLines.total = "0.00";
+        } else {
+          shippingLines.methodId = "shipping charge";
+          shippingLines.methodTitle = "Shipping Charge";
+          shippingLines.total = shippingCost.toString();
+        }
+
+        orderModel.shippingLines = [shippingLines];
         if (couponCode != "") {
           orderModel.couponLines = [
             CouponLines(code: couponCode),
@@ -835,6 +886,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
           context,
           MaterialPageRoute(
             builder: (context) => PaymentPage(
+              payableAmount: payableAmount,
               orderModel: orderModel,
               customerModel: widget.customerModel,
               products: widget.products,

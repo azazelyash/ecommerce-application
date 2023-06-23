@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/cart.dart';
 import 'package:abhyukthafoods/models/customer.dart';
+import 'package:abhyukthafoods/models/shipping.dart';
 import 'package:abhyukthafoods/pages/auth/onboardingpage.dart';
+import 'package:abhyukthafoods/services/api_services.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     getCustomerData();
     getCartDetials();
+    shippingDetails();
     updateUI();
+  }
+
+  void shippingDetails() async {
+    minimumOrderForFreeDelivery = await APIService().freeShippingEligiblility();
+    shippingCharges = await APIService().shippingCharge();
   }
 
   Future<void> getCartDetials() async {

@@ -18,13 +18,14 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 enum PaymentMethod { COD, RazorPay }
 
 class PaymentPage extends StatefulWidget {
-  PaymentPage({super.key, required this.billing, required this.orderModel, required this.customerModel, required this.products, required this.couponDiscount});
+  PaymentPage({super.key, required this.payableAmount, required this.billing, required this.orderModel, required this.customerModel, required this.products, required this.couponDiscount});
 
   OrderModel orderModel;
   CustomerModel customerModel;
   List<CartDetails> products;
   Billing billing;
   double couponDiscount;
+  double payableAmount;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -237,7 +238,7 @@ class _PaymentPageState extends State<PaymentPage> {
               RazorPayService razorPayService = RazorPayService();
               razorPayService.initPaymentGateway(paymentSuccess, paymentError);
               //loading starts
-              razorPayService.getPayment(amount, widget.billing.phone, widget.customerModel.email);
+              razorPayService.getPayment(widget.payableAmount, widget.billing.phone, widget.customerModel.email);
             }
           },
           label: const Text("Confirm Order"),
