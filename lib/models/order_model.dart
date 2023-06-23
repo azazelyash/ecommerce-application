@@ -1,4 +1,5 @@
 import 'package:abhyukthafoods/models/address.dart';
+import 'package:abhyukthafoods/models/shipping.dart';
 
 OrderModel tempOrderModel = OrderModel();
 
@@ -16,6 +17,7 @@ class OrderModel {
   DateTime? orderDate;
   Billing? billing;
   Shipping? shipping;
+  List<ShippingLines>? shippingLines;
 
   OrderModel({
     this.customerId,
@@ -30,6 +32,7 @@ class OrderModel {
     this.status,
     this.orderDate,
     this.billing,
+    this.shippingLines,
   });
 
   OrderModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +60,10 @@ class OrderModel {
 
     if (couponLines != null) {
       data['coupon_lines'] = couponLines!.map((v) => v.toJson()).toList();
+    }
+
+    if (shippingLines != null) {
+      data['shipping_lines'] = shippingLines!.map((v) => v.toJson()).toList();
     }
 
     return data;

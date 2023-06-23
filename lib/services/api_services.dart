@@ -43,20 +43,24 @@ class APIService {
       );
 
       if (response.statusCode == 200) {
-        UserCredential user = await auth.signInWithEmailAndPassword(email: username, password: password);
+        UserCredential? user;
+        try {
+          user = await auth.signInWithEmailAndPassword(email: username, password: password);
+          log("User ID: ${user.user!.uid}");
+        } catch (e) {
+          log("Firebase Error : $e");
+          if (e.toString().contains("user-not-found")) {
+            user = await auth.createUserWithEmailAndPassword(email: username, password: password);
+            log("User ID: ${user.user!.uid}");
+          }
+        }
 
-        log("User ID: ${user.user!.uid}");
-
-        // log(response.data.toString());
         model = LoginResponseModel.fromJson(response.data);
         customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
         billing = await APIService().fetchAddressDetails(model.data!.id.toString());
-        // log("Billing Address at API SERVICE : ${billing.toJson().toString()}");
-        // log("Avatar Url at API SERVICE : ${customerModel.avatarUrl}");
         if (model.statusCode == 200) {
-          await SharedService.setLoginDetails(model, user.user!);
+          await SharedService.setLoginDetails(model, user!.user!);
           await SharedService.setCustomerDetails(customerModel);
-          // await SharedService.setAddressDetails(billing);
         }
       }
     } on DioError catch (e) {
@@ -463,5 +467,61 @@ class APIService {
     }
 
     return coupons;
+  }
+
+  Future<double> freeShippingEligiblility() async {
+    double minOrderValue = 0.0;
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        "${APIConfig.url}shipping/zones/1/methods",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        log("Min Order Value: ${response.data[0]["settings"]["method_free_shipping"]["value"]}");
+        minOrderValue = double.parse(response.data[0]["settings"]["method_free_shipping"]["value"]);
+      }
+    } on DioError catch (e) {
+      log("Shipping Error: ${e.response}");
+    }
+
+    return minOrderValue;
+  }
+
+  Future<double> shippingCharge() async {
+    double shippingCharge = 0.0;
+    var authToken = base64.encode(
+      utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
+    );
+
+    try {
+      var response = await Dio().get(
+        "${APIConfig.url}shipping/zones/1/methods",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Basic $authToken',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        log("Shipping Charge: ${response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]}");
+        shippingCharge = double.parse(response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]);
+      }
+    } on DioError catch (e) {
+      log("Shipping Error: ${e.response}");
+    }
+
+    return shippingCharge;
   }
 }
