@@ -19,7 +19,7 @@ class _GPSLocationPageState extends State<GPSLocationPage> {
   }
 
   void getLocation() async {
-    await Location().getCurrentLocation();
+    await LocationService().getCurrentLocation();
   }
 
   @override
