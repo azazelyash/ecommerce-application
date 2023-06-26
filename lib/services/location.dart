@@ -1,12 +1,14 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
-class Location {
+class LocationService {
   double? latitude;
   double? longitude;
 
-  Location({this.latitude, this.longitude});
+  LocationService({this.latitude, this.longitude});
 
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled;
@@ -29,12 +31,34 @@ class Location {
       return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    Position position = await Geolocator.getCurrentPosition();
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+    );
     latitude = position.latitude;
     longitude = position.longitude;
 
     log("Latitude: $latitude");
     log("Longitude: $longitude");
     return position;
+  }
+
+  Future<List<Placemark>> getCurrentAddress(double latitude, double longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+
+    // for (int i = 0; i < placemarks.length; i++) {
+    //   log("<-----------------Placemark----------------->");
+    //   log("Placemark $i: ${placemarks[i].toJson()}");
+    // }
+
+    return placemarks;
+  }
+
+  Future<Placemark> fillAddressFields() async {
+    Position position = await getCurrentLocation();
+    List<Placemark> placemarks = await getCurrentAddress(position.latitude, position.longitude);
+
+    log("Placemarks: ${placemarks[0]}");
+
+    return placemarks[0];
   }
 }

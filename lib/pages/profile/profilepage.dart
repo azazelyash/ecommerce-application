@@ -8,15 +8,11 @@ import 'package:abhyukthafoods/pages/policies_page/terms_condition.dart';
 import 'package:abhyukthafoods/pages/profile/aboutuspage.dart';
 import 'package:abhyukthafoods/pages/profile/address_page.dart';
 import 'package:abhyukthafoods/pages/profile/coupons_page.dart';
-import 'package:abhyukthafoods/pages/profile/favouritepage.dart';
-import 'package:abhyukthafoods/pages/profile/languagepage.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../comps/dialogboxes.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key, required this.customerModel});

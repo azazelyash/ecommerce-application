@@ -4,9 +4,12 @@ import 'package:abhyukthafoods/comps/appbar.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/pages/profile/gps_location.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:abhyukthafoods/services/location.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:abhyukthafoods/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NewAddressPage extends StatelessWidget {
@@ -57,63 +60,100 @@ class _NewAddressPageBodyState extends State<NewAddressPageBody> {
     return emailRegex.hasMatch(email);
   }
 
+  OverlayEntry? loadingOverlayEntry;
+
+  void showLoadingOverlay(BuildContext context) {
+    final overlayState = Overlay.of(context)!;
+    loadingOverlayEntry = OverlayEntry(
+      builder: (context) => Container(
+        color: Colors.black54,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+    overlayState.insert(loadingOverlayEntry!);
+  }
+
+  void hideLoadingOverlay() {
+    if (loadingOverlayEntry != null) {
+      loadingOverlayEntry!.remove();
+      loadingOverlayEntry = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ListView(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           /* ------------------------------ GPS Navigator ----------------------------- */
 
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) => const GPSLocationPage(),
-          //       ),
-          //     );
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     width: MediaQuery.of(context).size.width,
-          //     // height: 40,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       children: [
-          //         Row(
-          //           children: [
-          //             Icon(
-          //               Icons.gps_fixed,
-          //               color: kPrimaryColor,
-          //             ),
-          //             const SizedBox(
-          //               width: 8,
-          //             ),
-          //             const Text(
-          //               "Use GPS Location",
-          //               style: TextStyle(
-          //                 fontSize: 16,
-          //                 fontWeight: FontWeight.w500,
-          //                 color: Colors.black,
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         Icon(
-          //           Icons.arrow_forward_ios,
-          //           size: 18,
-          //           color: kPrimaryColor,
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 16,
-          // ),
+          GestureDetector(
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+              Placemark placemark = await LocationService().fillAddressFields();
+
+              /* --------------------------- Fill Address Fields -------------------------- */
+
+              addressController.text = placemark.street.toString();
+              cityController.text = placemark.locality.toString();
+              stateController.text = placemark.administrativeArea.toString();
+              pincodeController.text = placemark.postalCode.toString();
+              countryController.text = placemark.isoCountryCode.toString();
+
+              setState(() {});
+
+              if (!mounted) return;
+              Navigator.pop(context);
+            },
+            child: Container(
+              color: Colors.transparent,
+              width: MediaQuery.of(context).size.width,
+              // height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.gps_fixed,
+                        color: kPrimaryColor,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "Use GPS to Fill Address",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
           addressPageFields("First Name", firstNameController, TextInputType.name),
           addressPageFields("Last Name", lastNameController, TextInputType.name),
           addressPageFields("Phone", phoneController, TextInputType.phone),
@@ -226,6 +266,9 @@ class _NewAddressPageBodyState extends State<NewAddressPageBody> {
                 ),
               ),
             ),
+          ),
+          const SizedBox(
+            height: 16,
           ),
         ],
       ),

@@ -62,7 +62,7 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
   Widget build(BuildContext context) {
     String id = widget.id;
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: FutureBuilder(
         future: APIService().fetchSpecificFirebaseAddress(id),
         builder: (context, snapshot) {
@@ -85,6 +85,9 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               children: [
+                const SizedBox(
+                  height: 16,
+                ),
                 addressPageFields("First Name", firstNameController, TextInputType.name),
                 addressPageFields("Last Name", lastNameController, TextInputType.name),
                 addressPageFields("Phone", phoneController, TextInputType.phone),
@@ -197,6 +200,9 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                       ),
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
                 ),
               ],
             );
