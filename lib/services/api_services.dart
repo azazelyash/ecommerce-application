@@ -10,19 +10,24 @@ import 'package:abhyukthafoods/models/firebase_address.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
 import 'package:abhyukthafoods/models/order_model.dart';
 import 'package:abhyukthafoods/models/products.dart';
+import 'package:abhyukthafoods/pages/auth/firebase_otp_verification.dart';
+import 'package:abhyukthafoods/pages/auth/login_otp_verification.dart';
 import 'package:abhyukthafoods/services/shared_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+String? docID;
 
 class APIService {
   static var client = http.Client();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  static Future<LoginResponseModel> loginCustomer(String username, String password) async {
+  static Future<LoginResponseModel> loginCustomer(String username, String password, String uid) async {
     LoginResponseModel model = LoginResponseModel();
     CustomerModel customerModel = CustomerModel();
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -43,23 +48,48 @@ class APIService {
       );
 
       if (response.statusCode == 200) {
-        UserCredential? user;
-        try {
-          user = await auth.signInWithEmailAndPassword(email: username, password: password);
-          log("User ID: ${user.user!.uid}");
-        } catch (e) {
-          log("Firebase Error : $e");
-          if (e.toString().contains("user-not-found")) {
-            user = await auth.createUserWithEmailAndPassword(email: username, password: password);
-            log("User ID: ${user.user!.uid}");
-          }
-        }
-
         model = LoginResponseModel.fromJson(response.data);
         customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
         billing = await APIService().fetchAddressDetails(model.data!.id.toString());
         if (model.statusCode == 200) {
-          await SharedService.setLoginDetails(model, user!.user!);
+          await SharedService.setLoginDetails(model, uid);
+          await SharedService.setCustomerDetails(customerModel);
+        }
+      }
+    } on DioError catch (e) {
+      log("Signin Error: $e");
+    }
+
+    return model;
+  }
+
+  static Future<LoginResponseModel> newLoginCustomerUsingFirebase(String username, String password, String uid) async {
+    LoginResponseModel model = LoginResponseModel();
+    CustomerModel customerModel = CustomerModel();
+    Billing billing = Billing();
+
+    try {
+      var response = await Dio().post(
+        APIConfig.tokenUrl,
+        data: {
+          "username": username,
+          "password": password,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        model = LoginResponseModel.fromJson(response.data);
+        APIService().fetchDocumentID();
+        log(model.toString());
+        customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
+        // billing = await APIService().fetchAddressDetails(model.data!.id.toString());
+        if (model.statusCode == 200) {
+          await SharedService.setLoginDetails(model, uid);
           await SharedService.setCustomerDetails(customerModel);
         }
       }
@@ -86,13 +116,12 @@ class APIService {
   }
 
   Future<bool> createCustomer(CustomerModel model) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    bool ret = false;
+
     var authToken = base64.encode(
       utf8.encode("${APIConfig.key}:${APIConfig.secret}"),
     );
-
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    bool ret = false;
 
     try {
       var response = await Dio().post(
@@ -107,9 +136,13 @@ class APIService {
       );
 
       if (response.statusCode == 201) {
-        await auth.createUserWithEmailAndPassword(email: model.email!, password: model.password!);
-        ret = true;
+        log("Customer Created");
       }
+
+      // if (response.statusCode == 201) {
+      //   await auth.createUserWithEmailAndPassword(email: model.email!, password: model.password!);
+      //   ret = true;
+      // }
     } on DioError catch (e) {
       log(e.toString());
     }
@@ -134,11 +167,12 @@ class APIService {
     return billing;
   }
 
-  Future<Billing> fetchSpecificFirebaseAddress(String docId) async {
+  Future<Billing> fetchSpecificFirebaseAddress(String specificDocuementID) async {
     Billing billing = Billing();
 
     try {
-      var response = await firestore.collection(auth.currentUser!.uid).doc(docId).get();
+      log(specificDocuementID);
+      var response = await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(specificDocuementID).get();
       // log(response.docs[0].data().toString());
       if (response.data()!.isNotEmpty) {
         billing = Billing.fromJson(response.data()!);
@@ -153,7 +187,7 @@ class APIService {
     List<FirebaseAddress> billing = [];
 
     try {
-      var response = await firestore.collection(auth.currentUser!.uid).get();
+      var response = await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").get();
       log(response.docs[0].data().toString());
       if (response.docs.isNotEmpty) {
         billing = response.docs.map((e) => FirebaseAddress.fromJson(e.data(), e.id)).toList();
@@ -164,27 +198,9 @@ class APIService {
     return billing;
   }
 
-  Future<void> addFirebaseAddress(Billing billing) async {
+  Future<void> updateFirebaseAddress(String specificDocID, Billing billing) async {
     try {
-      await firestore.collection(auth.currentUser!.uid).add({
-        'first_name': billing.firstName,
-        'last_name': billing.lastName,
-        'address_1': billing.address1,
-        'city': billing.city,
-        'state': billing.state,
-        'postcode': billing.postcode,
-        'country': billing.country,
-        'email': billing.email,
-        'phone': billing.phone,
-      });
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> updateFirebaseAddress(String docId, Billing billing) async {
-    try {
-      await firestore.collection(auth.currentUser!.uid).doc(docId).update({
+      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(specificDocID).update({
         'first_name': billing.firstName,
         'last_name': billing.lastName,
         'address_1': billing.address1,
@@ -204,7 +220,7 @@ class APIService {
 
   Future<void> deleteFirebaseAddress(String docId) async {
     try {
-      await firestore.collection(auth.currentUser!.uid).doc(docId).delete();
+      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(docId).delete();
     } catch (e) {
       log(e.toString());
     }
@@ -523,5 +539,131 @@ class APIService {
     }
 
     return shippingCharge;
+  }
+
+  Future<void> firebasePhoneAuth(String phoneNumber, BuildContext context) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        log("Phone Auth Completed");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        log("Phone Auth Failed: ${e.message}");
+      },
+      codeSent: (String verificationID, int? resendToken) async {
+        log("Code Sent");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => FirebaseOTPVerificationPage(
+              phone: phoneNumber,
+              verificationId: verificationID,
+            ),
+          ),
+        );
+        // Navigator.of(context).pop();
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<void> firebasePhoneLogin(String phoneNumber, BuildContext context) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        log("Phone Auth Completed");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        log("Phone Auth Failed: ${e.message}");
+      },
+      codeSent: (String verificationID, int? resendToken) async {
+        log("Code Sent");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LoginOTPVerificationPage(
+              verificationId: verificationID,
+              phone: phoneNumber,
+            ),
+          ),
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<void> fetchDocumentID() async {
+    try {
+      var response = await firestore.collection(auth.currentUser!.uid).get();
+      // log(response.docs[0].id);
+      docID = response.docs[0].id;
+      log("Document ID: $docID");
+    } catch (e) {
+      log("Error Finding Docuement Id: $e");
+    }
+  }
+
+  Future<void> addFirebaseAddress(Billing billing) async {
+    try {
+      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc().set({
+        'first_name': billing.firstName,
+        'last_name': billing.lastName,
+        'address_1': billing.address1,
+        'city': billing.city,
+        'state': billing.state,
+        'postcode': billing.postcode,
+        'country': billing.country,
+        'email': billing.email,
+        'phone': billing.phone,
+      });
+      // await firestore.collection(auth.currentUser!.uid).add({
+      //   'first_name': billing.firstName,
+      //   'last_name': billing.lastName,
+      //   'address_1': billing.address1,
+      //   'city': billing.city,
+      //   'state': billing.state,
+      //   'postcode': billing.postcode,
+      //   'country': billing.country,
+      //   'email': billing.email,
+      //   'phone': billing.phone,
+      // });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> saveLoginDataToFirebase(String uid, String email, String password, String fname, String lname) async {
+    try {
+      await firestore.collection(uid).add({
+        'first_name': fname,
+        'last_name': lname,
+        'email': email,
+        'password': password,
+      });
+    } catch (e) {
+      log("Firebase Storing Credential Error: $e");
+    }
+  }
+
+  Future<LoginResponseModel> fetchEmailPassword(String uid) async {
+    LoginResponseModel loginResponseModel = LoginResponseModel();
+    try {
+      var response = await firestore.collection(uid).get();
+
+      String email = response.docs[0]['email'];
+      String password = response.docs[0]['password'];
+
+      docID = response.docs[0].id.toString();
+      log("Current Document ID at fetchEmail&Password: ${docID!}");
+
+      loginResponseModel = await newLoginCustomerUsingFirebase(email, password, uid);
+    } catch (e) {
+      log("Email Fetch Error: $e");
+    }
+    return loginResponseModel;
   }
 }

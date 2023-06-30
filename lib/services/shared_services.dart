@@ -20,10 +20,10 @@ class SharedService {
 
   /* ---------------------------- Saves Login Data ---------------------------- */
 
-  static Future<void> setLoginDetails(LoginResponseModel? model, User user) async {
+  static Future<void> setLoginDetails(LoginResponseModel? model, String uid) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("login_details", model != null ? jsonEncode(model.toJson()) : "");
-    prefs.setString("user_id", user.uid);
+    prefs.setString("user_id", uid);
   }
 
   /* ---------------------------- Fetch Login Data ---------------------------- */

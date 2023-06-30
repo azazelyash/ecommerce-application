@@ -33,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     getCustomerData();
     getCartDetials();
     shippingDetails();
+    APIService().fetchDocumentID();
     updateUI();
   }
 
