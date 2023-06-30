@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:abhyukthafoods/comps/loadingIndicator.dart';
 import 'package:abhyukthafoods/comps/navbar.dart';
 import 'package:abhyukthafoods/models/customer.dart';
 import 'package:abhyukthafoods/models/login_model.dart';
@@ -43,37 +44,32 @@ class _LoginPageState extends State<LoginPage> {
   /* ------------------------------- User Login ------------------------------- */
 
   Future<void> loginUser() async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    loadingIndicator(context);
 
-    LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
-    getCustomerData();
+    // LoginResponseModel model = await APIService.loginCustomer(
+    //   emailController.text,
+    //   passwordController.text,
+    // );
+    // getCustomerData();
 
-    // if (!mounted) return;
+    // // if (!mounted) return;
 
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
 
-    if (model.statusCode == 200) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("Invalid Username or Password"),
-        ),
-      );
-    }
+    // if (model.statusCode == 200) {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
+    //     ),
+    //   );
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       backgroundColor: Colors.red,
+    //       content: Text("Invalid Username or Password"),
+    //     ),
+    //   );
+    // }
   }
 
   Future<void> getCustomerData() async {

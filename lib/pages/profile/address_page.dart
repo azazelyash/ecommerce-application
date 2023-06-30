@@ -40,6 +40,7 @@ class AddressView extends StatefulWidget {
 class _AddressViewState extends State<AddressView> {
   @override
   Widget build(BuildContext context) {
+    log("Current Document ID: $docID");
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -121,159 +122,174 @@ class _AddressViewState extends State<AddressView> {
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        log(snapshot.data![index].id!);
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          margin: const EdgeInsets.only(bottom: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              // shrinkWrap: true,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Shipping Address",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "${snapshot.data![index].billing!.firstName!} ${snapshot.data![index].billing!.lastName!}",
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "${snapshot.data![index].billing!.address1}, ${snapshot.data![index].billing!.city}, ${snapshot.data![index].billing!.state}, ${snapshot.data![index].billing!.postcode}, ${snapshot.data![index].billing!.country}",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "Contact No.: ${snapshot.data![index].billing!.phone}",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
-                                Row(
-                                  children: [
-                                    /* ------------------------------ Delete Button ----------------------------- */
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: "${index}Delete",
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        backgroundColor: Colors.grey.shade100,
-                                        child: SvgPicture.asset("assets/Icons/delete red.svg"),
-                                        onPressed: () async {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext dialogContext) {
-                                              return AlertDialog(
-                                                title: const Text("Delete Address"),
-                                                content: const Text("Are you sure you want to delete this address?"),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(dialogContext);
-                                                    },
-                                                    child: const Text("No"),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      APIService().deleteFirebaseAddress(snapshot.data![index].id!);
-                                                      setState(() {});
-                                                      Navigator.pop(dialogContext);
-                                                    },
-                                                    child: const Text("Yes"),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 12,
-                                    ),
-
-                                    /* ------------------------------- Edit Button ------------------------------ */
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: "${index}Edit",
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        backgroundColor: Colors.grey.shade100,
-                                        child: Icon(
-                                          Icons.edit,
-                                          size: 18,
-                                          color: kPrimaryColor,
-                                        ),
-                                        onPressed: () async {
-                                          bool ref = await Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (_) => EditAddressPage(
-                                                documentId: snapshot.data![index].id!,
-                                              ),
-                                            ),
-                                          );
-
-                                          if (ref) {
-                                            setState(() {});
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                    if (snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 40.0),
+                          child: Text(
+                            "You Have No Addresses Saved",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
                             ),
                           ),
-                        );
-                      },
-                    );
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          log(snapshot.data![index].id!);
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade300,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                ),
+                              ],
+                            ),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                // shrinkWrap: true,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Shipping Address",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Text(
+                                    "${snapshot.data![index].billing!.firstName!} ${snapshot.data![index].billing!.lastName!}",
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "${snapshot.data![index].billing!.address1}, ${snapshot.data![index].billing!.city}, ${snapshot.data![index].billing!.state}, ${snapshot.data![index].billing!.postcode}, ${snapshot.data![index].billing!.country}",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "Contact No.: ${snapshot.data![index].billing!.phone}",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 24,
+                                  ),
+                                  Row(
+                                    children: [
+                                      /* ------------------------------ Delete Button ----------------------------- */
+                                      SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: "${index}Delete",
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          backgroundColor: Colors.grey.shade100,
+                                          child: SvgPicture.asset("assets/Icons/delete red.svg"),
+                                          onPressed: () async {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext dialogContext) {
+                                                return AlertDialog(
+                                                  title: const Text("Delete Address"),
+                                                  content: const Text("Are you sure you want to delete this address?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(dialogContext);
+                                                      },
+                                                      child: const Text("No"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        APIService().deleteFirebaseAddress(snapshot.data![index].id!);
+                                                        setState(() {});
+                                                        Navigator.pop(dialogContext);
+                                                      },
+                                                      child: const Text("Yes"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+
+                                      /* ------------------------------- Edit Button ------------------------------ */
+                                      SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: "${index}Edit",
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          backgroundColor: Colors.grey.shade100,
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 18,
+                                            color: kPrimaryColor,
+                                          ),
+                                          onPressed: () async {
+                                            bool ref = await Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) => EditAddressPage(
+                                                  documentId: snapshot.data![index].id!,
+                                                ),
+                                              ),
+                                            );
+
+                                            if (ref) {
+                                              setState(() {});
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   }
                 },
               ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/comps/loadingIndicator.dart';
 import 'package:abhyukthafoods/models/address.dart';
 import 'package:abhyukthafoods/pages/profile/gps_location.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
@@ -97,14 +98,7 @@ class _NewAddressPageBodyState extends State<NewAddressPageBody> {
 
           GestureDetector(
             onTap: () async {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              );
+              loadingIndicator(context);
               Placemark placemark = await LocationService().fillAddressFields();
 
               /* --------------------------- Fill Address Fields -------------------------- */
@@ -207,15 +201,7 @@ class _NewAddressPageBodyState extends State<NewAddressPageBody> {
                   );
                   return;
                 }
-
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                );
+                loadingIndicator(context);
 
                 billing.firstName = firstNameController.text;
                 billing.lastName = lastNameController.text;

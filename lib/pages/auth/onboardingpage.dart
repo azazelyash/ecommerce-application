@@ -1,4 +1,5 @@
 import 'package:abhyukthafoods/comps/appbar.dart';
+import 'package:abhyukthafoods/pages/auth/login_using_firebase.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -207,7 +208,7 @@ class OB2 extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (_) => LoginPage(),
+                      builder: (_) => LoginUsingFirebase(),
                     ),
                   );
                 },
