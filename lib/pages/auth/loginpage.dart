@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           if (isFieldEmpty(emailController.text) || isFieldEmpty(passwordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(

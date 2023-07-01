@@ -88,7 +88,7 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
 
       if (model.statusCode != 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+           SnackBar(
             content: Row(
               children: [
                 Icon(

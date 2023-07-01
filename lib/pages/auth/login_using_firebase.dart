@@ -119,7 +119,7 @@ class LoginUsingFirebase extends StatelessWidget {
                         onTap: () async {
                           if (!isPhoneFieldFilled(phoneNumber)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(

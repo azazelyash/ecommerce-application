@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+             Row(
               children: [
                 SizedBox(
                   width: 20,
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+             Row(
               children: [
                 SizedBox(
                   width: 20,

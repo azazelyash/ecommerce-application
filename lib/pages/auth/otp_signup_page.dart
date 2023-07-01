@@ -122,7 +122,7 @@ class _OTPSignupPageState extends State<OTPSignupPage> {
                         onTap: () async {
                           if (!isPhoneFieldFilled(phoneNumber)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(

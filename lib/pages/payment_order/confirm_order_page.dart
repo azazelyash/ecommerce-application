@@ -466,7 +466,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                             SnackBar(
                               backgroundColor: Colors.red.shade500,
                               duration: const Duration(milliseconds: 1500),
-                              content: const Row(
+                              content:  Row(
                                 children: [
                                   Icon(
                                     Icons.error,
@@ -499,7 +499,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                             SnackBar(
                               backgroundColor: Colors.red.shade500,
                               duration: const Duration(milliseconds: 1500),
-                              content: const Row(
+                              content:  Row(
                                 children: [
                                   Icon(
                                     Icons.error,
@@ -557,7 +557,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
                           SnackBar(
                             backgroundColor: Colors.green.shade500,
                             duration: const Duration(milliseconds: 1500),
-                            content: const Row(
+                            content:  Row(
                               children: [
                                 Icon(
                                   Icons.check_circle,
@@ -837,7 +837,7 @@ class ConfirmOrderPageState extends State<ConfirmOrderPage> {
             SnackBar(
               backgroundColor: Colors.red.shade500,
               duration: const Duration(milliseconds: 1500),
-              content: const Row(
+              content:  Row(
                 children: [
                   Icon(
                     Icons.error,

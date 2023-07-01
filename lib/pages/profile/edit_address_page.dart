@@ -106,7 +106,7 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                     onPressed: () {
                       if (!isFilled()) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                           SnackBar(
                             content: Row(
                               children: [
                                 Icon(
@@ -124,7 +124,7 @@ class _EditAddressPageBodyState extends State<EditAddressPageBody> {
                         return;
                       } else if (!isValidEmail(emailController.text)) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                           SnackBar(
                             content: Row(
                               children: [
                                 Icon(

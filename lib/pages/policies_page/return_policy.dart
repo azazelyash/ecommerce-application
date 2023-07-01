@@ -6,7 +6,7 @@ class ReturnPolicy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       appBar: StandardAppBar(title: "Return Policy"),
       body: SingleChildScrollView(
         child: Padding(
