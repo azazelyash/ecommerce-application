@@ -15,13 +15,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class LoginOTPVerificationPage extends StatefulWidget {
-  LoginOTPVerificationPage({super.key, required this.verificationId, required this.phone});
+  LoginOTPVerificationPage(
+      {super.key, required this.verificationId, required this.phone});
 
   String verificationId;
   String phone;
 
   @override
-  State<LoginOTPVerificationPage> createState() => _LoginOTPVerificationPageState();
+  State<LoginOTPVerificationPage> createState() =>
+      _LoginOTPVerificationPageState();
 }
 
 class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
@@ -40,11 +42,13 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
   void verifyOtp(String code) async {
     try {
       loadingIndicator(context);
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: code);
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: widget.verificationId, smsCode: code);
 
       UserCredential user = await auth.signInWithCredential(credential);
 
-      LoginResponseModel model = await APIService().fetchEmailPassword(user.user!.uid);
+      LoginResponseModel model =
+          await APIService().fetchEmailPassword(user.user!.uid);
 
       if (model.statusCode != 200) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -81,7 +85,9 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
       if (model.statusCode == 200) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => MainPage(customerModel: customerModel), // Replace with your homepage widget
+            builder: (_) => MainPage(
+                customerModel:
+                    customerModel), // Replace with your homepage widget
           ),
         );
       } else {
@@ -99,14 +105,37 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
 
       log("Signed In");
     } catch (e) {
-      // Display Snackbar for verification error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("Verification Error. Please try again."),
-        ),
-      );
       log("Verification Error: $e");
+      log("Phone number does not exist");
+      // Phone number doesn't exist, show a dialog box
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("OTP Invalid"),
+            content:
+                Text("Please enter the correct otp that sent to your number."),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -134,7 +163,8 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
                       "Enter OTP",
-                      style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: kauthTextFieldStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600),
                       textScaleFactor: 1.0,
                     ),
                   ),
