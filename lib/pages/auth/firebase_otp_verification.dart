@@ -11,16 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class FirebaseOTPVerificationPage extends StatefulWidget {
-  FirebaseOTPVerificationPage({super.key, required this.verificationId, required this.phone});
+  FirebaseOTPVerificationPage(
+      {super.key, required this.verificationId, required this.phone});
 
   String verificationId;
   String phone;
 
   @override
-  State<FirebaseOTPVerificationPage> createState() => _FirebaseOTPVerificationPageState();
+  State<FirebaseOTPVerificationPage> createState() =>
+      _FirebaseOTPVerificationPageState();
 }
 
-class _FirebaseOTPVerificationPageState extends State<FirebaseOTPVerificationPage> {
+class _FirebaseOTPVerificationPageState
+    extends State<FirebaseOTPVerificationPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isOTPSent = false;
   int _resendTimer = 30;
@@ -70,7 +73,8 @@ class _FirebaseOTPVerificationPageState extends State<FirebaseOTPVerificationPag
   void verifyOtp(String code) async {
     try {
       loadingIndicator(context);
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: code);
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: widget.verificationId, smsCode: code);
 
       UserCredential user = await auth.signInWithCredential(credential);
 
@@ -88,6 +92,36 @@ class _FirebaseOTPVerificationPageState extends State<FirebaseOTPVerificationPag
       );
     } catch (e) {
       log("Verification Error: $e");
+      log("Phone number does not exist");
+      // Phone number doesn't exist, show a dialog box
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("OTP Invalid"),
+            content:
+                Text("Please enter the correct otp that sent to your number."),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -115,7 +149,8 @@ class _FirebaseOTPVerificationPageState extends State<FirebaseOTPVerificationPag
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
                       "Enter OTP",
-                      style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: kauthTextFieldStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600),
                       textScaleFactor: 1.0,
                     ),
                   ),
