@@ -127,10 +127,11 @@ class _EnterOTPScreenState extends State<EnterOTPScreen> {
         (route) => false,
       );
     } else {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red.shade600,
-          content:  Row(
+          content: Row(
             children: [
               Icon(
                 Icons.error,
@@ -201,7 +202,8 @@ class _EnterOTPScreenState extends State<EnterOTPScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 "Enter OTP",
-                style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: kauthTextFieldStyle(
+                    fontSize: 20, fontWeight: FontWeight.w600),
                 textScaleFactor: 1.0,
               ),
             ),
@@ -251,7 +253,9 @@ class _EnterOTPScreenState extends State<EnterOTPScreen> {
               GestureDetector(
                 onTap: _resendTimer == 0 ? resendOtp : null,
                 child: Text(
-                  _resendTimer == 0 ? 'Resend OTP' : 'Resend in $_resendTimer seconds',
+                  _resendTimer == 0
+                      ? 'Resend OTP'
+                      : 'Resend in $_resendTimer seconds',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

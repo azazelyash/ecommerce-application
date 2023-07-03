@@ -31,46 +31,6 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
   int _resendTimer = 30;
   Timer? _timer;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
-
-  // void resendOtp() async {
-  //   startResendTimer();
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => const Center(
-  //       child: CircularProgressIndicator(),
-  //     ),
-  //   );
-
-  //   APIService().firebasePhoneAuth(widget.phone, context);
-
-  //   Navigator.of(context).pop();
-  // }
-
-  // @override
-  // void dispose() {
-  //   _timer?.cancel();
-  //   super.dispose();
-  // }
-
-  // void startResendTimer() {
-  //   _resendTimer = 30;
-  //   const duration = Duration(seconds: 1);
-  //   _timer = Timer.periodic(duration, (Timer timer) {
-  //     setState(() {
-  //       if (_resendTimer > 0) {
-  //         _resendTimer--;
-  //       } else {
-  //         timer.cancel();
-  //       }
-  //     });
-  //   });
-  // }
-
   Future<void> getCustomerData() async {
     customerModel = await SharedService.customerDetails();
     /* -------------------------- print customer model -------------------------- */
@@ -88,7 +48,7 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
 
       if (model.statusCode != 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+          SnackBar(
             content: Row(
               children: [
                 Icon(
@@ -125,10 +85,11 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
           ),
         );
       } else {
+        // Display Snackbar for wrong OTP
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
-            content: Text("Invalid Username or Password"),
+            content: Text("Wrong OTP. Please try again."),
           ),
         );
       }
@@ -138,6 +99,13 @@ class _LoginOTPVerificationPageState extends State<LoginOTPVerificationPage> {
 
       log("Signed In");
     } catch (e) {
+      // Display Snackbar for verification error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Verification Error. Please try again."),
+        ),
+      );
       log("Verification Error: $e");
     }
   }

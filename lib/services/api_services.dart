@@ -27,7 +27,8 @@ class APIService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  static Future<LoginResponseModel> loginCustomer(String username, String password, String uid) async {
+  static Future<LoginResponseModel> loginCustomer(
+      String username, String password, String uid) async {
     LoginResponseModel model = LoginResponseModel();
     CustomerModel customerModel = CustomerModel();
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -49,8 +50,10 @@ class APIService {
 
       if (response.statusCode == 200) {
         model = LoginResponseModel.fromJson(response.data);
-        customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
-        billing = await APIService().fetchAddressDetails(model.data!.id.toString());
+        customerModel =
+            await APIService().getCustomerDetails(model.data!.id.toString());
+        billing =
+            await APIService().fetchAddressDetails(model.data!.id.toString());
         if (model.statusCode == 200) {
           await SharedService.setLoginDetails(model, uid);
           await SharedService.setCustomerDetails(customerModel);
@@ -63,7 +66,8 @@ class APIService {
     return model;
   }
 
-  static Future<LoginResponseModel> newLoginCustomerUsingFirebase(String username, String password, String uid) async {
+  static Future<LoginResponseModel> newLoginCustomerUsingFirebase(
+      String username, String password, String uid) async {
     LoginResponseModel model = LoginResponseModel();
     CustomerModel customerModel = CustomerModel();
     Billing billing = Billing();
@@ -86,7 +90,8 @@ class APIService {
         model = LoginResponseModel.fromJson(response.data);
         APIService().fetchDocumentID();
         log(model.toString());
-        customerModel = await APIService().getCustomerDetails(model.data!.id.toString());
+        customerModel =
+            await APIService().getCustomerDetails(model.data!.id.toString());
         // billing = await APIService().fetchAddressDetails(model.data!.id.toString());
         if (model.statusCode == 200) {
           await SharedService.setLoginDetails(model, uid);
@@ -102,7 +107,8 @@ class APIService {
 
   Future<CustomerModel> getCustomerDetails(String id) async {
     CustomerModel model = CustomerModel();
-    String url = "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
+    String url =
+        "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -153,7 +159,8 @@ class APIService {
   Future<Billing> fetchAddressDetails(String id) async {
     Billing billing = Billing();
 
-    String url = "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
+    String url =
+        "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -167,12 +174,18 @@ class APIService {
     return billing;
   }
 
-  Future<Billing> fetchSpecificFirebaseAddress(String specificDocuementID) async {
+  Future<Billing> fetchSpecificFirebaseAddress(
+      String specificDocuementID) async {
     Billing billing = Billing();
 
     try {
       log(specificDocuementID);
-      var response = await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(specificDocuementID).get();
+      var response = await firestore
+          .collection(auth.currentUser!.uid)
+          .doc(docID)
+          .collection("address")
+          .doc(specificDocuementID)
+          .get();
       // log(response.docs[0].data().toString());
       if (response.data()!.isNotEmpty) {
         billing = Billing.fromJson(response.data()!);
@@ -187,10 +200,16 @@ class APIService {
     List<FirebaseAddress> billing = [];
 
     try {
-      var response = await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").get();
+      var response = await firestore
+          .collection(auth.currentUser!.uid)
+          .doc(docID)
+          .collection("address")
+          .get();
       log(response.docs[0].data().toString());
       if (response.docs.isNotEmpty) {
-        billing = response.docs.map((e) => FirebaseAddress.fromJson(e.data(), e.id)).toList();
+        billing = response.docs
+            .map((e) => FirebaseAddress.fromJson(e.data(), e.id))
+            .toList();
       }
     } catch (e) {
       log("error = $e");
@@ -198,9 +217,15 @@ class APIService {
     return billing;
   }
 
-  Future<void> updateFirebaseAddress(String specificDocID, Billing billing) async {
+  Future<void> updateFirebaseAddress(
+      String specificDocID, Billing billing) async {
     try {
-      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(specificDocID).update({
+      await firestore
+          .collection(auth.currentUser!.uid)
+          .doc(docID)
+          .collection("address")
+          .doc(specificDocID)
+          .update({
         'first_name': billing.firstName,
         'last_name': billing.lastName,
         'address_1': billing.address1,
@@ -220,14 +245,20 @@ class APIService {
 
   Future<void> deleteFirebaseAddress(String docId) async {
     try {
-      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc(docId).delete();
+      await firestore
+          .collection(auth.currentUser!.uid)
+          .doc(docID)
+          .collection("address")
+          .doc(docId)
+          .delete();
     } catch (e) {
       log(e.toString());
     }
   }
 
   static Future<Billing> updateAddress(Billing billing, String id) async {
-    String url = "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
+    String url =
+        "${APIConfig.url}${APIConfig.customerURl}/$id?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
     log(url);
     try {
       var response = await http.put(
@@ -302,7 +333,8 @@ class APIService {
     List<OrderModel> data = [];
 
     try {
-      String url = "${APIConfig.url}${APIConfig.orderURL}?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
+      String url =
+          "${APIConfig.url}${APIConfig.orderURL}?consumer_key=${APIConfig.key}&consumer_secret=${APIConfig.secret}";
 
       log("URL at getOrders() : $url");
 
@@ -322,7 +354,8 @@ class APIService {
 
       if (response.statusCode == 200) {
         // data = {response.data}.map((e) => OrderModel.fromJson(e)).toList();
-        data = (response.data as List).map((e) => OrderModel.fromJson(e)).toList();
+        data =
+            (response.data as List).map((e) => OrderModel.fromJson(e)).toList();
       }
     } on DioError catch (e) {
       log(e.response.toString());
@@ -375,14 +408,15 @@ class APIService {
     );
 
     try {
-      var response = await Dio().post("${APIConfig.url}${APIConfig.customerURl}/$id",
-          data: {
-            "password": password,
-          },
-          options: Options(headers: {
-            HttpHeaders.authorizationHeader: 'Basic $authToken',
-            HttpHeaders.contentTypeHeader: "application/json",
-          }));
+      var response =
+          await Dio().post("${APIConfig.url}${APIConfig.customerURl}/$id",
+              data: {
+                "password": password,
+              },
+              options: Options(headers: {
+                HttpHeaders.authorizationHeader: 'Basic $authToken',
+                HttpHeaders.contentTypeHeader: "application/json",
+              }));
 
       if (response.statusCode == 200) {
         log("Password Updated");
@@ -401,13 +435,15 @@ class APIService {
     final response = await http.get(
       Uri.parse("${APIConfig.url}products?search=$query"),
       headers: {
-        'Authorization': 'Basic ${base64Encode(utf8.encode('${APIConfig.key}:${APIConfig.secret}'))}',
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('${APIConfig.key}:${APIConfig.secret}'))}',
       },
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
-      final List<Product> products = jsonList.map((e) => Product.fromJson(e)).toList();
+      final List<Product> products =
+          jsonList.map((e) => Product.fromJson(e)).toList();
       return products;
     } else {
       throw Exception('Failed to search products');
@@ -473,7 +509,8 @@ class APIService {
       if (response.statusCode == 200) {
         log(response.data.toString());
 
-        List<Coupon> coupons = (response.data as List).map((e) => Coupon.fromJson(e)).toList();
+        List<Coupon> coupons =
+            (response.data as List).map((e) => Coupon.fromJson(e)).toList();
 
         log(coupons[1].dateExpires.toString());
         return coupons;
@@ -504,7 +541,8 @@ class APIService {
 
       if (response.statusCode == 200) {
         log("Min Order Value: ${response.data[0]["settings"]["method_free_shipping"]["value"]}");
-        minOrderValue = double.parse(response.data[0]["settings"]["method_free_shipping"]["value"]);
+        minOrderValue = double.parse(
+            response.data[0]["settings"]["method_free_shipping"]["value"]);
       }
     } on DioError catch (e) {
       log("Shipping Error: ${e.response}");
@@ -532,7 +570,8 @@ class APIService {
 
       if (response.statusCode == 200) {
         log("Shipping Charge: ${response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]}");
-        shippingCharge = double.parse(response.data[0]["settings"]["method_rules"]["value"][0]["cost_per_order"]);
+        shippingCharge = double.parse(response.data[0]["settings"]
+            ["method_rules"]["value"][0]["cost_per_order"]);
       }
     } on DioError catch (e) {
       log("Shipping Error: ${e.response}");
@@ -541,7 +580,8 @@ class APIService {
     return shippingCharge;
   }
 
-  Future<void> firebasePhoneAuth(String phoneNumber, BuildContext context) async {
+  Future<void> firebasePhoneAuth(
+      String phoneNumber, BuildContext context) async {
     await Firebase.initializeApp();
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.verifyPhoneNumber(
@@ -552,6 +592,36 @@ class APIService {
       },
       verificationFailed: (FirebaseAuthException e) {
         log("Phone Auth Failed: ${e.message}");
+        log("Phone number does not exist");
+        // Phone number doesn't exist, show a dialog box
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Sign Up"),
+              content: Text(
+                  "Please enter a proper phone number that exist or Try again."),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
       },
       codeSent: (String verificationID, int? resendToken) async {
         log("Code Sent");
@@ -569,7 +639,8 @@ class APIService {
     );
   }
 
-  Future<void> firebasePhoneLogin(String phoneNumber, BuildContext context) async {
+  Future<void> firebasePhoneLogin(
+      String phoneNumber, BuildContext context) async {
     await Firebase.initializeApp();
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.verifyPhoneNumber(
@@ -580,6 +651,36 @@ class APIService {
       },
       verificationFailed: (FirebaseAuthException e) {
         log("Phone Auth Failed: ${e.message}");
+        log("Phone number does not exist");
+        // Phone number doesn't exist, show a dialog box
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Invalid OTP"),
+              content: Text(
+                  "Please enter the correct otp that sent to your number."),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
       },
       codeSent: (String verificationID, int? resendToken) async {
         log("Code Sent");
@@ -609,7 +710,12 @@ class APIService {
 
   Future<void> addFirebaseAddress(Billing billing) async {
     try {
-      await firestore.collection(auth.currentUser!.uid).doc(docID).collection("address").doc().set({
+      await firestore
+          .collection(auth.currentUser!.uid)
+          .doc(docID)
+          .collection("address")
+          .doc()
+          .set({
         'first_name': billing.firstName,
         'last_name': billing.lastName,
         'address_1': billing.address1,
@@ -636,7 +742,8 @@ class APIService {
     }
   }
 
-  Future<void> saveLoginDataToFirebase(String uid, String email, String password, String fname, String lname) async {
+  Future<void> saveLoginDataToFirebase(String uid, String email,
+      String password, String fname, String lname) async {
     try {
       await firestore.collection(uid).add({
         'first_name': fname,
@@ -660,10 +767,13 @@ class APIService {
       docID = response.docs[0].id.toString();
       log("Current Document ID at fetchEmail&Password: ${docID!}");
 
-      loginResponseModel = await newLoginCustomerUsingFirebase(email, password, uid);
+      loginResponseModel =
+          await newLoginCustomerUsingFirebase(email, password, uid);
     } catch (e) {
       log("Email Fetch Error: $e");
     }
     return loginResponseModel;
   }
+
+  isPhoneRegistered(String phone) {}
 }

@@ -7,9 +7,14 @@ import 'package:abhyukthafoods/pages/auth/otp_signup_page.dart';
 import 'package:abhyukthafoods/pages/auth/otp_verification.dart';
 import 'package:abhyukthafoods/pages/auth/signuppage.dart';
 import 'package:abhyukthafoods/services/api_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'login_otp_verification.dart';
 
 class LoginUsingFirebase extends StatelessWidget {
   LoginUsingFirebase({super.key});
@@ -36,6 +41,108 @@ class LoginUsingFirebase extends StatelessWidget {
     return true;
   }
 
+  Future<void> checkPhoneNumberExists(
+      BuildContext context, String phone) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('phoneNumber', isEqualTo: phone)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        log("Phone number exist");
+        firebasePhoneLogin(phone, context);
+      } else {
+        log("Phone number does not exist");
+        // Phone number doesn't exist, show a dialog box
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Phone Number Not Found"),
+              content:
+                  Text("The phone number is not registered. Please sign up."),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    OTPSignupPage()),
+                            ModalRoute.withName('/'));
+                      },
+                      child: Text("SignUp Here"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      log("Error checking phone number exists: ${e.toString()}");
+      // Show a dialog box with the error message
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("An error occurred. Please try again later."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> firebasePhoneLogin(
+      String phoneNumber, BuildContext context) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        log("Phone Auth Completed");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        Navigator.of(context).pop();
+        log("Phone Auth Failed: ${e.message}");
+      },
+      codeSent: (String verificationID, int? resendToken) async {
+        log("Code Sent");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LoginOTPVerificationPage(
+              verificationId: verificationID,
+              phone: phoneNumber,
+            ),
+          ),
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +166,8 @@ class LoginUsingFirebase extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Login here",
-                          style: kauthTextFieldStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          style: kauthTextFieldStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
                           textScaleFactor: 1.0,
                         ),
                       ),
@@ -119,7 +227,7 @@ class LoginUsingFirebase extends StatelessWidget {
                         onTap: () async {
                           if (!isPhoneFieldFilled(phoneNumber)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(
@@ -136,9 +244,12 @@ class LoginUsingFirebase extends StatelessWidget {
                             );
                             return;
                           }
+
                           String phone = countryCode! + phoneNumber!;
                           loadingIndicator(context);
-                          await APIService().firebasePhoneLogin(phone, context);
+                          checkPhoneNumberExists(context, phone);
+
+                          // Check if the phone number exists in Firestore
                         },
                         child: Container(
                           width: 390,
@@ -170,7 +281,10 @@ class LoginUsingFirebase extends StatelessWidget {
                         children: [
                           Text(
                             "Don't have an account ? ",
-                            style: GoogleFonts.dmSans(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: GoogleFonts.dmSans(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textScaleFactor: 1.0,
                           ),
                           GestureDetector(
