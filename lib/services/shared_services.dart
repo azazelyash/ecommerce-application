@@ -97,10 +97,9 @@ class SharedService {
     cartCount.value = 0;
     prefs.clear();
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const OnboardingPage(),
-      ),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) =>const OnboardingPage()),
+      ModalRoute.withName('/'),
     );
   }
 }

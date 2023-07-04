@@ -50,24 +50,25 @@ class _MainPageState extends State<MainPage> {
     ];
 
     return Scaffold(
-        bottomNavigationBar: NavBox(
-          onTap: (index) => navigateBottomBar(index),
-          index: selectedIndex,
-        ),
-        body: StreamBuilder(
-          stream: InternetConnectionChecker().onStatusChange,
-          builder: (context, snapshot) {
-            switch (snapshot.data) {
-              case InternetConnectionStatus.disconnected:
-                return LostInternet(callback: () {
-                  setState(() {});
-                });
-              case null:
-              case InternetConnectionStatus.connected:
-                return _pages[selectedIndex];
-            }
-          },
-        ));
+      bottomNavigationBar: NavBox(
+        onTap: (index) => navigateBottomBar(index),
+        index: selectedIndex,
+      ),
+      body: StreamBuilder(
+        stream: InternetConnectionChecker().onStatusChange,
+        builder: (context, snapshot) {
+          switch (snapshot.data) {
+            case InternetConnectionStatus.disconnected:
+              return LostInternet(callback: () {
+                setState(() {});
+              });
+            case null:
+            case InternetConnectionStatus.connected:
+              return _pages[selectedIndex];
+          }
+        },
+      ),
+    );
   }
 }
 

@@ -9,6 +9,7 @@
       import 'package:abhyukthafoods/services/api_services.dart';
       import 'package:cloud_firestore/cloud_firestore.dart';
       import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
       import 'package:google_fonts/google_fonts.dart';
       import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -74,6 +75,7 @@
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: IntlPhoneField(
+                              inputFormatters: [LengthLimitingTextInputFormatter(10)],
                               style: const TextStyle(
                                 color: Colors.white,
                               ),
