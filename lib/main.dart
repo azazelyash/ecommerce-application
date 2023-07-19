@@ -1,9 +1,6 @@
-import 'package:abhyukthafoods/pages/auth/login_using_firebase.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'pages/auth/otp_signup_page.dart';
 import 'pages/splash_screen/splash_screen.dart';
 
 // Widget defaultPage = const OnboardingPage();
@@ -24,9 +21,7 @@ class MyApp extends StatelessWidget {
       home: const SplashScreen(),
       // home: LoginUsingFirebase(),
       theme: ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-            secondary: Colors.black,
-            seedColor: const Color.fromRGBO(20, 120, 70, 1)),
+        colorScheme: ColorScheme.fromSeed(secondary: Colors.black, seedColor: const Color.fromRGBO(20, 120, 70, 1)),
         textTheme: textTheme(
           const TextTheme(
             titleLarge: TextStyle(fontWeight: FontWeight.bold),

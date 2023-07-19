@@ -46,30 +46,30 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> loginUser() async {
     loadingIndicator(context);
 
-    // LoginResponseModel model = await APIService.loginCustomer(
-    //   emailController.text,
-    //   passwordController.text,
-    // );
-    // getCustomerData();
+    LoginResponseModel model = await APIService.loginCustomer(
+      emailController.text,
+      passwordController.text,
+    );
+    getCustomerData();
 
-    // // if (!mounted) return;
+    // if (!mounted) return;
 
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
 
-    // if (model.statusCode == 200) {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(
-    //       builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
-    //     ),
-    //   );
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       backgroundColor: Colors.red,
-    //       content: Text("Invalid Username or Password"),
-    //     ),
-    //   );
-    // }
+    if (model.statusCode == 200) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Invalid Username or Password"),
+        ),
+      );
+    }
   }
 
   Future<void> getCustomerData() async {
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           if (isFieldEmpty(emailController.text) || isFieldEmpty(passwordController.text)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
+                              SnackBar(
                                 content: Row(
                                   children: [
                                     Icon(

@@ -65,43 +65,43 @@ class _SignUpPageState extends State<SignUpPage> {
   /* ------------------------------ Sign Up User ------------------------------ */
 
   Future<void> signUp(CustomerModel model) async {
-    // loadingIndicator(context);
+    loadingIndicator(context);
 
-    // final success = await apiService.createCustomer(model);
+    final success = await apiService.createCustomer(model);
 
-    // if (!mounted) return;
+    if (!mounted) return;
 
-    // if (success) {
-    //   LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
+    if (success) {
+      LoginResponseModel model = await APIService.loginCustomer(emailController.text, passwordController.text);
 
-    //   getCustomerData();
+      getCustomerData();
 
-    //   if (!mounted) return;
+      if (!mounted) return;
 
-    //   Navigator.of(context).pop(); // Close the dialog
-    //   if (model.statusCode == 200) {
-    //     Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(
-    //         builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
-    //       ),
-    //     );
-    //   } else {
-    //     Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(
-    //         builder: (_) => const LoginPage(), // Replace with your homepage widget
-    //       ),
-    //     );
-    //   }
-    // } else {
-    //   Navigator.of(context).pop(); // Close the dialog
+      Navigator.of(context).pop(); // Close the dialog
+      if (model.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => MainPage(customerModel: customerModel!), // Replace with your homepage widget
+          ),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(), // Replace with your homepage widget
+          ),
+        );
+      }
+    } else {
+      Navigator.of(context).pop(); // Close the dialog
 
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       backgroundColor: Colors.red,
-    //       content: Text("Email Already Exists"),
-    //     ),
-    //   );
-    // }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Email Already Exists"),
+        ),
+      );
+    }
   }
 
   Future<void> getCustomerData() async {

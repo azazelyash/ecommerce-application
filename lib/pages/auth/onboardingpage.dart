@@ -208,7 +208,7 @@ class OB2 extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (_) => LoginUsingFirebase(),
+                      builder: (_) => LoginPage(),
                     ),
                   );
                 },
